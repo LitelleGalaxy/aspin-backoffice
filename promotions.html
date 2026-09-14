@@ -925,7 +925,7 @@
 
 
       const filename =
-        `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+      `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
 
 
       const path =
