@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ASPIN Admin | Analytics</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .analytics-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .analytics-stat {
+      background: #101010;
+      border: 1px solid #292929;
+      padding: 20px;
+    }
+
+    .analytics-stat span {
+      display: block;
+      color: #999;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 10px;
+    }
+
+    .analytics-stat strong {
+      font-size: 28px;
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .analytics-panel {
+      background: #101010;
+      border: 1px solid #292929;
+      padding: 20px;
+    }
+
+    .event-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 13px 0;
+      border-bottom: 1px solid #292929;
+    }
+
+    .event-name {
+      color: #eee;
+      font-size: 13px;
+    }
+
+    .event-count {
+      color: #d4af37;
+      font-weight: 700;
+    }
+
+    .source-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      padding: 13px 0;
+      border-bottom: 1px solid #292929;
+    }
+
+    .empty-state {
+      color: #888;
+      padding: 20px 0;
+    }
+
+    @media (max-width: 900px) {
+      .analytics-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .analytics-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      <img src="favicon.png" alt="ASPIN" class="sidebar-logo">
+
+      <div class="sidebar-brand-text">
+        <strong>ASPIN.SITE</strong>
+        <span>ADMIN PORTAL</span>
+      </div>
+    </div>
+
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="promotions.html">Promotions</a>
+      <a href="media.html">Media</a>
+      <a href="faqs.html">FAQs</a>
+      <a href="payments.html">Payments</a>
+      <a href="subscribers.html">Subscribers</a>
+      <a href="analytics.html" class="active">Analytics</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+
+    <button id="logoutBtn" class="logout-btn">
+      LOG OUT
+    </button>
+
+  </aside>
+
+  <main class="admin-main">
+
+    <header class="page-header">
+
+      <div>
+        <div class="eyebrow">ASPIN.SITE</div>
+        <h1>Analytics</h1>
+        <p>First-party website activity recorded by ASPIN.SITE.</p>
+      </div>
+
+    </header>
+
+    <section class="analytics-stats">
+
+      <article class="analytics-stat">
+        <span>Total Events</span>
+        <strong id="totalEvents">—</strong>
+      </article>
+
+      <article class="analytics-stat">
+        <span>Register Clicks</span>
+        <strong id="registerClicks">—</strong>
+      </article>
+
+      <article class="analytics-stat">
+        <span>Subscriptions</span>
+        <strong id="subscriptions">—</strong>
+      </article>
+
+      <article class="analytics-stat">
+        <span>Page Views</span>
+        <strong id="pageViews">—</strong>
+      </article>
+
+    </section>
+
+
+    <section class="analytics-grid">
+
+      <article class="analytics-panel">
+
+        <div class="eyebrow">
+          EVENTS
+        </div>
+
+        <h2>
+          Event Activity
+        </h2>
+
+        <div id="eventList"></div>
+
+      </article>
+
+
+      <article class="analytics-panel">
+
+        <div class="eyebrow">
+          SOURCES
+        </div>
+
+        <h2>
+          Traffic Sources
+        </h2>
+
+        <div id="sourceList"></div>
+
+      </article>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<script>
+
+async function requireAdmin() {
+
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+
+    window.location.replace(
+      "login.html"
+    );
+
+    return false;
+  }
+
+  return true;
+}
+
+
+async function loadAnalytics() {
+
+  if (!(await requireAdmin())) return;
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("analytics_events")
+    .select("*")
+    .order("created_at", {
+      ascending: false
+    })
+    .limit(5000);
+
+  if (error) {
+
+    document.getElementById(
+      "eventList"
+    ).innerHTML =
+      `<p>Unable to load analytics: ${escapeHtml(error.message)}</p>`;
+
+    return;
+  }
+
+  const events =
+    data || [];
+
+  document.getElementById(
+    "totalEvents"
+  ).textContent =
+    events.length;
+
+  document.getElementById(
+    "registerClicks"
+  ).textContent =
+    events.filter(
+      event =>
+        event.event_name ===
+        "register_click"
+    ).length;
+
+  document.getElementById(
+    "subscriptions"
+  ).textContent =
+    events.filter(
+      event =>
+        event.event_name ===
+        "newsletter_subscribe"
+    ).length;
+
+  document.getElementById(
+    "pageViews"
+  ).textContent =
+    events.filter(
+      event =>
+        event.event_name ===
+        "page_view"
+    ).length;
+
+
+  const eventCounts = {};
+
+  events.forEach(event => {
+
+    const name =
+      event.event_name ||
+      "unknown";
+
+    eventCounts[name] =
+      (eventCounts[name] || 0) + 1;
+
+  });
+
+
+  const sortedEvents =
+    Object.entries(eventCounts)
+      .sort(
+        (a, b) => b[1] - a[1]
+      );
+
+
+  const eventList =
+    document.getElementById(
+      "eventList"
+    );
+
+  eventList.innerHTML = "";
+
+  if (!sortedEvents.length) {
+
+    eventList.innerHTML =
+      `<div class="empty-state">No tracked events yet.</div>`;
+
+  } else {
+
+    sortedEvents.forEach(
+      ([name, count]) => {
+
+        const row =
+          document.createElement(
+            "div"
+          );
+
+        row.className =
+          "event-row";
+
+        row.innerHTML = `
+
+          <span class="event-name">
+            ${escapeHtml(name)}
+          </span>
+
+          <span class="event-count">
+            ${count}
+          </span>
+
+        `;
+
+        eventList.appendChild(row);
+
+      }
+    );
+
+  }
+
+
+  const sourceCounts = {};
+
+  events.forEach(event => {
+
+    let source =
+      event.utm_source ||
+      event.source ||
+      "Direct / Unknown";
+
+    sourceCounts[source] =
+      (sourceCounts[source] || 0) + 1;
+
+  });
+
+
+  const sortedSources =
+    Object.entries(sourceCounts)
+      .sort(
+        (a, b) => b[1] - a[1]
+      );
+
+
+  const sourceList =
+    document.getElementById(
+      "sourceList"
+    );
+
+  sourceList.innerHTML = "";
+
+  if (!sortedSources.length) {
+
+    sourceList.innerHTML =
+      `<div class="empty-state">No source data yet.</div>`;
+
+  } else {
+
+    sortedSources.forEach(
+      ([source, count]) => {
+
+        const row =
+          document.createElement(
+            "div"
+          );
+
+        row.className =
+          "source-row";
+
+        row.innerHTML = `
+
+          <span>
+            ${escapeHtml(source)}
+          </span>
+
+          <strong>
+            ${count}
+          </strong>
+
+        `;
+
+        sourceList.appendChild(row);
+
+      }
+    );
+
+  }
+
+}
+
+
+document
+  .getElementById("logoutBtn")
+  .addEventListener(
+    "click",
+    async () => {
+
+      await supabaseClient.auth.signOut();
+
+      window.location.replace(
+        "login.html"
+      );
+
+    }
+  );
+
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+loadAnalytics();
+
+</script>
+
+</body>
+</html>

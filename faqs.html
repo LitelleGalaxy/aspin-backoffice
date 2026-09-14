@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ASPIN Admin | FAQs</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .faq-list {
+      display: grid;
+      gap: 15px;
+    }
+
+    .faq-card {
+      background: #101010;
+      border: 1px solid #292929;
+      padding: 22px;
+    }
+
+    .faq-question {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .faq-answer {
+      color: #aaa;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .faq-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-top: 18px;
+      padding-top: 15px;
+      border-top: 1px solid #292929;
+    }
+
+    .faq-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .faq-actions button {
+      padding: 9px 13px;
+      border: 1px solid #333;
+      background: #181818;
+      color: #eee;
+      cursor: pointer;
+    }
+
+    .faq-actions button:hover {
+      border-color: #d4af37;
+      color: #d4af37;
+    }
+
+    .status {
+      font-size: 11px;
+      letter-spacing: .1em;
+      padding: 6px 9px;
+      border: 1px solid #444;
+    }
+
+    .published {
+      color: #79d18b;
+      border-color: #315d3a;
+    }
+
+    .draft {
+      color: #aaa;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.78);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal {
+      width: min(650px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #111;
+      border: 1px solid #333;
+      padding: 25px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .close-btn {
+      border: 0;
+      background: transparent;
+      color: #aaa;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: .1em;
+      margin-bottom: 7px;
+      color: #aaa;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      background: #080808;
+      border: 1px solid #333;
+      color: #fff;
+    }
+
+    .form-group textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checkbox-row input {
+      width: auto;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 20px;
+      border-top: 1px solid #292929;
+    }
+
+    .secondary-btn {
+      padding: 12px 16px;
+      border: 1px solid #333;
+      background: #181818;
+      color: #eee;
+      cursor: pointer;
+    }
+
+    @media (max-width: 650px) {
+      .faq-meta {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      <img src="favicon.png" alt="ASPIN" class="sidebar-logo">
+
+      <div class="sidebar-brand-text">
+        <strong>ASPIN.SITE</strong>
+        <span>ADMIN PORTAL</span>
+      </div>
+    </div>
+
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="promotions.html">Promotions</a>
+      <a href="media.html">Media</a>
+      <a href="faqs.html" class="active">FAQs</a>
+      <a href="payments.html">Payments</a>
+      <a href="subscribers.html">Subscribers</a>
+      <a href="analytics.html">Analytics</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+
+    <button id="logoutBtn" class="logout-btn">
+      LOG OUT
+    </button>
+
+  </aside>
+
+  <main class="admin-main">
+
+    <header class="page-header">
+
+      <div>
+        <div class="eyebrow">ASPIN.SITE</div>
+        <h1>FAQs</h1>
+        <p>Manage frequently asked questions shown on the website.</p>
+      </div>
+
+      <button
+        id="addFaqBtn"
+        class="primary-btn"
+      >
+        + ADD FAQ
+      </button>
+
+    </header>
+
+    <div id="errorMessage"></div>
+
+    <section
+      id="faqList"
+      class="faq-list"
+    ></section>
+
+  </main>
+
+</div>
+
+
+<div
+  id="faqModal"
+  class="modal-overlay"
+>
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <h2 id="modalTitle">
+        Add FAQ
+      </h2>
+
+      <button
+        id="closeModal"
+        class="close-btn"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <form id="faqForm">
+
+      <input
+        type="hidden"
+        id="faqId"
+      >
+
+      <div class="form-group">
+
+        <label>
+          QUESTION
+        </label>
+
+        <input
+          id="question"
+          type="text"
+          required
+          placeholder="How do I register?"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          ANSWER
+        </label>
+
+        <textarea
+          id="answer"
+          required
+          placeholder="Enter the answer..."
+        ></textarea>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          SORT ORDER
+        </label>
+
+        <input
+          id="sortOrder"
+          type="number"
+          value="0"
+        >
+
+      </div>
+
+      <div class="checkbox-row">
+
+        <input
+          id="isPublished"
+          type="checkbox"
+          checked
+        >
+
+        <label for="isPublished">
+          Publish this FAQ
+        </label>
+
+      </div>
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          id="cancelBtn"
+          class="secondary-btn"
+        >
+          CANCEL
+        </button>
+
+        <button
+          type="submit"
+          class="primary-btn"
+        >
+          SAVE FAQ
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<script>
+
+let faqs = [];
+
+
+async function requireAdmin() {
+
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+
+    window.location.replace(
+      "login.html"
+    );
+
+    return false;
+  }
+
+  return true;
+}
+
+
+async function loadFaqs() {
+
+  if (!(await requireAdmin())) return;
+
+  const list =
+    document.getElementById("faqList");
+
+  list.innerHTML =
+    "<p>Loading FAQs...</p>";
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("faqs")
+    .select("*")
+    .order("sort_order", {
+      ascending: true
+    })
+    .order("created_at", {
+      ascending: false
+    });
+
+  if (error) {
+
+    list.innerHTML =
+      `<p>Unable to load FAQs: ${escapeHtml(error.message)}</p>`;
+
+    return;
+  }
+
+  faqs = data || [];
+
+  renderFaqs();
+
+}
+
+
+function renderFaqs() {
+
+  const list =
+    document.getElementById("faqList");
+
+  list.innerHTML = "";
+
+  if (!faqs.length) {
+
+    list.innerHTML = `
+      <div class="empty-state">
+        <h2>No FAQs yet</h2>
+        <p>Add your first FAQ.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  faqs.forEach(faq => {
+
+    const card =
+      document.createElement("article");
+
+    card.className =
+      "faq-card";
+
+    card.innerHTML = `
+
+      <div class="faq-question">
+        ${escapeHtml(faq.question)}
+      </div>
+
+      <div class="faq-answer">
+        ${escapeHtml(faq.answer)}
+      </div>
+
+      <div class="faq-meta">
+
+        <span class="status ${
+          faq.is_published
+            ? "published"
+            : "draft"
+        }">
+          ${
+            faq.is_published
+              ? "PUBLISHED"
+              : "DRAFT"
+          }
+        </span>
+
+        <div class="faq-actions">
+
+          <button
+            onclick="editFaq('${faq.id}')"
+          >
+            EDIT
+          </button>
+
+          <button
+            onclick="toggleFaq('${faq.id}', ${!faq.is_published})"
+          >
+            ${
+              faq.is_published
+                ? "UNPUBLISH"
+                : "PUBLISH"
+            }
+          </button>
+
+          <button
+            onclick="deleteFaq('${faq.id}')"
+          >
+            DELETE
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+    list.appendChild(card);
+
+  });
+
+}
+
+
+function openModal(faq = null) {
+
+  document.getElementById(
+    "faqModal"
+  ).style.display = "flex";
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent =
+    faq
+      ? "Edit FAQ"
+      : "Add FAQ";
+
+  document.getElementById(
+    "faqId"
+  ).value =
+    faq?.id || "";
+
+  document.getElementById(
+    "question"
+  ).value =
+    faq?.question || "";
+
+  document.getElementById(
+    "answer"
+  ).value =
+    faq?.answer || "";
+
+  document.getElementById(
+    "sortOrder"
+  ).value =
+    faq?.sort_order ?? 0;
+
+  document.getElementById(
+    "isPublished"
+  ).checked =
+    faq
+      ? faq.is_published
+      : true;
+
+}
+
+
+function closeModal() {
+
+  document.getElementById(
+    "faqModal"
+  ).style.display = "none";
+
+}
+
+
+function editFaq(id) {
+
+  const faq =
+    faqs.find(
+      item => item.id === id
+    );
+
+  if (faq) openModal(faq);
+
+}
+
+
+async function toggleFaq(id, publish) {
+
+  const {
+    error
+  } = await supabaseClient
+    .from("faqs")
+    .update({
+      is_published: publish,
+      updated_at:
+        new Date().toISOString()
+    })
+    .eq("id", id);
+
+  if (error) {
+
+    alert(
+      "Unable to update FAQ: " +
+      error.message
+    );
+
+    return;
+  }
+
+  loadFaqs();
+
+}
+
+
+async function deleteFaq(id) {
+
+  const faq =
+    faqs.find(
+      item => item.id === id
+    );
+
+  if (!faq) return;
+
+  if (!confirm(
+    `Delete "${faq.question}"?\n\nThis cannot be undone.`
+  )) return;
+
+  const {
+    error
+  } = await supabaseClient
+    .from("faqs")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+
+    alert(
+      "Unable to delete FAQ: " +
+      error.message
+    );
+
+    return;
+  }
+
+  loadFaqs();
+
+}
+
+
+document
+  .getElementById("faqForm")
+  .addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+      const id =
+        document.getElementById(
+          "faqId"
+        ).value;
+
+      const faqData = {
+
+        question:
+          document.getElementById(
+            "question"
+          ).value.trim(),
+
+        answer:
+          document.getElementById(
+            "answer"
+          ).value.trim(),
+
+        sort_order:
+          Number(
+            document.getElementById(
+              "sortOrder"
+            ).value
+          ) || 0,
+
+        is_published:
+          document.getElementById(
+            "isPublished"
+          ).checked,
+
+        updated_at:
+          new Date().toISOString()
+
+      };
+
+      let result;
+
+      if (id) {
+
+        result =
+          await supabaseClient
+            .from("faqs")
+            .update(faqData)
+            .eq("id", id);
+
+      } else {
+
+        result =
+          await supabaseClient
+            .from("faqs")
+            .insert(faqData);
+
+      }
+
+      if (result.error) {
+
+        alert(
+          "Unable to save FAQ: " +
+          result.error.message
+        );
+
+        return;
+      }
+
+      closeModal();
+
+      loadFaqs();
+
+    }
+  );
+
+
+document
+  .getElementById("addFaqBtn")
+  .addEventListener(
+    "click",
+    () => openModal()
+  );
+
+
+document
+  .getElementById("closeModal")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+
+document
+  .getElementById("cancelBtn")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+
+document
+  .getElementById("logoutBtn")
+  .addEventListener(
+    "click",
+    async () => {
+
+      await supabaseClient.auth.signOut();
+
+      window.location.replace(
+        "login.html"
+      );
+
+    }
+  );
+
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+loadFaqs();
+
+</script>
+
+</body>
+</html>
