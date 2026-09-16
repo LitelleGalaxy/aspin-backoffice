@@ -3,175 +3,162 @@
 
 <head>
 
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-  <title>ASPIN Admin | Settings</title>
+    <title>ASPIN BO | Settings</title>
 
-  <link
-    rel="icon"
-    type="image/png"
-    href="favicon.png"
-  >
+    <link rel="stylesheet" href="style.css">
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+    <style>
 
-  <style>
+        /* =========================================================
+           SETTINGS
+        ========================================================= */
 
-    .settings-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
 
-    .settings-panel {
-      background: #101010;
-      border: 1px solid #292929;
-      padding: 22px;
-    }
 
-    .settings-panel.full {
-      grid-column: 1 / -1;
-    }
+        .settings-panel {
+            background: #101010;
+            border: 1px solid #292929;
+            padding: 22px;
+        }
 
-    .settings-panel-header {
-      margin-bottom: 22px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #292929;
-    }
 
-    .settings-panel-header h2 {
-      margin: 0;
-    }
+        .settings-panel.full {
+            grid-column: 1 / -1;
+        }
 
-    .settings-panel-header p {
-      color: #777;
-      font-size: 12px;
-      margin-top: 6px;
-      line-height: 1.5;
-    }
 
-    .form-group {
-      margin-bottom: 18px;
-    }
+        .form-group {
+            margin-bottom: 18px;
+        }
 
-    .form-group:last-child {
-      margin-bottom: 0;
-    }
 
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: #d4af37;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .12em;
-    }
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: .1em;
+            color: #aaa;
+            margin-bottom: 7px;
+        }
 
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px 13px;
-      background: #080808;
-      border: 1px solid #353535;
-      color: #fff;
-      font-family: inherit;
-      font-size: 13px;
-      outline: none;
-    }
 
-    .form-group input:focus,
-    .form-group textarea:focus {
-      border-color: #d4af37;
-    }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            background: #080808;
+            border: 1px solid #333;
+            color: #fff;
+            outline: none;
+        }
 
-    .form-group textarea {
-      min-height: 100px;
-      resize: vertical;
-      line-height: 1.6;
-    }
 
-    .form-help {
-      color: #666;
-      font-size: 11px;
-      margin-top: 6px;
-      line-height: 1.5;
-    }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #d4af37;
+        }
 
-    .settings-actions {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 22px;
-      padding-top: 18px;
-      border-top: 1px solid #292929;
-    }
 
-    .save-status {
-      min-height: 18px;
-      margin-top: 12px;
-      color: #d4af37;
-      font-size: 12px;
-    }
+        .form-group textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
 
-    .success-message {
-      display: none;
-      margin-bottom: 20px;
-      padding: 14px;
-      border: 1px solid #6a5620;
-      background: #181408;
-      color: #d4af37;
-      font-size: 13px;
-    }
 
-    .error-message {
-      display: none;
-      margin-bottom: 20px;
-      padding: 14px;
-      border: 1px solid #6b2424;
-      background: #190909;
-      color: #ff8c8c;
-      font-size: 13px;
-    }
+        .save-status {
+            margin-top: 12px;
+            min-height: 18px;
+            color: #d4af37;
+            font-size: 13px;
+        }
 
-    .settings-note {
-      padding: 15px;
-      background: #0a0a0a;
-      border: 1px solid #292929;
-      color: #888;
-      font-size: 12px;
-      line-height: 1.6;
-    }
 
-    .settings-note strong {
-      color: #ccc;
-    }
+        .save-status.error {
+            color: #d97b7b;
+        }
 
-    .loading {
-      color: #888;
-      padding: 20px 0;
-    }
 
-    @media (max-width: 800px) {
+        .save-status.success {
+            color: #79d18b;
+        }
 
-      .settings-grid {
-        grid-template-columns: 1fr;
-      }
 
-      .settings-panel.full {
-        grid-column: auto;
-      }
+        .account-box {
+            background: #080808;
+            border: 1px solid #292929;
+            padding: 15px;
+            margin-top: 10px;
+        }
 
-    }
 
-  </style>
+        .account-box span {
+            display: block;
+            color: #888;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+
+        .account-box strong {
+            word-break: break-word;
+        }
+
+
+        .settings-note {
+            margin-top: 8px;
+            color: #777;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+
+        .primary-btn:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
+
+
+        @media (max-width: 800px) {
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-panel.full {
+                grid-column: auto;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .settings-panel {
+                padding: 18px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -182,1027 +169,856 @@
 <div class="admin-layout">
 
 
-  <aside class="sidebar">
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================= -->
 
-    <div class="sidebar-brand">
-
-      <img
-        src="favicon.png"
-        alt="ASPIN"
-        class="sidebar-logo"
-      >
-
-      <div class="sidebar-brand-text">
-
-        <strong>ASPIN.SITE</strong>
-
-        <span>ADMIN PORTAL</span>
-
-      </div>
-
-    </div>
+    <aside class="sidebar">
 
 
-    <nav>
+        <div class="sidebar-brand">
 
-      <a href="index.html">
-        Dashboard
-      </a>
+            <img
+                src="favicon.png"
+                alt="ASPIN"
+                class="sidebar-logo"
+            >
 
-      <a href="promotions.html">
-        Promotions
-      </a>
+            <div class="sidebar-brand-text">
 
-      <a href="media.html">
-        Media
-      </a>
+                <strong>
+                    ASPIN.SITE
+                </strong>
 
-      <a href="faqs.html">
-        FAQs
-      </a>
+                <span>
+                    BACK OFFICE
+                </span>
 
-      <a href="payments.html">
-        Payments
-      </a>
-
-      <a href="subscribers.html">
-        Subscribers
-      </a>
-
-      <a href="analytics.html">
-        Analytics
-      </a>
-
-      <a
-        href="settings.html"
-        class="active"
-      >
-        Settings
-      </a>
-
-    </nav>
-
-
-    <button
-      id="logoutBtn"
-      class="logout-btn"
-    >
-
-      LOG OUT
-
-    </button>
-
-  </aside>
-
-
-  <main class="admin-main">
-
-
-    <header class="page-header">
-
-      <div>
-
-        <div class="eyebrow">
-          ASPIN.SITE
-        </div>
-
-        <h1>
-          Settings
-        </h1>
-
-        <p>
-          Manage website information and contact details.
-        </p>
-
-      </div>
-
-    </header>
-
-
-    <div
-      id="successMessage"
-      class="success-message"
-    ></div>
-
-
-    <div
-      id="errorMessage"
-      class="error-message"
-    ></div>
-
-
-    <div
-      id="loading"
-      class="loading"
-    >
-
-      Loading settings...
-
-    </div>
-
-
-    <section class="settings-grid">
-
-
-      <!-- GENERAL -->
-
-      <article class="settings-panel">
-
-        <div class="settings-panel-header">
-
-          <div class="eyebrow">
-            GENERAL
-          </div>
-
-          <h2>
-            Website Information
-          </h2>
-
-          <p>
-            Basic information used throughout the website.
-          </p>
+            </div>
 
         </div>
 
+        <nav class="admin-nav">
+        <a href="index.html">Dashboard</a>
+        <a href="promotions.html">Promotions</a>
+        <a href="media.html">Media</a>
+        <a href="faqs.html">FAQs</a>
+        <a href="payments.html">Payments</a>
+        <a href="subscribers.html">Subscribers</a>
+        <a href="analytics.html">Analytics</a>
+        <a href="activity.html">Activity History</a>
+        <a href="settings.html">Settings</a>
+      </nav>
 
-        <form id="generalForm">
+      <button id="logoutBtn" class="logout-btn">
+        LOG OUT
+      </button>
 
 
-          <div class="form-group">
+    </aside>
 
-            <label for="siteName">
-              SITE NAME
-            </label>
 
-            <input
-              id="siteName"
-              type="text"
-              placeholder="ASPIN.SITE"
-            >
 
-          </div>
+    <!-- =========================================================
+         MAIN CONTENT
+    ========================================================= -->
 
+    <main class="admin-main">
 
-          <div class="form-group">
 
-            <label for="siteDescription">
-              SITE DESCRIPTION
-            </label>
+        <header class="page-header">
 
-            <textarea
-              id="siteDescription"
-              placeholder="Enter your website description..."
-            ></textarea>
+            <div>
 
-          </div>
+                <div class="eyebrow">
+                    ASPIN.SITE
+                </div>
 
+                <h1>
+                    Settings
+                </h1>
 
-          <div class="settings-actions">
+                <p>
+                    Manage general website configuration.
+                </p>
 
-            <button
-              type="submit"
-              class="primary-btn"
-            >
+            </div>
 
-              SAVE GENERAL
+        </header>
 
-            </button>
 
-          </div>
 
+        <div class="settings-grid">
 
-          <div
-            id="generalStatus"
-            class="save-status"
-          ></div>
 
+            <!-- =================================================
+                 GENERAL SETTINGS
+            ================================================= -->
 
-        </form>
+            <section class="settings-panel">
 
-      </article>
 
+                <div class="eyebrow">
+                    GENERAL
+                </div>
 
-      <!-- CONTACT -->
 
-      <article class="settings-panel">
+                <h2>
+                    Website Information
+                </h2>
 
-        <div class="settings-panel-header">
 
-          <div class="eyebrow">
-            CONTACT
-          </div>
+                <form id="generalForm">
 
-          <h2>
-            Contact Information
-          </h2>
 
-          <p>
-            Contact details displayed or used by the website.
-          </p>
+                    <div class="form-group">
 
-        </div>
+                        <label for="site_name">
+                            SITE NAME
+                        </label>
 
+                        <input
+                            id="site_name"
+                            type="text"
+                            placeholder="ASPIN.SITE"
+                            autocomplete="off"
+                        >
 
-        <form id="contactForm">
+                    </div>
 
 
-          <div class="form-group">
 
-            <label for="contactEmail">
-              EMAIL ADDRESS
-            </label>
+                    <div class="form-group">
 
-            <input
-              id="contactEmail"
-              type="email"
-              placeholder="support@aspin.site"
-            >
+                        <label for="site_description">
+                            SITE DESCRIPTION
+                        </label>
 
-          </div>
+                        <textarea
+                            id="site_description"
+                            placeholder="Website description..."
+                        ></textarea>
 
+                    </div>
 
-          <div class="form-group">
 
-            <label for="contactPhone">
-              PHONE NUMBER
-            </label>
 
-            <input
-              id="contactPhone"
-              type="text"
-              placeholder="+63..."
-            >
+                    <div class="form-group">
 
-          </div>
+                        <label for="contact_email">
+                            CONTACT EMAIL
+                        </label>
 
+                        <input
+                            id="contact_email"
+                            type="email"
+                            placeholder="support@example.com"
+                            autocomplete="email"
+                        >
 
-          <div class="settings-actions">
+                    </div>
 
-            <button
-              type="submit"
-              class="primary-btn"
-            >
 
-              SAVE CONTACT
 
-            </button>
+                    <div class="form-group">
 
-          </div>
+                        <label for="contact_phone">
+                            CONTACT PHONE
+                        </label>
 
+                        <input
+                            id="contact_phone"
+                            type="text"
+                            placeholder="+63..."
+                            autocomplete="tel"
+                        >
 
-          <div
-            id="contactStatus"
-            class="save-status"
-          ></div>
+                    </div>
 
 
-        </form>
 
-      </article>
+                    <div class="form-actions">
 
+                        <button
+                            type="submit"
+                            class="primary-btn"
+                            id="saveGeneralBtn"
+                        >
+                            SAVE SETTINGS
+                        </button>
 
-      <!-- SOCIAL -->
+                    </div>
 
-      <article class="settings-panel">
 
-        <div class="settings-panel-header">
+                    <div
+                        id="generalStatus"
+                        class="save-status"
+                        aria-live="polite"
+                    ></div>
 
-          <div class="eyebrow">
-            SOCIAL
-          </div>
 
-          <h2>
-            Social Links
-          </h2>
+                </form>
 
-          <p>
-            Social media links used by the public website.
-          </p>
 
-        </div>
+            </section>
 
 
-        <form id="socialForm">
 
+            <!-- =================================================
+                 SOCIAL LINKS
+            ================================================= -->
 
-          <div class="form-group">
+            <section class="settings-panel">
 
-            <label for="facebookUrl">
-              FACEBOOK URL
-            </label>
 
-            <input
-              id="facebookUrl"
-              type="url"
-              placeholder="https://facebook.com/..."
-            >
+                <div class="eyebrow">
+                    SOCIAL
+                </div>
 
-          </div>
 
+                <h2>
+                    Social Links
+                </h2>
 
-          <div class="form-group">
 
-            <label for="instagramUrl">
-              INSTAGRAM URL
-            </label>
+                <form id="socialForm">
 
-            <input
-              id="instagramUrl"
-              type="url"
-              placeholder="https://instagram.com/..."
-            >
 
-          </div>
+                    <div class="form-group">
 
+                        <label for="facebook_url">
+                            FACEBOOK
+                        </label>
 
-          <div class="form-group">
+                        <input
+                            id="facebook_url"
+                            type="url"
+                            placeholder="https://facebook.com/..."
+                            autocomplete="url"
+                        >
 
-            <label for="telegramUrl">
-              TELEGRAM URL
-            </label>
+                    </div>
 
-            <input
-              id="telegramUrl"
-              type="url"
-              placeholder="https://t.me/..."
-            >
 
-          </div>
 
+                    <div class="form-group">
 
-          <div class="settings-actions">
+                        <label for="instagram_url">
+                            INSTAGRAM
+                        </label>
 
-            <button
-              type="submit"
-              class="primary-btn"
-            >
+                        <input
+                            id="instagram_url"
+                            type="url"
+                            placeholder="https://instagram.com/..."
+                            autocomplete="url"
+                        >
 
-              SAVE SOCIAL
+                    </div>
 
-            </button>
 
-          </div>
 
+                    <div class="form-group">
 
-          <div
-            id="socialStatus"
-            class="save-status"
-          ></div>
+                        <label for="telegram_url">
+                            TELEGRAM
+                        </label>
 
+                        <input
+                            id="telegram_url"
+                            type="url"
+                            placeholder="https://t.me/..."
+                            autocomplete="url"
+                        >
 
-        </form>
+                    </div>
 
-      </article>
 
 
-      <!-- SYSTEM -->
+                    <div class="form-actions">
 
-      <article class="settings-panel">
+                        <button
+                            type="submit"
+                            class="primary-btn"
+                            id="saveSocialBtn"
+                        >
+                            SAVE SOCIAL LINKS
+                        </button>
 
-        <div class="settings-panel-header">
+                    </div>
 
-          <div class="eyebrow">
-            SYSTEM
-          </div>
 
-          <h2>
-            CMS Information
-          </h2>
+                    <div
+                        id="socialStatus"
+                        class="save-status"
+                        aria-live="polite"
+                    ></div>
 
-          <p>
-            Current backoffice configuration.
-          </p>
+
+                </form>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ADMIN ACCOUNT
+            ================================================= -->
+
+            <section class="settings-panel full">
+
+
+                <div class="eyebrow">
+                    ACCOUNT
+                </div>
+
+
+                <h2>
+                    Current Admin Account
+                </h2>
+
+
+                <div class="account-box">
+
+                    <span>
+                        SIGNED-IN EMAIL
+                    </span>
+
+                    <strong id="adminEmail">
+                        Loading...
+                    </strong>
+
+                </div>
+
+
+                <p class="settings-note">
+                    This is the currently authenticated ASpin admin account.
+                </p>
+
+
+            </section>
+
 
         </div>
 
 
-        <div class="settings-note">
+    </main>
 
-          <strong>Database:</strong>
-          Supabase
-
-          <br><br>
-
-          <strong>Storage:</strong>
-          Supabase Storage
-
-          <br><br>
-
-          <strong>Authentication:</strong>
-          Supabase Auth
-
-          <br><br>
-
-          <strong>Website:</strong>
-          ASPIN.SITE
-
-          <br><br>
-
-          <strong>Gaming Site:</strong>
-          ASPIN.VIP
-
-        </div>
-
-      </article>
-
-
-    </section>
-
-
-  </main>
 
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="supabase.js"></script>
+  <!-- SUPABASE -->
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script src="mobile-menu.js"></script>
 
 <script>
 
 
-const SETTING_KEYS = [
-
-  "site_name",
-
-  "site_description",
-
-  "contact_email",
-
-  "contact_phone",
-
-  "facebook_url",
-
-  "instagram_url",
-
-  "telegram_url"
-
-];
-
-
-
-/* =========================================
-   ADMIN CHECK
-========================================= */
-
+/* =========================================================
+   ADMIN AUTHENTICATION
+========================================================= */
 
 async function requireAdmin() {
 
-  const {
-
-    data: { session },
-
-    error
-
-  } = await supabaseClient
-    .auth
-    .getSession();
+    const {
+        data: { session },
+        error
+    } = await supabaseClient.auth.getSession();
 
 
-  if (error || !session) {
+    if (error) {
 
-    window.location.replace(
-      "login.html"
-    );
+        console.error(
+            "Session error:",
+            error
+        );
 
-    return false;
+        window.location.replace(
+            "login.html"
+        );
 
-  }
+        return null;
+    }
 
 
-  return true;
+    if (!session) {
 
+        window.location.replace(
+            "login.html"
+        );
+
+        return null;
+    }
+
+
+    return session;
 }
 
 
 
-/* =========================================
-   ERROR / SUCCESS
-========================================= */
-
-
-function showError(message) {
-
-  const el =
-    document.getElementById(
-      "errorMessage"
-    );
-
-  el.textContent =
-    message;
-
-  el.style.display =
-    "block";
-
-}
-
-
-function hideError() {
-
-  const el =
-    document.getElementById(
-      "errorMessage"
-    );
-
-  el.textContent =
-    "";
-
-  el.style.display =
-    "none";
-
-}
-
-
-function showSuccess(message) {
-
-  const el =
-    document.getElementById(
-      "successMessage"
-    );
-
-  el.textContent =
-    message;
-
-  el.style.display =
-    "block";
-
-
-  setTimeout(
-    () => {
-
-      el.style.display =
-        "none";
-
-    },
-    3500
-  );
-
-}
-
-
-
-/* =========================================
+/* =========================================================
    LOAD SETTINGS
-========================================= */
-
+========================================================= */
 
 async function loadSettings() {
 
-  const allowed =
-    await requireAdmin();
+    const session =
+        await requireAdmin();
 
 
-  if (!allowed) return;
-
-
-  const loading =
-    document.getElementById(
-      "loading"
-    );
-
-
-  loading.style.display =
-    "block";
-
-
-  const {
-
-    data,
-
-    error
-
-  } = await supabaseClient
-
-    .from(
-      "site_settings"
-    )
-
-    .select("*");
-
-
-  loading.style.display =
-    "none";
-
-
-  if (error) {
-
-    showError(
-      "Unable to load settings: " +
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  hideError();
-
-
-  const settings = {};
-
-
-  (data || []).forEach(
-    item => {
-
-      settings[item.key] =
-        item.value ?? "";
-
+    if (!session) {
+        return;
     }
-  );
 
 
-  document
-    .getElementById(
-      "siteName"
-    )
-    .value =
-      settings.site_name || "";
+    document.getElementById(
+        "adminEmail"
+    ).textContent =
+        session.user.email || "—";
 
 
-  document
-    .getElementById(
-      "siteDescription"
-    )
-    .value =
-      settings.site_description || "";
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("site_settings")
+
+        .select("*");
 
 
-  document
-    .getElementById(
-      "contactEmail"
-    )
-    .value =
-      settings.contact_email || "";
+    if (error) {
+
+        console.error(
+            "Unable to load settings:",
+            error
+        );
 
 
-  document
-    .getElementById(
-      "contactPhone"
-    )
-    .value =
-      settings.contact_phone || "";
+        const status =
+            document.getElementById(
+                "generalStatus"
+            );
 
 
-  document
-    .getElementById(
-      "facebookUrl"
-    )
-    .value =
-      settings.facebook_url || "";
+        status.textContent =
+            "Unable to load settings: " +
+            error.message;
 
 
-  document
-    .getElementById(
-      "instagramUrl"
-    )
-    .value =
-      settings.instagram_url || "";
+        status.className =
+            "save-status error";
 
 
-  document
-    .getElementById(
-      "telegramUrl"
-    )
-    .value =
-      settings.telegram_url || "";
+        return;
+    }
+
+
+    const settings = {};
+
+
+    (data || []).forEach(
+        item => {
+
+            settings[item.key] =
+                item.value;
+
+        }
+    );
+
+
+
+    /* GENERAL */
+
+    document.getElementById(
+        "site_name"
+    ).value =
+        settings.site_name || "";
+
+
+    document.getElementById(
+        "site_description"
+    ).value =
+        settings.site_description || "";
+
+
+    document.getElementById(
+        "contact_email"
+    ).value =
+        settings.contact_email || "";
+
+
+    document.getElementById(
+        "contact_phone"
+    ).value =
+        settings.contact_phone || "";
+
+
+
+    /* SOCIAL */
+
+    document.getElementById(
+        "facebook_url"
+    ).value =
+        settings.facebook_url || "";
+
+
+    document.getElementById(
+        "instagram_url"
+    ).value =
+        settings.instagram_url || "";
+
+
+    document.getElementById(
+        "telegram_url"
+    ).value =
+        settings.telegram_url || "";
 
 }
 
 
 
-/* =========================================
-   SAVE SETTINGS
-========================================= */
-
+/* =========================================================
+   SAVE ONE SETTING
+========================================================= */
 
 async function saveSetting(
-  key,
-  value
+    key,
+    value
 ) {
 
-  const {
+    const {
+        error
+    } = await supabaseClient
 
-    error
+        .from("site_settings")
 
-  } = await supabaseClient
-
-    .from(
-      "site_settings"
-    )
-
-    .upsert(
-      {
-        key,
-        value,
-        updated_at:
-          new Date()
-            .toISOString()
-      },
-      {
-        onConflict: "key"
-      }
-    );
+        .upsert(
+            {
+                key: key,
+                value: value,
+                updated_at:
+                    new Date().toISOString()
+            },
+            {
+                onConflict: "key"
+            }
+        );
 
 
-  if (error) {
-
-    throw error;
-
-  }
-
+    return error;
 }
 
 
 
-/* =========================================
-   GENERAL FORM
-========================================= */
-
-
-document
-  .getElementById(
-    "generalForm"
-  )
-  .addEventListener(
-    "submit",
-    async function(event) {
-
-      event.preventDefault();
-
-
-      hideError();
-
-
-      const status =
-        document.getElementById(
-          "generalStatus"
-        );
-
-
-      status.textContent =
-        "Saving...";
-
-
-      try {
-
-
-        await saveSetting(
-          "site_name",
-          document
-            .getElementById(
-              "siteName"
-            )
-            .value
-            .trim()
-        );
-
-
-        await saveSetting(
-          "site_description",
-          document
-            .getElementById(
-              "siteDescription"
-            )
-            .value
-            .trim()
-        );
-
-
-        status.textContent =
-          "Saved successfully.";
-
-        showSuccess(
-          "General settings saved."
-        );
-
-      }
-
-      catch (error) {
-
-        status.textContent =
-          "";
-
-        showError(
-          "Unable to save general settings: " +
-          error.message
-        );
-
-      }
-
-    }
-  );
-
-
-
-/* =========================================
-   CONTACT FORM
-========================================= */
-
+/* =========================================================
+   SAVE GENERAL SETTINGS
+========================================================= */
 
 document
-  .getElementById(
-    "contactForm"
-  )
-  .addEventListener(
-    "submit",
-    async function(event) {
+    .getElementById(
+        "generalForm"
+    )
+    .addEventListener(
+        "submit",
+        async event => {
 
-      event.preventDefault();
-
-
-      hideError();
+            event.preventDefault();
 
 
-      const status =
-        document.getElementById(
-          "contactStatus"
-        );
+            const status =
+                document.getElementById(
+                    "generalStatus"
+                );
 
 
-      status.textContent =
-        "Saving...";
+            const button =
+                document.getElementById(
+                    "saveGeneralBtn"
+                );
 
 
-      try {
+            status.textContent =
+                "Saving...";
 
 
-        await saveSetting(
-          "contact_email",
-          document
-            .getElementById(
-              "contactEmail"
-            )
-            .value
-            .trim()
-        );
+            status.className =
+                "save-status";
 
 
-        await saveSetting(
-          "contact_phone",
-          document
-            .getElementById(
-              "contactPhone"
-            )
-            .value
-            .trim()
-        );
+            button.disabled =
+                true;
 
 
-        status.textContent =
-          "Saved successfully.";
+            const settings = {
 
-        showSuccess(
-          "Contact settings saved."
-        );
+                site_name:
+                    document
+                        .getElementById(
+                            "site_name"
+                        )
+                        .value
+                        .trim(),
 
-      }
+                site_description:
+                    document
+                        .getElementById(
+                            "site_description"
+                        )
+                        .value
+                        .trim(),
 
-      catch (error) {
+                contact_email:
+                    document
+                        .getElementById(
+                            "contact_email"
+                        )
+                        .value
+                        .trim(),
 
-        status.textContent =
-          "";
+                contact_phone:
+                    document
+                        .getElementById(
+                            "contact_phone"
+                        )
+                        .value
+                        .trim()
 
-        showError(
-          "Unable to save contact settings: " +
-          error.message
-        );
-
-      }
-
-    }
-  );
+            };
 
 
+            try {
 
-/* =========================================
-   SOCIAL FORM
-========================================= */
+                for (
+                    const [key, value]
+                    of Object.entries(settings)
+                ) {
 
+                    const error =
+                        await saveSetting(
+                            key,
+                            value
+                        );
+
+
+                    if (error) {
+
+                        throw error;
+
+                    }
+
+                }
+
+
+                status.textContent =
+                    "Settings saved successfully.";
+
+
+                status.className =
+                    "save-status success";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Unable to save settings:",
+                    error
+                );
+
+
+                status.textContent =
+                    "Unable to save: " +
+                    error.message;
+
+
+                status.className =
+                    "save-status error";
+
+            }
+
+
+            button.disabled =
+                false;
+
+        }
+    );
+
+
+
+/* =========================================================
+   SAVE SOCIAL LINKS
+========================================================= */
 
 document
-  .getElementById(
-    "socialForm"
-  )
-  .addEventListener(
-    "submit",
-    async function(event) {
+    .getElementById(
+        "socialForm"
+    )
+    .addEventListener(
+        "submit",
+        async event => {
 
-      event.preventDefault();
-
-
-      hideError();
+            event.preventDefault();
 
 
-      const status =
-        document.getElementById(
-          "socialStatus"
-        );
+            const status =
+                document.getElementById(
+                    "socialStatus"
+                );
 
 
-      status.textContent =
-        "Saving...";
+            const button =
+                document.getElementById(
+                    "saveSocialBtn"
+                );
 
 
-      try {
+            status.textContent =
+                "Saving...";
 
 
-        await saveSetting(
-          "facebook_url",
-          document
-            .getElementById(
-              "facebookUrl"
-            )
-            .value
-            .trim()
-        );
+            status.className =
+                "save-status";
 
 
-        await saveSetting(
-          "instagram_url",
-          document
-            .getElementById(
-              "instagramUrl"
-            )
-            .value
-            .trim()
-        );
+            button.disabled =
+                true;
 
 
-        await saveSetting(
-          "telegram_url",
-          document
-            .getElementById(
-              "telegramUrl"
-            )
-            .value
-            .trim()
-        );
+            const settings = {
+
+                facebook_url:
+                    document
+                        .getElementById(
+                            "facebook_url"
+                        )
+                        .value
+                        .trim(),
+
+                instagram_url:
+                    document
+                        .getElementById(
+                            "instagram_url"
+                        )
+                        .value
+                        .trim(),
+
+                telegram_url:
+                    document
+                        .getElementById(
+                            "telegram_url"
+                        )
+                        .value
+                        .trim()
+
+            };
 
 
-        status.textContent =
-          "Saved successfully.";
+            try {
 
-        showSuccess(
-          "Social links saved."
-        );
+                for (
+                    const [key, value]
+                    of Object.entries(settings)
+                ) {
 
-      }
-
-      catch (error) {
-
-        status.textContent =
-          "";
-
-        showError(
-          "Unable to save social links: " +
-          error.message
-        );
-
-      }
-
-    }
-  );
+                    const error =
+                        await saveSetting(
+                            key,
+                            value
+                        );
 
 
+                    if (error) {
 
-/* =========================================
+                        throw error;
+
+                    }
+
+                }
+
+
+                status.textContent =
+                    "Social links saved successfully.";
+
+
+                status.className =
+                    "save-status success";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Unable to save social links:",
+                    error
+                );
+
+
+                status.textContent =
+                    "Unable to save: " +
+                    error.message;
+
+
+                status.className =
+                    "save-status error";
+
+            }
+
+
+            button.disabled =
+                false;
+
+        }
+    );
+
+
+
+/* =========================================================
    LOGOUT
-========================================= */
-
+========================================================= */
 
 document
-  .getElementById(
-    "logoutBtn"
-  )
-  .addEventListener(
-    "click",
-    async () => {
+    .getElementById(
+        "logoutBtn"
+    )
+    .addEventListener(
+        "click",
+        async () => {
 
-      await supabaseClient
-        .auth
-        .signOut();
-
-
-      window.location.replace(
-        "login.html"
-      );
-
-    }
-  );
+            const button =
+                document.getElementById(
+                    "logoutBtn"
+                );
 
 
+            button.disabled =
+                true;
 
-/* =========================================
-   INITIAL LOAD
-========================================= */
 
+            await supabaseClient.auth.signOut();
+
+
+            window.location.replace(
+                "login.html"
+            );
+
+        }
+    );
+
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
 loadSettings();
 
 
 </script>
+
 
 </body>
 
