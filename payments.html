@@ -1,156 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <title>ASPIN BO | Payments</title>
 
-  <title>ASPIN Admin | Payments</title>
-
-  <link
-    rel="icon"
-    type="image/png"
-    href="favicon.png"
-  >
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
 
   <style>
-
-    .payment-toolbar {
+    .page-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: center;
+      margin-bottom: 30px;
       gap: 20px;
-      margin-bottom: 25px;
     }
 
-    .payment-count {
-      color: #888;
-      font-size: 12px;
+    .page-header h1 {
+      margin: 0;
+    }
+
+    .page-header p {
+      margin: 8px 0 0;
+      color: #999;
+    }
+
+    .primary-btn {
+      background: #b10d16;
+      color: #fff;
+      border: 1px solid #d4af37;
+      padding: 13px 20px;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: 0.2s ease;
+    }
+
+    .primary-btn:hover {
+      background: #d1111c;
+    }
+
+    .primary-btn:disabled,
+    .secondary-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .payment-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .payment-card {
       display: grid;
-      grid-template-columns: 150px 1fr;
-      gap: 20px;
-      background: #101010;
-      border: 1px solid #292929;
-      padding: 18px;
-    }
-
-    .payment-image-wrap {
-      width: 150px;
-      height: 110px;
-      background: #050505;
-      border: 1px solid #292929;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .payment-image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .payment-no-image {
-      color: #555;
-      font-size: 11px;
-      text-align: center;
-    }
-
-    .payment-content {
-      min-width: 0;
-    }
-
-    .payment-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
       gap: 15px;
     }
 
+    .payment-card {
+      background: #101010;
+      border: 1px solid #292929;
+      padding: 22px;
+      transition: border-color 0.2s ease;
+    }
+
+    .payment-card:hover {
+      border-color: #4a3d22;
+    }
+
     .payment-name {
-      color: #fff;
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 700;
+      margin-bottom: 8px;
     }
 
     .payment-description {
       color: #aaa;
-      font-size: 14px;
-      line-height: 1.7;
-      margin-top: 9px;
-      white-space: pre-wrap;
+      line-height: 1.6;
     }
 
     .payment-meta {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 16px;
-      padding-top: 14px;
+      margin-top: 18px;
+      padding-top: 15px;
       border-top: 1px solid #292929;
-    }
-
-    .payment-status {
-      display: inline-block;
-      padding: 5px 9px;
-      font-size: 10px;
-      letter-spacing: .12em;
-      font-weight: 700;
-      border: 1px solid;
-    }
-
-    .payment-status.published {
-      color: #d4af37;
-      border-color: #6a5620;
-      background: #181408;
-    }
-
-    .payment-status.hidden {
-      color: #888;
-      border-color: #3a3a3a;
-      background: #151515;
-    }
-
-    .payment-order {
-      color: #777;
-      font-size: 11px;
     }
 
     .payment-actions {
       display: flex;
       gap: 8px;
-      margin-left: auto;
       flex-wrap: wrap;
     }
 
     .payment-actions button {
-      border: 1px solid #3a3a3a;
-      background: #171717;
+      padding: 9px 13px;
+      border: 1px solid #333;
+      background: #181818;
       color: #eee;
-      padding: 8px 12px;
-      font-size: 11px;
       cursor: pointer;
+      transition: 0.2s ease;
     }
 
     .payment-actions button:hover {
@@ -158,42 +104,88 @@
       color: #d4af37;
     }
 
-    .payment-actions .delete-btn:hover {
-      border-color: #a33;
+    .payment-actions .delete-btn {
       color: #ff7777;
+      border-color: #632323;
+    }
+
+    .payment-actions .delete-btn:hover {
+      color: #ff9999;
+      border-color: #9a3333;
+      background: rgba(180, 30, 30, 0.12);
+    }
+
+    .payment-image {
+      width: 100px;
+      height: 70px;
+      object-fit: contain;
+      background: #070707;
+      margin-top: 15px;
+      border: 1px solid #292929;
+    }
+
+    .status {
+      font-size: 11px;
+      letter-spacing: .1em;
+      padding: 6px 9px;
+      border: 1px solid #444;
+    }
+
+    .published {
+      color: #79d18b;
+      border-color: #315d3a;
+    }
+
+    .draft {
+      color: #aaa;
     }
 
     .empty-state {
-      padding: 55px;
+      border: 1px dashed #3a3020;
+      padding: 60px 20px;
       text-align: center;
-      border: 1px solid #292929;
-      background: #101010;
+      color: #777;
     }
 
-    .empty-state p {
-      color: #888;
-      margin-top: 8px;
+    .empty-state h2 {
+      color: #ddd;
+      margin-bottom: 8px;
+    }
+
+    .loading {
+      color: #d4af37;
+      padding: 30px 0;
     }
 
     .error-message {
       display: none;
+      color: #ff7777;
+      background: rgba(150, 20, 20, 0.12);
+      border: 1px solid #632323;
+      padding: 15px;
       margin-bottom: 20px;
-      padding: 14px;
-      border: 1px solid #6b2424;
-      background: #190909;
-      color: #ff8c8c;
-      font-size: 13px;
     }
+
+    .success-message {
+      display: none;
+      color: #79d18b;
+      background: rgba(50, 150, 90, 0.08);
+      border: 1px solid #315d3a;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    /* MODAL */
 
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.78);
+      background: rgba(0, 0, 0, .78);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 20px;
       z-index: 1000;
+      padding: 20px;
     }
 
     .modal-overlay.active {
@@ -201,20 +193,19 @@
     }
 
     .modal {
-      width: min(680px, 100%);
+      width: min(650px, 100%);
       max-height: 90vh;
       overflow-y: auto;
-      background: #101010;
-      border: 1px solid #3a3a3a;
-      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+      background: #111;
+      border: 1px solid #333;
+      padding: 25px;
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px;
-      border-bottom: 1px solid #292929;
+      margin-bottom: 25px;
     }
 
     .modal-header h2 {
@@ -222,22 +213,16 @@
     }
 
     .close-btn {
-      width: 34px;
-      height: 34px;
-      border: 1px solid #3a3a3a;
-      background: #171717;
-      color: #fff;
-      font-size: 22px;
+      border: 0;
+      background: transparent;
+      color: #aaa;
+      font-size: 28px;
       cursor: pointer;
+      line-height: 1;
     }
 
     .close-btn:hover {
-      border-color: #d4af37;
-      color: #d4af37;
-    }
-
-    .payment-form {
-      padding: 20px;
+      color: #fff;
     }
 
     .form-group {
@@ -246,85 +231,46 @@
 
     .form-group label {
       display: block;
-      margin-bottom: 8px;
-      color: #d4af37;
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .12em;
+      letter-spacing: .1em;
+      margin-bottom: 7px;
+      color: #aaa;
     }
 
     .form-group input,
     .form-group textarea {
       width: 100%;
       box-sizing: border-box;
-      padding: 12px 13px;
+      padding: 12px;
       background: #080808;
-      border: 1px solid #353535;
+      border: 1px solid #333;
       color: #fff;
-      font-family: inherit;
-      font-size: 14px;
       outline: none;
+      font-family: inherit;
     }
 
     .form-group input:focus,
     .form-group textarea:focus {
       border-color: #d4af37;
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, .12);
     }
 
     .form-group textarea {
-      min-height: 130px;
+      min-height: 120px;
       resize: vertical;
-      line-height: 1.6;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-
-    .upload-box {
-      border: 1px dashed #5a4a26;
-      padding: 15px;
-      background: #0a0a0a;
-    }
-
-    .upload-box input[type="file"] {
-      width: 100%;
-      color: #ccc;
-    }
-
-    .image-preview {
-      width: 100%;
-      max-height: 180px;
-      object-fit: contain;
-      background: #050505;
-      margin-top: 12px;
-      display: none;
-      border: 1px solid #292929;
-    }
-
-    .upload-status {
-      margin-top: 8px;
-      color: #d4af37;
-      font-size: 12px;
     }
 
     .checkbox-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin: 8px 0 20px;
+      margin: 20px 0;
+      color: #ddd;
+      cursor: pointer;
     }
 
     .checkbox-row input {
       width: auto;
-      accent-color: #d4af37;
-    }
-
-    .checkbox-row label {
-      color: #ccc;
-      font-size: 13px;
       cursor: pointer;
     }
 
@@ -337,12 +283,12 @@
     }
 
     .secondary-btn {
-      border: 1px solid #3a3a3a;
-      background: #171717;
+      padding: 12px 16px;
+      border: 1px solid #333;
+      background: #181818;
       color: #eee;
-      padding: 11px 16px;
-      font-size: 12px;
       cursor: pointer;
+      transition: 0.2s ease;
     }
 
     .secondary-btn:hover {
@@ -350,40 +296,17 @@
       color: #d4af37;
     }
 
-    .loading {
-      color: #888;
-      padding: 20px 0;
-    }
+    @media (max-width: 650px) {
 
-    @media (max-width: 800px) {
-
-      .payment-card {
-        grid-template-columns: 1fr;
-      }
-
-      .payment-image-wrap {
-        width: 100%;
-        height: 180px;
-      }
-
-      .payment-top {
+      .page-header {
+        align-items: flex-start;
         flex-direction: column;
       }
 
-      .payment-actions {
-        margin-left: 0;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-    }
-
-    @media (max-width: 520px) {
-
-      .payment-card {
-        padding: 15px;
+      .payment-meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
       }
 
       .payment-actions {
@@ -394,22 +317,22 @@
         flex: 1;
       }
 
-      .modal {
-        max-height: 95vh;
+      .modal-actions {
+        flex-direction: column-reverse;
       }
 
+      .modal-actions button {
+        width: 100%;
+      }
     }
-
   </style>
-
 </head>
-
 
 <body>
 
-
 <div class="admin-layout">
 
+  <!-- SIDEBAR -->
 
   <aside class="sidebar">
 
@@ -422,70 +345,35 @@
       >
 
       <div class="sidebar-brand-text">
-
         <strong>ASPIN.SITE</strong>
-
-        <span>ADMIN PORTAL</span>
-
+        <span>BACK OFFICE</span>
       </div>
 
     </div>
 
 
-    <nav>
+    <nav class="admin-nav">
+        <a href="index.html">Dashboard</a>
+        <a href="promotions.html">Promotions</a>
+        <a href="media.html">Media</a>
+        <a href="faqs.html">FAQs</a>
+        <a href="payments.html">Payments</a>
+        <a href="subscribers.html">Subscribers</a>
+        <a href="analytics.html">Analytics</a>
+        <a href="activity.html">Activity History</a>
+        <a href="settings.html">Settings</a>
+      </nav>
 
-      <a href="index.html">
-        Dashboard
-      </a>
-
-      <a href="promotions.html">
-        Promotions
-      </a>
-
-      <a href="media.html">
-        Media
-      </a>
-
-      <a href="faqs.html">
-        FAQs
-      </a>
-
-      <a
-        href="payments.html"
-        class="active"
-      >
-        Payments
-      </a>
-
-      <a href="subscribers.html">
-        Subscribers
-      </a>
-
-      <a href="analytics.html">
-        Analytics
-      </a>
-
-      <a href="settings.html">
-        Settings
-      </a>
-
-    </nav>
-
-
-    <button
-      id="logoutBtn"
-      class="logout-btn"
-    >
-
-      LOG OUT
-
-    </button>
+      <button id="logoutBtn" class="logout-btn">
+        LOG OUT
+      </button>
 
   </aside>
 
 
-  <main class="admin-main">
+  <!-- MAIN -->
 
+  <main class="admin-main">
 
     <header class="page-header">
 
@@ -495,9 +383,7 @@
           ASPIN.SITE
         </div>
 
-        <h1>
-          Payments
-        </h1>
+        <h1>Payments</h1>
 
         <p>
           Manage payment methods displayed on the website.
@@ -509,10 +395,9 @@
       <button
         id="addPaymentBtn"
         class="primary-btn"
+        type="button"
       >
-
         + ADD PAYMENT
-
       </button>
 
     </header>
@@ -525,64 +410,40 @@
 
 
     <div
+      id="successMessage"
+      class="success-message"
+    ></div>
+
+
+    <div
       id="loading"
       class="loading"
     >
-
       Loading payment methods...
-
     </div>
 
 
-    <section>
-
-
-      <div class="payment-toolbar">
-
-        <div>
-
-          <div class="eyebrow">
-            CONTENT
-          </div>
-
-          <h2>
-            Payment Methods
-          </h2>
-
-        </div>
-
-
-        <div
-          id="paymentCount"
-          class="payment-count"
-        ></div>
-
-      </div>
-
-
-      <div
-        id="paymentList"
-        class="payment-list"
-      ></div>
-
-
-    </section>
-
+    <section
+      id="paymentList"
+      class="payment-list"
+    ></section>
 
   </main>
 
 </div>
 
 
-<!-- ADD / EDIT MODAL -->
+<!-- PAYMENT MODAL -->
 
 <div
   id="paymentModal"
   class="modal-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalTitle"
 >
 
   <div class="modal">
-
 
     <div class="modal-header">
 
@@ -591,22 +452,18 @@
       </h2>
 
       <button
-        id="closeModalBtn"
+        id="closeModal"
         class="close-btn"
         type="button"
+        aria-label="Close"
       >
-
         ×
-
       </button>
 
     </div>
 
 
-    <form
-      id="paymentForm"
-      class="payment-form"
-    >
+    <form id="paymentForm">
 
       <input
         type="hidden"
@@ -617,14 +474,15 @@
       <div class="form-group">
 
         <label for="name">
-          PAYMENT METHOD NAME
+          PAYMENT NAME
         </label>
 
         <input
           id="name"
           type="text"
-          placeholder="GCash"
           required
+          maxlength="100"
+          placeholder="GCash"
         >
 
       </div>
@@ -638,7 +496,8 @@
 
         <textarea
           id="description"
-          placeholder="Enter payment method details..."
+          maxlength="500"
+          placeholder="Enter payment method information..."
         ></textarea>
 
       </div>
@@ -646,58 +505,37 @@
 
       <div class="form-group">
 
-        <label>
-          PAYMENT IMAGE
+        <label for="imageUrl">
+          IMAGE URL
         </label>
 
-
-        <div class="upload-box">
-
-          <input
-            id="imageFile"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/svg+xml"
-          >
-
-
-          <div
-            id="uploadStatus"
-            class="upload-status"
-          ></div>
-
-
-          <img
-            id="imagePreview"
-            class="image-preview"
-            alt="Payment preview"
-          >
-
-        </div>
+        <input
+          id="imageUrl"
+          type="url"
+          placeholder="https://..."
+        >
 
       </div>
 
 
-      <div class="form-row">
+      <div class="form-group">
 
-        <div class="form-group">
+        <label for="sortOrder">
+          SORT ORDER
+        </label>
 
-          <label for="sortOrder">
-            DISPLAY ORDER
-          </label>
-
-          <input
-            id="sortOrder"
-            type="number"
-            min="0"
-            value="0"
-          >
-
-        </div>
+        <input
+          id="sortOrder"
+          type="number"
+          value="0"
+          min="0"
+          step="1"
+        >
 
       </div>
 
 
-      <div class="checkbox-row">
+      <label class="checkbox-row">
 
         <input
           id="isPublished"
@@ -705,37 +543,32 @@
           checked
         >
 
-        <label for="isPublished">
-          Publish this payment method on the website
-        </label>
+        <span>
+          Publish this payment method
+        </span>
 
-      </div>
+      </label>
 
 
       <div class="modal-actions">
 
         <button
-          id="cancelBtn"
           type="button"
+          id="cancelBtn"
           class="secondary-btn"
         >
-
           CANCEL
-
         </button>
-
 
         <button
           type="submit"
+          id="savePaymentBtn"
           class="primary-btn"
         >
-
           SAVE PAYMENT
-
         </button>
 
       </div>
-
 
     </form>
 
@@ -744,256 +577,219 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- SUPABASE -->
 
-<script src="supabase.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script src="mobile-menu.js"></script>
 
 <script>
 
-
-let currentPayments = [];
-
-let editingPayment = null;
+  let payments = [];
 
 
+  const paymentModal =
+    document.getElementById("paymentModal");
 
-/* =========================================
-   ADMIN CHECK
-========================================= */
+  const paymentForm =
+    document.getElementById("paymentForm");
 
-
-async function requireAdmin() {
-
-  const {
-
-    data: { session },
-
-    error
-
-  } = await supabaseClient
-    .auth
-    .getSession();
-
-
-  if (error || !session) {
-
-    window.location.replace(
-      "login.html"
-    );
-
-    return false;
-
-  }
-
-
-  return true;
-
-}
-
-
-
-/* =========================================
-   ERROR
-========================================= */
-
-
-function showError(message) {
-
-  const el =
-    document.getElementById(
-      "errorMessage"
-    );
-
-  el.textContent =
-    message;
-
-  el.style.display =
-    "block";
-
-}
-
-
-function hideError() {
-
-  const el =
-    document.getElementById(
-      "errorMessage"
-    );
-
-  el.textContent =
-    "";
-
-  el.style.display =
-    "none";
-
-}
-
-
-
-/* =========================================
-   ESCAPE HTML
-========================================= */
-
-
-function escapeHtml(value) {
-
-  return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-
-/* =========================================
-   LOAD PAYMENTS
-========================================= */
-
-
-async function loadPayments() {
-
-  const allowed =
-    await requireAdmin();
-
-
-  if (!allowed) return;
-
+  const paymentList =
+    document.getElementById("paymentList");
 
   const loading =
-    document.getElementById(
-      "loading"
-    );
+    document.getElementById("loading");
 
-  const list =
-    document.getElementById(
-      "paymentList"
-    );
+  const errorMessage =
+    document.getElementById("errorMessage");
 
-  const count =
-    document.getElementById(
-      "paymentCount"
-    );
+  const successMessage =
+    document.getElementById("successMessage");
+
+  const savePaymentBtn =
+    document.getElementById("savePaymentBtn");
 
 
-  loading.style.display =
-    "block";
+  function showError(message) {
 
-  list.innerHTML =
-    "";
+    errorMessage.textContent = message;
 
-  count.textContent =
-    "";
-
-
-  const {
-
-    data,
-
-    error
-
-  } = await supabaseClient
-
-    .from(
-      "payment_methods"
-    )
-
-    .select("*")
-
-    .order(
-      "sort_order",
-      {
-        ascending: true
-      }
-    )
-
-    .order(
-      "created_at",
-      {
-        ascending: true
-      }
-    );
-
-
-  loading.style.display =
-    "none";
-
-
-  if (error) {
-
-    showError(
-      "Unable to load payment methods: " +
-      error.message
-    );
-
-    return;
+    errorMessage.style.display =
+      "block";
 
   }
 
 
-  hideError();
+  function hideError() {
 
+    errorMessage.textContent = "";
 
-  currentPayments =
-    data || [];
-
-
-  count.textContent =
-    `${currentPayments.length} payment method${
-      currentPayments.length === 1
-        ? ""
-        : "s"
-    }`;
-
-
-  if (!currentPayments.length) {
-
-    list.innerHTML = `
-
-      <div class="empty-state">
-
-        <h2>
-          No payment methods yet
-        </h2>
-
-        <p>
-          Add your first payment method to get started.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
+    errorMessage.style.display =
+      "none";
 
   }
 
 
-  currentPayments.forEach(
-    payment => {
+  function showSuccess(message) {
+
+    successMessage.textContent =
+      message;
+
+    successMessage.style.display =
+      "block";
+
+    setTimeout(() => {
+
+      successMessage.style.display =
+        "none";
+
+    }, 2500);
+
+  }
+
+
+  async function requireAdmin() {
+
+    try {
+
+      const {
+        data: { session },
+        error
+      } =
+        await supabaseClient.auth.getSession();
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      if (!session) {
+
+        window.location.replace(
+          "login.html"
+        );
+
+        return false;
+
+      }
+
+
+      return true;
+
+    } catch (error) {
+
+      showError(
+        "Unable to verify authentication: " +
+        error.message
+      );
+
+      return false;
+
+    }
+
+  }
+
+
+  async function loadPayments() {
+
+    const authenticated =
+      await requireAdmin();
+
+
+    if (!authenticated) return;
+
+
+    hideError();
+
+
+    loading.style.display =
+      "block";
+
+
+    paymentList.innerHTML =
+      "";
+
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("payment_methods")
+          .select("*")
+          .order("sort_order", {
+            ascending: true
+          })
+          .order("created_at", {
+            ascending: false
+          });
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      payments =
+        data || [];
+
+
+      renderPayments();
+
+    }
+
+    catch (error) {
+
+      showError(
+        "Unable to load payments: " +
+        error.message
+      );
+
+    }
+
+    finally {
+
+      loading.style.display =
+        "none";
+
+    }
+
+  }
+
+
+  function renderPayments() {
+
+    paymentList.innerHTML =
+      "";
+
+
+    if (!payments.length) {
+
+      paymentList.innerHTML = `
+
+        <div class="empty-state">
+
+          <h2>
+            No payment methods yet
+          </h2>
+
+          <p>
+            Add your first payment method.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    payments.forEach(payment => {
 
       const card =
         document.createElement(
@@ -1005,21 +801,8 @@ async function loadPayments() {
         "payment-card";
 
 
-      const statusClass =
-        payment.is_published
-          ? "published"
-          : "hidden";
-
-
-      const statusText =
-        payment.is_published
-          ? "PUBLISHED"
-          : "HIDDEN";
-
-
-      const imageHtml =
+      const image =
         payment.image_url
-
           ? `
 
             <img
@@ -1034,755 +817,295 @@ async function loadPayments() {
             >
 
           `
+          : "";
 
-          : `
 
-            <div class="payment-no-image">
-              NO IMAGE
-            </div>
+      const statusClass =
+        payment.is_published
+          ? "published"
+          : "draft";
 
-          `;
+
+      const statusText =
+        payment.is_published
+          ? "PUBLISHED"
+          : "DRAFT";
 
 
       card.innerHTML = `
 
-        <div class="payment-image-wrap">
+        <div class="payment-name">
+          ${escapeHtml(
+            payment.name
+          )}
+        </div>
 
-          ${imageHtml}
+
+        <div class="payment-description">
+
+          ${escapeHtml(
+            payment.description ||
+            "No description."
+          )}
 
         </div>
 
 
-        <div class="payment-content">
+        ${image}
 
 
-          <div class="payment-top">
+        <div class="payment-meta">
 
-            <div>
-
-              <div class="payment-name">
-
-                ${escapeHtml(
-                  payment.name
-                )}
-
-              </div>
+          <span
+            class="status ${statusClass}"
+          >
+            ${statusText}
+          </span>
 
 
-              ${
-                payment.description
-                  ? `
-                    <div class="payment-description">
-                      ${escapeHtml(
-                        payment.description
-                      )}
-                    </div>
-                  `
-                  : ""
-              }
+          <div class="payment-actions">
 
-            </div>
-
-          </div>
-
-
-          <div class="payment-meta">
-
-
-            <span
-              class="payment-status ${statusClass}"
+            <button
+              class="edit-btn"
+              type="button"
             >
-
-              ${statusText}
-
-            </span>
+              EDIT
+            </button>
 
 
-            <span class="payment-order">
-
-              Order:
-              ${Number(
-                payment.sort_order || 0
-              )}
-
-            </span>
-
-
-            <div class="payment-actions">
-
-
-              <button
-                type="button"
-                onclick="editPayment('${payment.id}')"
-              >
-
-                EDIT
-
-              </button>
+            <button
+              class="toggle-btn"
+              type="button"
+            >
+              ${
+                payment.is_published
+                  ? "UNPUBLISH"
+                  : "PUBLISH"
+              }
+            </button>
 
 
-              <button
-                type="button"
-                onclick="togglePayment('${payment.id}')"
-              >
-
-                ${
-                  payment.is_published
-                    ? "HIDE"
-                    : "PUBLISH"
-                }
-
-              </button>
-
-
-              <button
-                type="button"
-                class="delete-btn"
-                onclick="deletePayment('${payment.id}')"
-              >
-
-                DELETE
-
-              </button>
-
-
-            </div>
-
+            <button
+              class="delete-btn"
+              type="button"
+            >
+              DELETE
+            </button>
 
           </div>
-
 
         </div>
 
       `;
 
 
-      list.appendChild(
+      card
+        .querySelector(".edit-btn")
+        .addEventListener(
+          "click",
+          () => openModal(payment)
+        );
+
+
+      card
+        .querySelector(".toggle-btn")
+        .addEventListener(
+          "click",
+          () =>
+            togglePayment(
+              payment.id,
+              !payment.is_published
+            )
+        );
+
+
+      card
+        .querySelector(".delete-btn")
+        .addEventListener(
+          "click",
+          () =>
+            deletePayment(
+              payment.id
+            )
+        );
+
+
+      paymentList.appendChild(
         card
       );
 
-    }
-  );
+    });
 
-}
-
+  }
 
 
-/* =========================================
-   OPEN ADD MODAL
-========================================= */
-
-
-function openAddModal() {
-
-  editingPayment =
-    null;
-
-
-  hideError();
-
-
-  document
-    .getElementById(
-      "paymentForm"
-    )
-    .reset();
-
-
-  document
-    .getElementById(
-      "paymentId"
-    )
-    .value =
-      "";
-
-
-  document
-    .getElementById(
-      "sortOrder"
-    )
-    .value =
-      0;
-
-
-  document
-    .getElementById(
-      "isPublished"
-    )
-    .checked =
-      true;
-
-
-  document
-    .getElementById(
-      "imagePreview"
-    )
-    .style.display =
-      "none";
-
-
-  document
-    .getElementById(
-      "imagePreview"
-    )
-    .src =
-      "";
-
-
-  document
-    .getElementById(
-      "uploadStatus"
-    )
-    .textContent =
-      "";
-
-
-  document
-    .getElementById(
-      "modalTitle"
-    )
-    .textContent =
-      "Add Payment Method";
-
-
-  document
-    .getElementById(
-      "paymentModal"
-    )
-    .classList.add(
-      "active"
-    );
-
-}
-
-
-
-/* =========================================
-   EDIT PAYMENT
-========================================= */
-
-
-window.editPayment =
-  function(id) {
-
-    const payment =
-      currentPayments.find(
-        item =>
-          String(item.id) ===
-          String(id)
-      );
-
-
-    if (!payment) return;
-
-
-    editingPayment =
-      payment;
-
+  function openModal(payment = null) {
 
     hideError();
 
 
-    document
-      .getElementById(
-        "paymentId"
-      )
-      .value =
-        payment.id;
+    document.getElementById(
+      "modalTitle"
+    ).textContent =
+      payment
+        ? "Edit Payment Method"
+        : "Add Payment Method";
 
 
-    document
-      .getElementById(
-        "name"
-      )
-      .value =
-        payment.name || "";
+    document.getElementById(
+      "paymentId"
+    ).value =
+      payment?.id || "";
 
 
-    document
-      .getElementById(
-        "description"
-      )
-      .value =
-        payment.description || "";
+    document.getElementById(
+      "name"
+    ).value =
+      payment?.name || "";
 
 
-    document
-      .getElementById(
-        "sortOrder"
-      )
-      .value =
-        payment.sort_order || 0;
+    document.getElementById(
+      "description"
+    ).value =
+      payment?.description || "";
 
 
-    document
-      .getElementById(
-        "isPublished"
-      )
-      .checked =
-        !!payment.is_published;
+    document.getElementById(
+      "imageUrl"
+    ).value =
+      payment?.image_url || "";
 
 
-    const preview =
-      document.getElementById(
-        "imagePreview"
-      );
+    document.getElementById(
+      "sortOrder"
+    ).value =
+      payment?.sort_order ?? 0;
 
 
-    if (payment.image_url) {
-
-      preview.src =
-        payment.image_url;
-
-      preview.style.display =
-        "block";
-
-    }
-
-    else {
-
-      preview.src =
-        "";
-
-      preview.style.display =
-        "none";
-
-    }
+    document.getElementById(
+      "isPublished"
+    ).checked =
+      payment
+        ? payment.is_published === true
+        : true;
 
 
-    document
-      .getElementById(
-        "uploadStatus"
-      )
-      .textContent =
-        "";
+    savePaymentBtn.disabled =
+      false;
 
 
-    document
-      .getElementById(
-        "modalTitle"
-      )
-      .textContent =
-        "Edit Payment Method";
+    savePaymentBtn.textContent =
+      "SAVE PAYMENT";
 
 
-    document
-      .getElementById(
-        "paymentModal"
-      )
-      .classList.add(
-        "active"
-      );
-
-  };
-
-
-
-/* =========================================
-   CLOSE MODAL
-========================================= */
-
-
-function closeModal() {
-
-  document
-    .getElementById(
-      "paymentModal"
-    )
-    .classList.remove(
+    paymentModal.classList.add(
       "active"
     );
 
 
-  editingPayment =
-    null;
+    setTimeout(() => {
 
-}
+      document.getElementById(
+        "name"
+      ).focus();
+
+    }, 50);
+
+  }
 
 
+  function closeModal() {
 
-/* =========================================
-   UPLOAD PAYMENT IMAGE
-========================================= */
-
-
-async function uploadPaymentImage(
-  file
-) {
-
-  const status =
-    document.getElementById(
-      "uploadStatus"
+    paymentModal.classList.remove(
+      "active"
     );
 
 
-  const allowedTypes = [
-
-    "image/jpeg",
-
-    "image/png",
-
-    "image/webp",
-
-    "image/svg+xml"
-
-  ];
+    paymentForm.reset();
 
 
-  if (
-    !allowedTypes.includes(
-      file.type
-    )
+    document.getElementById(
+      "paymentId"
+    ).value = "";
+
+
+    document.getElementById(
+      "sortOrder"
+    ).value = "0";
+
+
+    document.getElementById(
+      "isPublished"
+    ).checked = true;
+
+
+    savePaymentBtn.disabled =
+      false;
+
+
+    savePaymentBtn.textContent =
+      "SAVE PAYMENT";
+
+  }
+
+
+  async function togglePayment(
+    id,
+    publish
   ) {
 
-    throw new Error(
-      "Only JPG, PNG, WEBP and SVG images are allowed."
-    );
-
-  }
-
-
-  status.textContent =
-    "Uploading image...";
-
-
-  const extension =
-    file.name
-      .split(".")
-      .pop()
-      .toLowerCase();
-
-
-  const filename =
-    `${Date.now()}-${
-      Math.random()
-        .toString(36)
-        .slice(2)
-    }.${extension}`;
-
-
-  const path =
-    `payments/${filename}`;
-
-
-  const {
-
-    error
-
-  } = await supabaseClient
-
-    .storage
-
-    .from("media")
-
-    .upload(
-      path,
-      file,
-      {
-        cacheControl: "3600",
-        upsert: false
-      }
-    );
-
-
-  if (error) {
-
-    throw error;
-
-  }
-
-
-  const {
-
-    data
-
-  } = supabaseClient
-
-    .storage
-
-    .from("media")
-
-    .getPublicUrl(
-      path
-    );
-
-
-  status.textContent =
-    "Image uploaded successfully.";
-
-
-  return data.publicUrl;
-
-}
-
-
-
-/* =========================================
-   SAVE PAYMENT
-========================================= */
-
-
-document
-  .getElementById(
-    "paymentForm"
-  )
-  .addEventListener(
-    "submit",
-    async function(event) {
-
-      event.preventDefault();
-
-
-      hideError();
-
-
-      try {
-
-
-        const id =
-          document
-            .getElementById(
-              "paymentId"
-            )
-            .value;
-
-
-        const name =
-          document
-            .getElementById(
-              "name"
-            )
-            .value
-            .trim();
-
-
-        const description =
-          document
-            .getElementById(
-              "description"
-            )
-            .value
-            .trim();
-
-
-        const sortOrder =
-          Number(
-            document
-              .getElementById(
-                "sortOrder"
-              )
-              .value
-          ) || 0;
-
-
-        const isPublished =
-          document
-            .getElementById(
-              "isPublished"
-            )
-            .checked;
-
-
-        if (!name) {
-
-          throw new Error(
-            "Please enter a payment method name."
-          );
-
-        }
-
-
-        let imageUrl =
-          editingPayment?.image_url ||
-          null;
-
-
-        const selectedFile =
-          document
-            .getElementById(
-              "imageFile"
-            )
-            .files[0];
-
-
-        if (selectedFile) {
-
-          imageUrl =
-            await uploadPaymentImage(
-              selectedFile
-            );
-
-        }
-
-
-        const paymentData = {
-
-          name,
-
-          description:
-            description || null,
-
-          image_url:
-            imageUrl,
-
-          sort_order:
-            sortOrder,
-
-          is_published:
-            isPublished,
-
-          updated_at:
-            new Date()
-              .toISOString()
-
-        };
-
-
-        let result;
-
-
-        if (id) {
-
-          result =
-            await supabaseClient
-
-              .from(
-                "payment_methods"
-              )
-
-              .update(
-                paymentData
-              )
-
-              .eq(
-                "id",
-                id
-              );
-
-        }
-
-        else {
-
-          result =
-            await supabaseClient
-
-              .from(
-                "payment_methods"
-              )
-
-              .insert(
-                paymentData
-              );
-
-        }
-
-
-        if (result.error) {
-
-          throw result.error;
-
-        }
-
-
-        closeModal();
-
-
-        await loadPayments();
-
-      }
-
-
-      catch (error) {
-
-        showError(
-          "Unable to save payment method: " +
-          error.message
-        );
-
-      }
-
-    }
-  );
-
-
-
-/* =========================================
-   TOGGLE PAYMENT
-========================================= */
-
-
-window.togglePayment =
-  async function(id) {
-
-    const payment =
-      currentPayments.find(
-        item =>
-          String(item.id) ===
-          String(id)
-      );
-
-
-    if (!payment) return;
-
-
     hideError();
 
 
-    const {
+    try {
 
-      error
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("payment_methods")
+          .update({
+            is_published:
+              publish,
 
-    } = await supabaseClient
+            updated_at:
+              new Date().toISOString()
+          })
+          .eq("id", id);
 
-      .from(
-        "payment_methods"
-      )
 
-      .update({
+      if (error) {
+        throw error;
+      }
 
-        is_published:
-          !payment.is_published,
 
-        updated_at:
-          new Date()
-            .toISOString()
-
-      })
-
-      .eq(
-        "id",
-        id
+      showSuccess(
+        publish
+          ? "Payment method published."
+          : "Payment method unpublished."
       );
 
 
-    if (error) {
+      await loadPayments();
+
+    }
+
+    catch (error) {
 
       showError(
-        "Unable to update payment method: " +
+        "Unable to update payment: " +
         error.message
       );
 
-      return;
-
     }
 
-
-    await loadPayments();
-
-  };
+  }
 
 
-
-/* =========================================
-   DELETE PAYMENT
-========================================= */
-
-
-window.deletePayment =
-  async function(id) {
+  async function deletePayment(id) {
 
     const payment =
-      currentPayments.find(
+      payments.find(
         item =>
           String(item.id) ===
           String(id)
@@ -1794,11 +1117,7 @@ window.deletePayment =
 
     const confirmed =
       confirm(
-
-        `Delete "${payment.name}"?\n\n` +
-
-        "This cannot be undone."
-
+        `Delete "${payment.name}"?\n\nThis cannot be undone.`
       );
 
 
@@ -1808,197 +1127,262 @@ window.deletePayment =
     hideError();
 
 
-    const {
+    try {
 
-      error
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("payment_methods")
+          .delete()
+          .eq("id", id);
 
-    } = await supabaseClient
 
-      .from(
-        "payment_methods"
-      )
+      if (error) {
+        throw error;
+      }
 
-      .delete()
 
-      .eq(
-        "id",
-        id
+      showSuccess(
+        "Payment method deleted."
       );
 
 
-    if (error) {
-
-      showError(
-        "Unable to delete payment method: " +
-        error.message
-      );
-
-      return;
+      await loadPayments();
 
     }
 
+    catch (error) {
 
-    /*
-     * Clean up the associated
-     * storage image when possible.
-     */
+      showError(
+        "Unable to delete payment: " +
+        error.message
+      );
 
-    if (payment.image_url) {
+    }
 
-      try {
-
-        const marker =
-          "/storage/v1/object/public/media/";
+  }
 
 
-        const index =
-          payment.image_url
-            .indexOf(
-              marker
-            );
+  paymentForm.addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
 
 
-        if (index !== -1) {
-
-          const path =
-            payment.image_url
-              .substring(
-                index +
-                marker.length
-              );
+      hideError();
 
 
-          await supabaseClient
+      const id =
+        document.getElementById(
+          "paymentId"
+        ).value;
 
-            .storage
 
-            .from("media")
+      const name =
+        document.getElementById(
+          "name"
+        ).value.trim();
 
-            .remove([
-              path
-            ]);
+
+      const description =
+        document.getElementById(
+          "description"
+        ).value.trim();
+
+
+      const imageUrl =
+        document.getElementById(
+          "imageUrl"
+        ).value.trim();
+
+
+      const sortOrder =
+        Math.max(
+          0,
+          Number(
+            document.getElementById(
+              "sortOrder"
+            ).value
+          ) || 0
+        );
+
+
+      const isPublished =
+        document.getElementById(
+          "isPublished"
+        ).checked;
+
+
+      if (!name) {
+
+        showError(
+          "Payment name is required."
+        );
+
+        return;
+
+      }
+
+
+      if (imageUrl) {
+
+        try {
+
+          new URL(imageUrl);
+
+        }
+
+        catch {
+
+          showError(
+            "Please enter a valid image URL."
+          );
+
+          return;
 
         }
 
       }
 
-      catch (storageError) {
 
-        console.warn(
-          "Payment deleted, but image cleanup failed:",
-          storageError
+      savePaymentBtn.disabled =
+        true;
+
+
+      savePaymentBtn.textContent =
+        "SAVING...";
+
+
+      const paymentData = {
+
+        name,
+
+        description:
+          description || null,
+
+        image_url:
+          imageUrl || null,
+
+        sort_order:
+          sortOrder,
+
+        is_published:
+          isPublished,
+
+        updated_at:
+          new Date().toISOString()
+
+      };
+
+
+      try {
+
+        let result;
+
+
+        if (id) {
+
+          result =
+            await supabaseClient
+              .from("payment_methods")
+              .update(
+                paymentData
+              )
+              .eq("id", id);
+
+        }
+
+        else {
+
+          result =
+            await supabaseClient
+              .from("payment_methods")
+              .insert(
+                paymentData
+              );
+
+        }
+
+
+        if (result.error) {
+          throw result.error;
+        }
+
+
+        closeModal();
+
+
+        showSuccess(
+          id
+            ? "Payment method updated."
+            : "Payment method added."
         );
+
+
+        await loadPayments();
+
+      }
+
+      catch (error) {
+
+        showError(
+          "Unable to save payment method: " +
+          error.message
+        );
+
+
+        savePaymentBtn.disabled =
+          false;
+
+
+        savePaymentBtn.textContent =
+          "SAVE PAYMENT";
 
       }
 
     }
-
-
-    await loadPayments();
-
-  };
-
-
-
-/* =========================================
-   IMAGE PREVIEW
-========================================= */
-
-
-document
-  .getElementById(
-    "imageFile"
-  )
-  .addEventListener(
-    "change",
-    function() {
-
-      const file =
-        this.files[0];
-
-
-      if (!file) return;
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload =
-        function(event) {
-
-          const preview =
-            document
-              .getElementById(
-                "imagePreview"
-              );
-
-
-          preview.src =
-            event.target.result;
-
-
-          preview.style.display =
-            "block";
-
-        };
-
-
-      reader.readAsDataURL(
-        file
-      );
-
-    }
   );
 
 
+  document
+    .getElementById(
+      "addPaymentBtn"
+    )
+    .addEventListener(
+      "click",
+      () => openModal()
+    );
 
-/* =========================================
-   BUTTONS
-========================================= */
+
+  document
+    .getElementById(
+      "closeModal"
+    )
+    .addEventListener(
+      "click",
+      closeModal
+    );
 
 
-document
-  .getElementById(
-    "addPaymentBtn"
-  )
-  .addEventListener(
+  document
+    .getElementById(
+      "cancelBtn"
+    )
+    .addEventListener(
+      "click",
+      closeModal
+    );
+
+
+  paymentModal.addEventListener(
     "click",
-    openAddModal
-  );
-
-
-document
-  .getElementById(
-    "closeModalBtn"
-  )
-  .addEventListener(
-    "click",
-    closeModal
-  );
-
-
-document
-  .getElementById(
-    "cancelBtn"
-  )
-  .addEventListener(
-    "click",
-    closeModal
-  );
-
-
-document
-  .getElementById(
-    "paymentModal"
-  )
-  .addEventListener(
-    "click",
-    function(event) {
+    event => {
 
       if (
         event.target ===
-        this
+        paymentModal
       ) {
 
         closeModal();
@@ -2009,44 +1393,75 @@ document
   );
 
 
+  document.addEventListener(
+    "keydown",
+    event => {
 
-/* =========================================
-   LOGOUT
-========================================= */
+      if (
+        event.key === "Escape" &&
+        paymentModal.classList.contains(
+          "active"
+        )
+      ) {
 
+        closeModal();
 
-document
-  .getElementById(
-    "logoutBtn"
-  )
-  .addEventListener(
-    "click",
-    async () => {
-
-      await supabaseClient
-        .auth
-        .signOut();
-
-
-      window.location.replace(
-        "login.html"
-      );
+      }
 
     }
   );
 
 
+  document
+    .getElementById(
+      "logoutBtn"
+    )
+    .addEventListener(
+      "click",
+      async () => {
 
-/* =========================================
-   INITIAL LOAD
-========================================= */
+        await supabaseClient.auth.signOut();
+
+        window.location.replace(
+          "login.html"
+        );
+
+      }
+    );
 
 
-loadPayments();
+  function escapeHtml(value) {
 
+    return String(value ?? "")
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
+
+
+  /* INITIALIZE */
+
+  loadPayments();
 
 </script>
 
 </body>
-
 </html>
