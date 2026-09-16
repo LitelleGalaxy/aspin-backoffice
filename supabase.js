@@ -12,7 +12,6 @@ const supabaseClient =
         SUPABASE_PUBLISHABLE_KEY
     );
 
-
 /* =========================================================
    SESSION PROTECTION
 ========================================================= */
@@ -22,7 +21,6 @@ const isLoginPage =
     .toLowerCase()
     .endsWith("login.html");
 
-
 function redirectToLogin() {
 
   if (isLoginPage) {
@@ -31,7 +29,6 @@ function redirectToLogin() {
 
   window.location.replace("login.html");
 }
-
 
 /* Supabase authentication listener */
 
@@ -51,7 +48,6 @@ supabaseClient.auth.onAuthStateChange(
     }
   }
 );
-
 
 /* Extra session check every minute */
 
