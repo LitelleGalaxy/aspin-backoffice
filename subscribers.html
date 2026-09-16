@@ -1,189 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <link rel="icon" type="image/png" href="favicon.png">
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>ASPIN Admin | Subscribers</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="icon"
+    type="image/png"
+    href="favicon.png"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
   <style>
+
     .subscriber-toolbar {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 20px;
+      align-items: flex-end;
+      gap: 20px;
+      margin-bottom: 25px;
     }
 
-    .search-box {
-      padding: 11px 13px;
+    .subscriber-count {
+      color: #888;
+      font-size: 12px;
+    }
+
+    .subscriber-search {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 13px 15px;
+      margin-bottom: 18px;
       background: #080808;
-      border: 1px solid #333;
+      border: 1px solid #353535;
       color: #fff;
-      min-width: 260px;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
     }
 
-    .table-wrap {
+    .subscriber-search:focus {
+      border-color: #d4af37;
+    }
+
+    .subscriber-table-wrap {
+      width: 100%;
       overflow-x: auto;
       background: #101010;
       border: 1px solid #292929;
     }
 
-    table {
+    .subscriber-table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 700px;
+      min-width: 760px;
     }
 
-    th,
-    td {
-      padding: 15px;
+    .subscriber-table th {
+      padding: 14px 16px;
       text-align: left;
+      background: #151515;
       border-bottom: 1px solid #292929;
-    }
-
-    th {
-      font-size: 11px;
-      letter-spacing: .1em;
-      color: #aaa;
-      text-transform: uppercase;
-    }
-
-    td {
-      font-size: 13px;
-      color: #eee;
-    }
-
-    .status {
+      color: #d4af37;
       font-size: 10px;
-      padding: 5px 8px;
-      border: 1px solid #444;
+      letter-spacing: .12em;
+      white-space: nowrap;
     }
 
-    .active-status {
-      color: #79d18b;
-      border-color: #315d3a;
+    .subscriber-table td {
+      padding: 15px 16px;
+      border-bottom: 1px solid #222;
+      color: #ccc;
+      font-size: 13px;
+      vertical-align: middle;
     }
 
-    .inactive-status {
+    .subscriber-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .subscriber-table tr:hover td {
+      background: #131313;
+    }
+
+    .subscriber-email {
+      color: #fff;
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .subscriber-phone {
       color: #aaa;
     }
 
-    .action-btn {
-      padding: 7px 10px;
-      border: 1px solid #333;
-      background: #181818;
-      color: #eee;
-      cursor: pointer;
+    .subscriber-date {
+      color: #888;
+      white-space: nowrap;
     }
 
-    .action-btn:hover {
+    .subscriber-status {
+      display: inline-block;
+      padding: 5px 9px;
+      font-size: 10px;
+      letter-spacing: .1em;
+      font-weight: 700;
+      border: 1px solid;
+    }
+
+    .subscriber-status.active {
+      color: #d4af37;
+      border-color: #6a5620;
+      background: #181408;
+    }
+
+    .subscriber-status.inactive {
+      color: #888;
+      border-color: #3a3a3a;
+      background: #151515;
+    }
+
+    .subscriber-consent {
+      color: #aaa;
+      font-size: 11px;
+    }
+
+    .subscriber-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .subscriber-actions button {
+      border: 1px solid #3a3a3a;
+      background: #171717;
+      color: #eee;
+      padding: 8px 11px;
+      font-size: 10px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .subscriber-actions button:hover {
       border-color: #d4af37;
       color: #d4af37;
     }
 
-    @media (max-width: 700px) {
+    .subscriber-actions .delete-btn:hover {
+      border-color: #a33;
+      color: #ff7777;
+    }
+
+    .empty-state {
+      padding: 55px;
+      text-align: center;
+      border: 1px solid #292929;
+      background: #101010;
+    }
+
+    .empty-state p {
+      color: #888;
+      margin-top: 8px;
+    }
+
+    .error-message {
+      display: none;
+      margin-bottom: 20px;
+      padding: 14px;
+      border: 1px solid #6b2424;
+      background: #190909;
+      color: #ff8c8c;
+      font-size: 13px;
+    }
+
+    .loading {
+      color: #888;
+      padding: 20px 0;
+    }
+
+    @media (max-width: 800px) {
+
       .subscriber-toolbar {
         align-items: flex-start;
         flex-direction: column;
       }
 
-      .search-box {
-        width: 100%;
-        box-sizing: border-box;
-      }
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <div class="admin-layout">
+
 
   <aside class="sidebar">
 
     <div class="sidebar-brand">
-      <img src="favicon.png" alt="ASPIN" class="sidebar-logo">
+
+      <img
+        src="favicon.png"
+        alt="ASPIN"
+        class="sidebar-logo"
+      >
 
       <div class="sidebar-brand-text">
+
         <strong>ASPIN.SITE</strong>
+
         <span>ADMIN PORTAL</span>
+
       </div>
+
     </div>
 
+
     <nav>
-      <a href="index.html">Dashboard</a>
-      <a href="promotions.html">Promotions</a>
-      <a href="media.html">Media</a>
-      <a href="faqs.html">FAQs</a>
-      <a href="payments.html">Payments</a>
-      <a href="subscribers.html" class="active">Subscribers</a>
-      <a href="analytics.html">Analytics</a>
-      <a href="settings.html">Settings</a>
+
+      <a href="index.html">
+        Dashboard
+      </a>
+
+      <a href="promotions.html">
+        Promotions
+      </a>
+
+      <a href="media.html">
+        Media
+      </a>
+
+      <a href="faqs.html">
+        FAQs
+      </a>
+
+      <a href="payments.html">
+        Payments
+      </a>
+
+      <a
+        href="subscribers.html"
+        class="active"
+      >
+        Subscribers
+      </a>
+
+      <a href="analytics.html">
+        Analytics
+      </a>
+
+      <a href="settings.html">
+        Settings
+      </a>
+
     </nav>
 
-    <button id="logoutBtn" class="logout-btn">
+
+    <button
+      id="logoutBtn"
+      class="logout-btn"
+    >
+
       LOG OUT
+
     </button>
 
   </aside>
 
+
   <main class="admin-main">
+
 
     <header class="page-header">
 
       <div>
-        <div class="eyebrow">ASPIN.SITE</div>
-        <h1>Subscribers</h1>
-        <p>Manage newsletter and promotional update subscribers.</p>
+
+        <div class="eyebrow">
+          ASPIN.SITE
+        </div>
+
+        <h1>
+          Subscribers
+        </h1>
+
+        <p>
+          Manage users who subscribed for website updates and promotions.
+        </p>
+
       </div>
 
     </header>
 
-    <div class="subscriber-toolbar">
 
-      <div>
-        <strong id="subscriberCount">
-          0 subscribers
-        </strong>
+    <div
+      id="errorMessage"
+      class="error-message"
+    ></div>
+
+
+    <div
+      id="loading"
+      class="loading"
+    >
+
+      Loading subscribers...
+
+    </div>
+
+
+    <section>
+
+
+      <div class="subscriber-toolbar">
+
+        <div>
+
+          <div class="eyebrow">
+            DATABASE
+          </div>
+
+          <h2>
+            Subscriber List
+          </h2>
+
+        </div>
+
+
+        <div
+          id="subscriberCount"
+          class="subscriber-count"
+        ></div>
+
       </div>
 
+
       <input
-        id="searchInput"
-        class="search-box"
         type="search"
-        placeholder="Search email or phone..."
+        id="searchInput"
+        class="subscriber-search"
+        placeholder="Search by email or phone..."
       >
 
-    </div>
 
-    <div class="table-wrap">
+      <div
+        id="subscriberContainer"
+      ></div>
 
-      <table>
 
-        <thead>
+    </section>
 
-          <tr>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Consent</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Action</th>
-          </tr>
-
-        </thead>
-
-        <tbody id="subscriberTable">
-
-        </tbody>
-
-      </table>
-
-    </div>
 
   </main>
 
@@ -191,256 +370,710 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
+
 
 <script>
 
+
 let subscribers = [];
+
+
+
+/* =========================================
+   ADMIN CHECK
+========================================= */
 
 
 async function requireAdmin() {
 
   const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
 
-  if (!session) {
+    data: { session },
+
+    error
+
+  } = await supabaseClient
+    .auth
+    .getSession();
+
+
+  if (error || !session) {
 
     window.location.replace(
       "login.html"
     );
 
     return false;
+
   }
 
+
   return true;
+
 }
+
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+
+function showError(message) {
+
+  const el =
+    document.getElementById(
+      "errorMessage"
+    );
+
+  el.textContent =
+    message;
+
+  el.style.display =
+    "block";
+
+}
+
+
+function hideError() {
+
+  const el =
+    document.getElementById(
+      "errorMessage"
+    );
+
+  el.textContent =
+    "";
+
+  el.style.display =
+    "none";
+
+}
+
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+
+function escapeHtml(value) {
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+
+/* =========================================
+   FORMAT DATE
+========================================= */
+
+
+function formatDate(value) {
+
+  if (!value) return "—";
+
+
+  const date =
+    new Date(value);
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return "—";
+
+  }
+
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    }
+  );
+
+}
+
+
+
+/* =========================================
+   LOAD SUBSCRIBERS
+========================================= */
 
 
 async function loadSubscribers() {
 
-  if (!(await requireAdmin())) return;
+  const allowed =
+    await requireAdmin();
 
-  const tbody =
+
+  if (!allowed) return;
+
+
+  const loading =
     document.getElementById(
-      "subscriberTable"
+      "loading"
     );
 
-  tbody.innerHTML =
-    `<tr><td colspan="6">Loading...</td></tr>`;
+
+  loading.style.display =
+    "block";
+
 
   const {
+
     data,
+
     error
+
   } = await supabaseClient
-    .from("subscribers")
+
+    .from(
+      "subscribers"
+    )
+
     .select("*")
-    .order("created_at", {
-      ascending: false
-    });
+
+    .order(
+      "created_at",
+      {
+        ascending: false
+      }
+    );
+
+
+  loading.style.display =
+    "none";
+
 
   if (error) {
 
-    tbody.innerHTML =
-      `<tr><td colspan="6">Unable to load subscribers: ${escapeHtml(error.message)}</td></tr>`;
+    showError(
+      "Unable to load subscribers: " +
+      error.message
+    );
 
     return;
+
   }
 
-  subscribers = data || [];
+
+  hideError();
+
+
+  subscribers =
+    data || [];
+
 
   renderSubscribers();
 
 }
 
 
+
+/* =========================================
+   RENDER SUBSCRIBERS
+========================================= */
+
+
 function renderSubscribers() {
 
-  const tbody =
+  const container =
     document.getElementById(
-      "subscriberTable"
+      "subscriberContainer"
     );
+
+
+  const count =
+    document.getElementById(
+      "subscriberCount"
+    );
+
 
   const search =
     document.getElementById(
       "searchInput"
-    ).value
-      .trim()
-      .toLowerCase();
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
 
   const filtered =
-    subscribers.filter(item => {
+    subscribers.filter(
+      subscriber => {
 
-      const email =
-        String(
-          item.email || ""
-        ).toLowerCase();
+        const email =
+          String(
+            subscriber.email || ""
+          )
+          .toLowerCase();
 
-      const phone =
-        String(
-          item.phone || ""
-        ).toLowerCase();
 
-      return (
-        email.includes(search) ||
-        phone.includes(search)
-      );
+        const phone =
+          String(
+            subscriber.phone || ""
+          )
+          .toLowerCase();
 
-    });
 
-  document.getElementById(
-    "subscriberCount"
-  ).textContent =
-    `${subscribers.length} subscriber${
-      subscribers.length === 1
+        return (
+          !search ||
+          email.includes(search) ||
+          phone.includes(search)
+        );
+
+      }
+    );
+
+
+  count.textContent =
+    `${filtered.length} subscriber${
+      filtered.length === 1
         ? ""
         : "s"
     }`;
 
-  tbody.innerHTML = "";
 
   if (!filtered.length) {
 
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6">
-          No subscribers found.
-        </td>
-      </tr>
+    container.innerHTML = `
+
+      <div class="empty-state">
+
+        <h2>
+          ${
+            search
+              ? "No matching subscribers"
+              : "No subscribers yet"
+          }
+        </h2>
+
+        <p>
+          ${
+            search
+              ? "Try a different search."
+              : "Subscribers will appear here when they sign up."
+          }
+        </p>
+
+      </div>
+
     `;
 
     return;
+
   }
 
-  filtered.forEach(subscriber => {
 
-    const tr =
-      document.createElement("tr");
+  const rows =
+    filtered.map(
+      subscriber => {
 
-    const date =
-      subscriber.created_at
-        ? new Date(
-            subscriber.created_at
-          ).toLocaleDateString()
-        : "—";
 
-    tr.innerHTML = `
+        const isActive =
+          subscriber.is_active !== false;
 
-      <td>
-        ${escapeHtml(
-          subscriber.email || "—"
-        )}
-      </td>
 
-      <td>
-        ${escapeHtml(
-          subscriber.phone || "—"
-        )}
-      </td>
+        return `
 
-      <td>
-        ${
-          subscriber.consent
-            ? "YES"
-            : "NO"
-        }
-      </td>
+          <tr>
 
-      <td>
+            <td>
 
-        <span class="status ${
-          subscriber.is_active
-            ? "active-status"
-            : "inactive-status"
-        }">
+              <div class="subscriber-email">
 
-          ${
-            subscriber.is_active
-              ? "ACTIVE"
-              : "INACTIVE"
-          }
+                ${escapeHtml(
+                  subscriber.email ||
+                  "—"
+                )}
 
-        </span>
+              </div>
 
-      </td>
+            </td>
 
-      <td>
-        ${date}
-      </td>
 
-      <td>
+            <td>
 
-        <button
-          class="action-btn"
-          onclick="toggleSubscriber(
-            '${subscriber.id}',
-            ${!subscriber.is_active}
-          )"
-        >
+              <div class="subscriber-phone">
 
-          ${
-            subscriber.is_active
-              ? "DEACTIVATE"
-              : "ACTIVATE"
-          }
+                ${escapeHtml(
+                  subscriber.phone ||
+                  "—"
+                )}
 
-        </button>
+              </div>
 
-      </td>
+            </td>
 
-    `;
 
-    tbody.appendChild(tr);
+            <td>
 
-  });
+              <span
+                class="subscriber-status ${
+                  isActive
+                    ? "active"
+                    : "inactive"
+                }"
+              >
+
+                ${
+                  isActive
+                    ? "ACTIVE"
+                    : "INACTIVE"
+                }
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span class="subscriber-consent">
+
+                ${
+                  subscriber.consent
+                    ? "YES"
+                    : "NO"
+                }
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span class="subscriber-date">
+
+                ${formatDate(
+                  subscriber.created_at
+                )}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <div class="subscriber-actions">
+
+                <button
+                  type="button"
+                  onclick="toggleSubscriber('${subscriber.id}')"
+                >
+
+                  ${
+                    isActive
+                      ? "DEACTIVATE"
+                      : "ACTIVATE"
+                  }
+
+                </button>
+
+
+                <button
+                  type="button"
+                  class="delete-btn"
+                  onclick="deleteSubscriber('${subscriber.id}')"
+                >
+
+                  DELETE
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        `;
+
+      }
+    )
+    .join("");
+
+
+  container.innerHTML = `
+
+    <div class="subscriber-table-wrap">
+
+      <table class="subscriber-table">
+
+        <thead>
+
+          <tr>
+
+            <th>
+              EMAIL
+            </th>
+
+            <th>
+              PHONE
+            </th>
+
+            <th>
+              STATUS
+            </th>
+
+            <th>
+              CONSENT
+            </th>
+
+            <th>
+              SUBSCRIBED
+            </th>
+
+            <th>
+              ACTIONS
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          ${rows}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
 
 }
 
 
-async function toggleSubscriber(
-  id,
-  active
-) {
 
-  const {
-    error
-  } = await supabaseClient
-    .from("subscribers")
-    .update({
-      is_active: active
-    })
-    .eq("id", id);
+/* =========================================
+   TOGGLE SUBSCRIBER
+========================================= */
 
-  if (error) {
 
-    alert(
-      "Unable to update subscriber: " +
-      error.message
-    );
+window.toggleSubscriber =
+  async function(id) {
 
-    return;
-  }
 
-  loadSubscribers();
+    const subscriber =
+      subscribers.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
 
-}
+
+    if (!subscriber) return;
+
+
+    const currentlyActive =
+      subscriber.is_active !== false;
+
+
+    const action =
+      currentlyActive
+        ? "deactivate"
+        : "activate";
+
+
+    const confirmed =
+      confirm(
+        `Are you sure you want to ${action} this subscriber?`
+      );
+
+
+    if (!confirmed) return;
+
+
+    hideError();
+
+
+    const {
+
+      error
+
+    } = await supabaseClient
+
+      .from(
+        "subscribers"
+      )
+
+      .update({
+
+        is_active:
+          !currentlyActive
+
+      })
+
+      .eq(
+        "id",
+        id
+      );
+
+
+    if (error) {
+
+      showError(
+        "Unable to update subscriber: " +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    await loadSubscribers();
+
+  };
+
+
+
+/* =========================================
+   DELETE SUBSCRIBER
+========================================= */
+
+
+window.deleteSubscriber =
+  async function(id) {
+
+
+    const subscriber =
+      subscribers.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!subscriber) return;
+
+
+    const confirmed =
+      confirm(
+
+        `Delete "${subscriber.email}"?\n\n` +
+
+        "This cannot be undone."
+
+      );
+
+
+    if (!confirmed) return;
+
+
+    hideError();
+
+
+    const {
+
+      error
+
+    } = await supabaseClient
+
+      .from(
+        "subscribers"
+      )
+
+      .delete()
+
+      .eq(
+        "id",
+        id
+      );
+
+
+    if (error) {
+
+      showError(
+        "Unable to delete subscriber: " +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    await loadSubscribers();
+
+  };
+
+
+
+/* =========================================
+   SEARCH
+========================================= */
 
 
 document
-  .getElementById("searchInput")
+  .getElementById(
+    "searchInput"
+  )
   .addEventListener(
     "input",
     renderSubscribers
   );
 
 
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+
 document
-  .getElementById("logoutBtn")
+  .getElementById(
+    "logoutBtn"
+  )
   .addEventListener(
     "click",
     async () => {
 
-      await supabaseClient.auth.signOut();
+      await supabaseClient
+        .auth
+        .signOut();
+
 
       window.location.replace(
         "login.html"
@@ -450,21 +1083,17 @@ document
   );
 
 
-function escapeHtml(value) {
 
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
+/* =========================================
+   INITIAL LOAD
+========================================= */
 
 
 loadSubscribers();
 
+
 </script>
 
 </body>
+
 </html>
