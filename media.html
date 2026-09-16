@@ -1,178 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>ASPIN Admin | Media</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
   <style>
-    .media-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 25px;
-    }
 
     .media-upload {
+
       background: #101010;
       border: 1px solid #292929;
       padding: 20px;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
+
     }
+
 
     .media-upload input[type="file"] {
+
       width: 100%;
       padding: 14px;
+
       border: 1px dashed #5a4a26;
+
       background: #080808;
       color: #ccc;
+
+      box-sizing: border-box;
+
     }
+
 
     .upload-status {
+
       margin-top: 10px;
+
       color: #d4af37;
+
       font-size: 13px;
+
+      min-height: 18px;
+
     }
+
+
+    .media-toolbar {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: flex-end;
+
+      gap: 20px;
+
+      margin-bottom: 25px;
+
+    }
+
+
+    .media-count {
+
+      color: #888;
+
+      font-size: 12px;
+
+    }
+
 
     .media-grid {
+
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
       gap: 18px;
+
     }
+
 
     .media-card {
+
       background: #101010;
+
       border: 1px solid #292929;
+
       overflow: hidden;
+
+      min-width: 0;
+
     }
+
+
+    .media-preview-wrap {
+
+      width: 100%;
+
+      height: 180px;
+
+      background: #050505;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      overflow: hidden;
+
+    }
+
 
     .media-preview {
+
       width: 100%;
-      height: 180px;
+
+      height: 100%;
+
       object-fit: cover;
-      background: #050505;
+
       display: block;
+
     }
+
 
     .media-info {
+
       padding: 15px;
+
     }
+
 
     .media-name {
+
       font-size: 13px;
+
       word-break: break-all;
+
       color: #eee;
-      margin-bottom: 10px;
+
+      margin-bottom: 6px;
+
+      font-weight: 600;
+
     }
+
+
+    .media-path {
+
+      font-size: 10px;
+
+      color: #777;
+
+      word-break: break-all;
+
+      margin-bottom: 12px;
+
+    }
+
 
     .media-actions {
+
       display: flex;
+
       gap: 8px;
+
       flex-wrap: wrap;
+
     }
+
 
     .media-actions button,
+
     .media-actions a {
+
       border: 1px solid #3a3a3a;
+
       background: #171717;
+
       color: #eee;
+
       padding: 8px 11px;
+
       font-size: 11px;
+
       text-decoration: none;
+
       cursor: pointer;
+
     }
+
 
     .media-actions button:hover,
+
     .media-actions a:hover {
+
       border-color: #d4af37;
+
       color: #d4af37;
+
     }
+
 
     .empty-state {
+
       padding: 50px;
+
       text-align: center;
+
       border: 1px solid #292929;
+
       background: #101010;
+
+      grid-column: 1 / -1;
+
     }
+
+
+    .empty-state h2 {
+
+      margin-bottom: 8px;
+
+    }
+
+
+    .empty-state p {
+
+      color: #888;
+
+    }
+
+
+    .loading-state {
+
+      color: #888;
+
+      padding: 20px 0;
+
+    }
+
+
+    .error-state {
+
+      padding: 20px;
+
+      border: 1px solid #5a2020;
+
+      background: #180909;
+
+      color: #ff8c8c;
+
+    }
+
 
     @media (max-width: 1100px) {
+
       .media-grid {
-        grid-template-columns: repeat(3, 1fr);
+
+        grid-template-columns:
+          repeat(3, minmax(0, 1fr));
+
       }
+
     }
+
 
     @media (max-width: 800px) {
+
       .media-grid {
-        grid-template-columns: repeat(2, 1fr);
+
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+
       }
+
 
       .media-toolbar {
+
         align-items: flex-start;
+
         flex-direction: column;
+
       }
+
     }
 
+
     @media (max-width: 520px) {
+
       .media-grid {
+
         grid-template-columns: 1fr;
+
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <div class="admin-layout">
+
+
+  <!-- SIDEBAR -->
 
   <aside class="sidebar">
 
+
     <div class="sidebar-brand">
-      <img src="favicon.png" alt="ASPIN" class="sidebar-logo">
+
+      <img
+        src="favicon.png"
+        alt="ASPIN"
+        class="sidebar-logo"
+      >
 
       <div class="sidebar-brand-text">
+
         <strong>ASPIN.SITE</strong>
+
         <span>ADMIN PORTAL</span>
+
       </div>
+
     </div>
 
+
     <nav>
-      <a href="index.html">Dashboard</a>
-      <a href="promotions.html">Promotions</a>
-      <a href="media.html" class="active">Media</a>
-      <a href="faqs.html">FAQs</a>
-      <a href="payments.html">Payments</a>
-      <a href="subscribers.html">Subscribers</a>
-      <a href="analytics.html">Analytics</a>
-      <a href="settings.html">Settings</a>
+
+      <a href="index.html">
+        Dashboard
+      </a>
+
+      <a href="promotions.html">
+        Promotions
+      </a>
+
+      <a
+        href="media.html"
+        class="active"
+      >
+        Media
+      </a>
+
+      <a href="faqs.html">
+        FAQs
+      </a>
+
+      <a href="payments.html">
+        Payments
+      </a>
+
+      <a href="subscribers.html">
+        Subscribers
+      </a>
+
+      <a href="analytics.html">
+        Analytics
+      </a>
+
+      <a href="settings.html">
+        Settings
+      </a>
+
     </nav>
 
-    <button id="logoutBtn" class="logout-btn">
+
+    <button
+      id="logoutBtn"
+      class="logout-btn"
+    >
+
       LOG OUT
+
     </button>
+
 
   </aside>
 
+
+  <!-- MAIN -->
+
   <main class="admin-main">
 
+
     <header class="page-header">
+
       <div>
-        <div class="eyebrow">ASPIN.SITE</div>
-        <h1>Media</h1>
-        <p>Upload and manage images used across the website.</p>
+
+        <div class="eyebrow">
+          ASPIN.SITE
+        </div>
+
+        <h1>
+          Media
+        </h1>
+
+        <p>
+          Upload and manage images used across the website.
+        </p>
+
       </div>
+
     </header>
+
+
+    <!-- UPLOAD -->
 
     <section class="media-upload">
 
-      <h2>Upload Media</h2>
+      <h2>
+        Upload Media
+      </h2>
 
       <p>
         JPG, PNG, WEBP and SVG files are supported.
       </p>
+
 
       <input
         type="file"
@@ -180,177 +443,551 @@
         accept="image/jpeg,image/png,image/webp,image/svg+xml"
       >
 
+
       <button
         id="uploadBtn"
         class="primary-btn"
         style="margin-top:15px;"
       >
+
         UPLOAD IMAGE
+
       </button>
 
-      <div id="uploadStatus" class="upload-status"></div>
+
+      <div
+        id="uploadStatus"
+        class="upload-status"
+      ></div>
 
     </section>
+
+
+    <!-- LIBRARY -->
 
     <section>
 
+
       <div class="media-toolbar">
+
         <div>
-          <div class="eyebrow">LIBRARY</div>
-          <h2>Uploaded Media</h2>
+
+          <div class="eyebrow">
+            LIBRARY
+          </div>
+
+          <h2>
+            Uploaded Media
+          </h2>
+
         </div>
+
+
+        <div
+          id="mediaCount"
+          class="media-count"
+        ></div>
+
       </div>
 
-      <div id="mediaGrid" class="media-grid"></div>
+
+      <div
+        id="mediaGrid"
+        class="media-grid"
+      ></div>
+
 
     </section>
 
+
   </main>
+
 
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
 
+
 <script>
+
+
+/* =========================================
+   ADMIN CHECK
+========================================= */
+
 
 async function requireAdmin() {
 
   const {
+
     data: { session }
+
   } = await supabaseClient.auth.getSession();
 
+
   if (!session) {
-    window.location.replace("login.html");
+
+    window.location.replace(
+      "login.html"
+    );
+
     return false;
+
   }
 
+
   return true;
+
 }
+
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+
+function escapeHtml(value) {
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+
+/* =========================================
+   ESCAPE JAVASCRIPT STRING
+========================================= */
+
+
+function escapeJs(value) {
+
+  return String(value)
+
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+
+    .replace(
+      /'/g,
+      "\\'"
+    );
+
+}
+
+
+
+/* =========================================
+   GET FILES RECURSIVELY
+========================================= */
+
+
+async function getAllFiles(
+  folder = "",
+  depth = 0
+) {
+
+  /*
+   * Prevent infinite folder recursion.
+   * Three levels is more than enough
+   * for this media system.
+   */
+
+  if (depth > 3) {
+
+    return [];
+
+  }
+
+
+  const {
+
+    data,
+    error
+
+  } = await supabaseClient
+
+    .storage
+
+    .from("media")
+
+    .list(
+      folder,
+      {
+        limit: 100,
+        sortBy: {
+          column: "created_at",
+          order: "desc"
+        }
+      }
+    );
+
+
+  if (error) {
+
+    throw error;
+
+  }
+
+
+  const files = [];
+
+
+  for (const item of data || []) {
+
+
+    const currentPath =
+      folder
+        ? `${folder}/${item.name}`
+        : item.name;
+
+
+    /*
+     * Supabase folders don't have
+     * a normal file MIME type.
+     *
+     * Files usually have metadata.
+     */
+
+    const isFile =
+      !!item.metadata;
+
+
+    if (isFile) {
+
+      files.push({
+
+        ...item,
+
+        path: currentPath
+
+      });
+
+    }
+
+
+    /*
+     * If it is a folder,
+     * recursively inspect it.
+     */
+
+    else {
+
+      const nestedFiles =
+        await getAllFiles(
+          currentPath,
+          depth + 1
+        );
+
+
+      files.push(
+        ...nestedFiles
+      );
+
+    }
+
+  }
+
+
+  return files;
+
+}
+
+
+
+/* =========================================
+   LOAD MEDIA
+========================================= */
 
 
 async function loadMedia() {
 
-  const allowed = await requireAdmin();
+  const allowed =
+    await requireAdmin();
+
 
   if (!allowed) return;
 
+
   const grid =
-    document.getElementById("mediaGrid");
+    document.getElementById(
+      "mediaGrid"
+    );
 
-  grid.innerHTML =
-    "<p>Loading media...</p>";
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .storage
-    .from("media")
-    .list("", {
-      limit: 100,
-      sortBy: {
-        column: "created_at",
-        order: "desc"
-      }
+  const count =
+    document.getElementById(
+      "mediaCount"
+    );
+
+
+  grid.innerHTML = `
+
+    <div class="loading-state">
+      Loading media...
+    </div>
+
+  `;
+
+
+  count.textContent = "";
+
+
+  try {
+
+
+    const files =
+      await getAllFiles();
+
+
+    if (!files.length) {
+
+      grid.innerHTML = `
+
+        <div class="empty-state">
+
+          <h2>
+            No media yet
+          </h2>
+
+          <p>
+            Upload your first image above.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    count.textContent =
+      `${files.length} file${
+        files.length === 1
+          ? ""
+          : "s"
+      }`;
+
+
+    grid.innerHTML = "";
+
+
+    files.forEach(file => {
+
+
+      const {
+
+        data: publicData
+
+      } = supabaseClient
+
+        .storage
+
+        .from("media")
+
+        .getPublicUrl(
+          file.path
+        );
+
+
+      const url =
+        publicData.publicUrl;
+
+
+      const card =
+        document.createElement(
+          "article"
+        );
+
+
+      card.className =
+        "media-card";
+
+
+      card.innerHTML = `
+
+        <div class="media-preview-wrap">
+
+          <img
+
+            src="${escapeHtml(url)}"
+
+            class="media-preview"
+
+            alt="${escapeHtml(
+              file.name
+            )}"
+
+            loading="lazy"
+
+          >
+
+        </div>
+
+
+        <div class="media-info">
+
+
+          <div class="media-name">
+
+            ${escapeHtml(
+              file.name
+            )}
+
+          </div>
+
+
+          <div class="media-path">
+
+            /${escapeHtml(
+              file.path
+            )}
+
+          </div>
+
+
+          <div class="media-actions">
+
+
+            <a
+
+              href="${escapeHtml(url)}"
+
+              target="_blank"
+
+              rel="noopener noreferrer"
+
+            >
+
+              VIEW
+
+            </a>
+
+
+            <button
+
+              onclick="copyUrl(
+                '${escapeJs(url)}'
+              )"
+
+            >
+
+              COPY URL
+
+            </button>
+
+
+            <button
+
+              onclick="deleteMedia(
+                '${escapeJs(file.path)}'
+              )"
+
+            >
+
+              DELETE
+
+            </button>
+
+
+          </div>
+
+
+        </div>
+
+      `;
+
+
+      grid.appendChild(
+        card
+      );
+
+
     });
 
-  if (error) {
 
-    grid.innerHTML =
-      `<p>Unable to load media: ${escapeHtml(error.message)}</p>`;
-
-    return;
   }
 
-  const files = (data || [])
-    .filter(file => file.name);
+  catch (error) {
 
-  if (!files.length) {
+
+    console.error(
+      "Unable to load media:",
+      error
+    );
+
 
     grid.innerHTML = `
-      <div class="empty-state">
-        <h2>No media yet</h2>
-        <p>Upload your first image above.</p>
+
+      <div class="error-state">
+
+        Unable to load media:
+        ${escapeHtml(
+          error.message
+        )}
+
       </div>
+
     `;
 
-    return;
   }
-
-  grid.innerHTML = "";
-
-  files.forEach(file => {
-
-    const path = file.name;
-
-    const {
-      data: publicData
-    } = supabaseClient
-      .storage
-      .from("media")
-      .getPublicUrl(path);
-
-    const url = publicData.publicUrl;
-
-    const card =
-      document.createElement("article");
-
-    card.className = "media-card";
-
-    card.innerHTML = `
-      <img
-        src="${escapeHtml(url)}"
-        class="media-preview"
-        alt="${escapeHtml(file.name)}"
-      >
-
-      <div class="media-info">
-
-        <div class="media-name">
-          ${escapeHtml(file.name)}
-        </div>
-
-        <div class="media-actions">
-
-          <a
-            href="${escapeHtml(url)}"
-            target="_blank"
-          >
-            VIEW
-          </a>
-
-          <button
-            onclick="copyUrl('${escapeJs(url)}')"
-          >
-            COPY URL
-          </button>
-
-          <button
-            onclick="deleteMedia('${escapeJs(path)}')"
-          >
-            DELETE
-          </button>
-
-        </div>
-
-      </div>
-    `;
-
-    grid.appendChild(card);
-
-  });
 
 }
 
 
+
+/* =========================================
+   UPLOAD MEDIA
+========================================= */
+
+
 async function uploadMedia() {
 
+
   const file =
-    document.getElementById("mediaFile").files[0];
+    document
+      .getElementById(
+        "mediaFile"
+      )
+      .files[0];
+
 
   const status =
-    document.getElementById("uploadStatus");
+    document.getElementById(
+      "uploadStatus"
+    );
+
 
   if (!file) {
 
@@ -358,81 +995,171 @@ async function uploadMedia() {
       "Please choose an image first.";
 
     return;
+
   }
 
+
   const allowedTypes = [
+
     "image/jpeg",
+
     "image/png",
+
     "image/webp",
+
     "image/svg+xml"
+
   ];
 
-  if (!allowedTypes.includes(file.type)) {
+
+  if (
+    !allowedTypes.includes(
+      file.type
+    )
+  ) {
 
     status.textContent =
       "Only JPG, PNG, WEBP and SVG files are allowed.";
 
     return;
+
   }
+
 
   status.textContent =
     "Uploading...";
 
-  const extension =
-    file.name
-      .split(".")
-      .pop()
-      .toLowerCase();
 
-  const filename =
-    `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+  try {
 
-  const path =
-    `media/${filename}`;
 
-  const {
-    error
-  } = await supabaseClient
-    .storage
-    .from("media")
-    .upload(path, file, {
-      cacheControl: "3600",
-      upsert: false
-    });
+    const extension =
+      file.name
 
-  if (error) {
+        .split(".")
+
+        .pop()
+
+        .toLowerCase();
+
+
+    /*
+     * Safe filename generator.
+     * Does not require crypto.randomUUID().
+     */
+
+    const filename =
+
+      `${Date.now()}-${
+        Math.random()
+          .toString(36)
+          .slice(2)
+      }.${extension}`;
+
+
+    /*
+     * General uploads go into
+     * the media/ folder.
+     */
+
+    const path =
+      `media/${filename}`;
+
+
+    const {
+
+      error
+
+    } = await supabaseClient
+
+      .storage
+
+      .from("media")
+
+      .upload(
+        path,
+        file,
+        {
+          cacheControl: "3600",
+          upsert: false
+        }
+      );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
 
     status.textContent =
-      "Upload failed: " + error.message;
+      "Image uploaded successfully.";
 
-    return;
+
+    document
+      .getElementById(
+        "mediaFile"
+      )
+      .value = "";
+
+
+    await loadMedia();
+
+
   }
 
-  status.textContent =
-    "Image uploaded successfully.";
+  catch (error) {
 
-  document.getElementById("mediaFile").value = "";
 
-  loadMedia();
+    status.textContent =
+      "Upload failed: " +
+      error.message;
+
+
+  }
 
 }
 
 
-async function deleteMedia(path) {
+
+/* =========================================
+   DELETE MEDIA
+========================================= */
+
+
+async function deleteMedia(
+  path
+) {
+
 
   const confirmed =
     confirm(
-      "Delete this image?\n\nThis cannot be undone."
+
+      "Delete this image?\n\n" +
+
+      "This cannot be undone."
+
     );
+
 
   if (!confirmed) return;
 
+
   const {
+
     error
+
   } = await supabaseClient
+
     .storage
+
     .from("media")
-    .remove([path]);
+
+    .remove([
+      path
+    ]);
+
 
   if (error) {
 
@@ -442,22 +1169,43 @@ async function deleteMedia(path) {
     );
 
     return;
+
   }
 
-  loadMedia();
+
+  await loadMedia();
 
 }
 
 
-async function copyUrl(url) {
+
+/* =========================================
+   COPY URL
+========================================= */
+
+
+async function copyUrl(
+  url
+) {
+
 
   try {
 
-    await navigator.clipboard.writeText(url);
 
-    alert("Image URL copied.");
+    await navigator
+      .clipboard
+      .writeText(url);
 
-  } catch {
+
+    alert(
+      "Image URL copied."
+    );
+
+
+  }
+
+  catch {
+
 
     prompt(
       "Copy this image URL:",
@@ -469,54 +1217,69 @@ async function copyUrl(url) {
 }
 
 
-function escapeHtml(value) {
 
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
-
-
-function escapeJs(value) {
-
-  return String(value)
-    .replace(/\\/g, "\\\\")
-    .replace(/'/g, "\\'");
-
-}
+/* =========================================
+   UPLOAD BUTTON
+========================================= */
 
 
 document
-  .getElementById("uploadBtn")
+
+  .getElementById(
+    "uploadBtn"
+  )
+
   .addEventListener(
     "click",
     uploadMedia
   );
 
 
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+
 document
-  .getElementById("logoutBtn")
+
+  .getElementById(
+    "logoutBtn"
+  )
+
   .addEventListener(
+
     "click",
+
     async () => {
 
-      await supabaseClient.auth.signOut();
+
+      await supabaseClient
+        .auth
+        .signOut();
+
 
       window.location.replace(
         "login.html"
       );
 
+
     }
+
   );
+
+
+
+/* =========================================
+   INITIAL LOAD
+========================================= */
 
 
 loadMedia();
 
+
 </script>
 
 </body>
+
 </html>
