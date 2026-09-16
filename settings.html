@@ -1,19 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <link rel="icon" type="image/png" href="favicon.png">
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>ASPIN Admin | Settings</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="icon"
+    type="image/png"
+    href="favicon.png"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
   <style>
+
     .settings-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 18px;
     }
 
     .settings-panel {
@@ -26,58 +41,126 @@
       grid-column: 1 / -1;
     }
 
+    .settings-panel-header {
+      margin-bottom: 22px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #292929;
+    }
+
+    .settings-panel-header h2 {
+      margin: 0;
+    }
+
+    .settings-panel-header p {
+      color: #777;
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
     .form-group {
       margin-bottom: 18px;
     }
 
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
     .form-group label {
       display: block;
-      font-size: 11px;
-      letter-spacing: .1em;
-      color: #aaa;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
+      color: #d4af37;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
     }
 
     .form-group input,
     .form-group textarea {
       width: 100%;
       box-sizing: border-box;
-      padding: 12px;
+      padding: 12px 13px;
       background: #080808;
-      border: 1px solid #333;
+      border: 1px solid #353535;
       color: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #d4af37;
     }
 
     .form-group textarea {
-      min-height: 130px;
+      min-height: 100px;
       resize: vertical;
+      line-height: 1.6;
+    }
+
+    .form-help {
+      color: #666;
+      font-size: 11px;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .settings-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid #292929;
     }
 
     .save-status {
+      min-height: 18px;
       margin-top: 12px;
+      color: #d4af37;
+      font-size: 12px;
+    }
+
+    .success-message {
+      display: none;
+      margin-bottom: 20px;
+      padding: 14px;
+      border: 1px solid #6a5620;
+      background: #181408;
       color: #d4af37;
       font-size: 13px;
     }
 
-    .account-box {
-      background: #080808;
-      border: 1px solid #292929;
+    .error-message {
+      display: none;
+      margin-bottom: 20px;
+      padding: 14px;
+      border: 1px solid #6b2424;
+      background: #190909;
+      color: #ff8c8c;
+      font-size: 13px;
+    }
+
+    .settings-note {
       padding: 15px;
-      margin-top: 10px;
-    }
-
-    .account-box span {
-      display: block;
+      background: #0a0a0a;
+      border: 1px solid #292929;
       color: #888;
-      font-size: 11px;
-      margin-bottom: 5px;
+      font-size: 12px;
+      line-height: 1.6;
     }
 
-    .account-box strong {
-      word-break: break-word;
+    .settings-note strong {
+      color: #ccc;
+    }
+
+    .loading {
+      color: #888;
+      padding: 20px 0;
     }
 
     @media (max-width: 800px) {
+
       .settings-grid {
         grid-template-columns: 1fr;
       }
@@ -85,239 +168,446 @@
       .settings-panel.full {
         grid-column: auto;
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <div class="admin-layout">
+
 
   <aside class="sidebar">
 
     <div class="sidebar-brand">
-      <img src="favicon.png" alt="ASPIN" class="sidebar-logo">
+
+      <img
+        src="favicon.png"
+        alt="ASPIN"
+        class="sidebar-logo"
+      >
 
       <div class="sidebar-brand-text">
+
         <strong>ASPIN.SITE</strong>
+
         <span>ADMIN PORTAL</span>
+
       </div>
+
     </div>
 
+
     <nav>
-      <a href="index.html">Dashboard</a>
-      <a href="promotions.html">Promotions</a>
-      <a href="media.html">Media</a>
-      <a href="faqs.html">FAQs</a>
-      <a href="payments.html">Payments</a>
-      <a href="subscribers.html">Subscribers</a>
-      <a href="analytics.html">Analytics</a>
-      <a href="settings.html" class="active">Settings</a>
+
+      <a href="index.html">
+        Dashboard
+      </a>
+
+      <a href="promotions.html">
+        Promotions
+      </a>
+
+      <a href="media.html">
+        Media
+      </a>
+
+      <a href="faqs.html">
+        FAQs
+      </a>
+
+      <a href="payments.html">
+        Payments
+      </a>
+
+      <a href="subscribers.html">
+        Subscribers
+      </a>
+
+      <a href="analytics.html">
+        Analytics
+      </a>
+
+      <a
+        href="settings.html"
+        class="active"
+      >
+        Settings
+      </a>
+
     </nav>
 
-    <button id="logoutBtn" class="logout-btn">
+
+    <button
+      id="logoutBtn"
+      class="logout-btn"
+    >
+
       LOG OUT
+
     </button>
 
   </aside>
 
+
   <main class="admin-main">
+
 
     <header class="page-header">
 
       <div>
-        <div class="eyebrow">ASPIN.SITE</div>
-        <h1>Settings</h1>
-        <p>Manage general website configuration.</p>
+
+        <div class="eyebrow">
+          ASPIN.SITE
+        </div>
+
+        <h1>
+          Settings
+        </h1>
+
+        <p>
+          Manage website information and contact details.
+        </p>
+
       </div>
 
     </header>
 
 
-    <div class="settings-grid">
+    <div
+      id="successMessage"
+      class="success-message"
+    ></div>
 
 
-      <section class="settings-panel">
+    <div
+      id="errorMessage"
+      class="error-message"
+    ></div>
 
-        <div class="eyebrow">
-          GENERAL
+
+    <div
+      id="loading"
+      class="loading"
+    >
+
+      Loading settings...
+
+    </div>
+
+
+    <section class="settings-grid">
+
+
+      <!-- GENERAL -->
+
+      <article class="settings-panel">
+
+        <div class="settings-panel-header">
+
+          <div class="eyebrow">
+            GENERAL
+          </div>
+
+          <h2>
+            Website Information
+          </h2>
+
+          <p>
+            Basic information used throughout the website.
+          </p>
+
         </div>
 
-        <h2>
-          Website Information
-        </h2>
 
         <form id="generalForm">
 
+
           <div class="form-group">
 
-            <label>
+            <label for="siteName">
               SITE NAME
             </label>
 
             <input
-              id="site_name"
+              id="siteName"
               type="text"
               placeholder="ASPIN.SITE"
             >
 
           </div>
 
+
           <div class="form-group">
 
-            <label>
+            <label for="siteDescription">
               SITE DESCRIPTION
             </label>
 
             <textarea
-              id="site_description"
-              placeholder="Website description..."
+              id="siteDescription"
+              placeholder="Enter your website description..."
             ></textarea>
 
           </div>
 
-          <div class="form-group">
 
-            <label>
-              CONTACT EMAIL
-            </label>
+          <div class="settings-actions">
 
-            <input
-              id="contact_email"
-              type="email"
-              placeholder="support@example.com"
+            <button
+              type="submit"
+              class="primary-btn"
             >
+
+              SAVE GENERAL
+
+            </button>
 
           </div>
 
-          <div class="form-group">
-
-            <label>
-              CONTACT PHONE
-            </label>
-
-            <input
-              id="contact_phone"
-              type="text"
-              placeholder="+63..."
-            >
-
-          </div>
-
-          <button
-            type="submit"
-            class="primary-btn"
-          >
-            SAVE SETTINGS
-          </button>
 
           <div
             id="generalStatus"
             class="save-status"
           ></div>
 
+
         </form>
 
-      </section>
+      </article>
 
 
-      <section class="settings-panel">
+      <!-- CONTACT -->
 
-        <div class="eyebrow">
-          SOCIAL
+      <article class="settings-panel">
+
+        <div class="settings-panel-header">
+
+          <div class="eyebrow">
+            CONTACT
+          </div>
+
+          <h2>
+            Contact Information
+          </h2>
+
+          <p>
+            Contact details displayed or used by the website.
+          </p>
+
         </div>
 
-        <h2>
-          Social Links
-        </h2>
 
-        <form id="socialForm">
+        <form id="contactForm">
+
 
           <div class="form-group">
 
-            <label>
-              FACEBOOK
+            <label for="contactEmail">
+              EMAIL ADDRESS
             </label>
 
             <input
-              id="facebook_url"
+              id="contactEmail"
+              type="email"
+              placeholder="support@aspin.site"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="contactPhone">
+              PHONE NUMBER
+            </label>
+
+            <input
+              id="contactPhone"
+              type="text"
+              placeholder="+63..."
+            >
+
+          </div>
+
+
+          <div class="settings-actions">
+
+            <button
+              type="submit"
+              class="primary-btn"
+            >
+
+              SAVE CONTACT
+
+            </button>
+
+          </div>
+
+
+          <div
+            id="contactStatus"
+            class="save-status"
+          ></div>
+
+
+        </form>
+
+      </article>
+
+
+      <!-- SOCIAL -->
+
+      <article class="settings-panel">
+
+        <div class="settings-panel-header">
+
+          <div class="eyebrow">
+            SOCIAL
+          </div>
+
+          <h2>
+            Social Links
+          </h2>
+
+          <p>
+            Social media links used by the public website.
+          </p>
+
+        </div>
+
+
+        <form id="socialForm">
+
+
+          <div class="form-group">
+
+            <label for="facebookUrl">
+              FACEBOOK URL
+            </label>
+
+            <input
+              id="facebookUrl"
               type="url"
               placeholder="https://facebook.com/..."
             >
 
           </div>
 
+
           <div class="form-group">
 
-            <label>
-              INSTAGRAM
+            <label for="instagramUrl">
+              INSTAGRAM URL
             </label>
 
             <input
-              id="instagram_url"
+              id="instagramUrl"
               type="url"
               placeholder="https://instagram.com/..."
             >
 
           </div>
 
+
           <div class="form-group">
 
-            <label>
-              TELEGRAM
+            <label for="telegramUrl">
+              TELEGRAM URL
             </label>
 
             <input
-              id="telegram_url"
+              id="telegramUrl"
               type="url"
               placeholder="https://t.me/..."
             >
 
           </div>
 
-          <button
-            type="submit"
-            class="primary-btn"
-          >
-            SAVE SOCIAL LINKS
-          </button>
+
+          <div class="settings-actions">
+
+            <button
+              type="submit"
+              class="primary-btn"
+            >
+
+              SAVE SOCIAL
+
+            </button>
+
+          </div>
+
 
           <div
             id="socialStatus"
             class="save-status"
           ></div>
 
+
         </form>
 
-      </section>
+      </article>
 
 
-      <section class="settings-panel full">
+      <!-- SYSTEM -->
 
-        <div class="eyebrow">
-          ACCOUNT
-        </div>
+      <article class="settings-panel">
 
-        <h2>
-          Current Admin Account
-        </h2>
+        <div class="settings-panel-header">
 
-        <div class="account-box">
+          <div class="eyebrow">
+            SYSTEM
+          </div>
 
-          <span>
-            SIGNED-IN EMAIL
-          </span>
+          <h2>
+            CMS Information
+          </h2>
 
-          <strong id="adminEmail">
-            Loading...
-          </strong>
+          <p>
+            Current backoffice configuration.
+          </p>
 
         </div>
 
-      </section>
+
+        <div class="settings-note">
+
+          <strong>Database:</strong>
+          Supabase
+
+          <br><br>
+
+          <strong>Storage:</strong>
+          Supabase Storage
+
+          <br><br>
+
+          <strong>Authentication:</strong>
+          Supabase Auth
+
+          <br><br>
+
+          <strong>Website:</strong>
+          ASPIN.SITE
+
+          <br><br>
+
+          <strong>Gaming Site:</strong>
+          ASPIN.VIP
+
+        </div>
+
+      </article>
 
 
-    </div>
+    </section>
+
 
   </main>
 
@@ -325,114 +615,266 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
 
+
 <script>
+
+
+const SETTING_KEYS = [
+
+  "site_name",
+
+  "site_description",
+
+  "contact_email",
+
+  "contact_phone",
+
+  "facebook_url",
+
+  "instagram_url",
+
+  "telegram_url"
+
+];
+
+
+
+/* =========================================
+   ADMIN CHECK
+========================================= */
+
 
 async function requireAdmin() {
 
   const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
 
-  if (!session) {
+    data: { session },
+
+    error
+
+  } = await supabaseClient
+    .auth
+    .getSession();
+
+
+  if (error || !session) {
 
     window.location.replace(
       "login.html"
     );
 
-    return null;
+    return false;
+
   }
 
-  return session;
+
+  return true;
+
 }
+
+
+
+/* =========================================
+   ERROR / SUCCESS
+========================================= */
+
+
+function showError(message) {
+
+  const el =
+    document.getElementById(
+      "errorMessage"
+    );
+
+  el.textContent =
+    message;
+
+  el.style.display =
+    "block";
+
+}
+
+
+function hideError() {
+
+  const el =
+    document.getElementById(
+      "errorMessage"
+    );
+
+  el.textContent =
+    "";
+
+  el.style.display =
+    "none";
+
+}
+
+
+function showSuccess(message) {
+
+  const el =
+    document.getElementById(
+      "successMessage"
+    );
+
+  el.textContent =
+    message;
+
+  el.style.display =
+    "block";
+
+
+  setTimeout(
+    () => {
+
+      el.style.display =
+        "none";
+
+    },
+    3500
+  );
+
+}
+
+
+
+/* =========================================
+   LOAD SETTINGS
+========================================= */
 
 
 async function loadSettings() {
 
-  const session =
+  const allowed =
     await requireAdmin();
 
-  if (!session) return;
 
-  document.getElementById(
-    "adminEmail"
-  ).textContent =
-    session.user.email || "—";
+  if (!allowed) return;
+
+
+  const loading =
+    document.getElementById(
+      "loading"
+    );
+
+
+  loading.style.display =
+    "block";
 
 
   const {
+
     data,
+
     error
+
   } = await supabaseClient
-    .from("site_settings")
+
+    .from(
+      "site_settings"
+    )
+
     .select("*");
+
+
+  loading.style.display =
+    "none";
+
 
   if (error) {
 
-    console.error(
-      "Unable to load settings:",
-      error
+    showError(
+      "Unable to load settings: " +
+      error.message
     );
 
     return;
+
   }
 
 
+  hideError();
+
+
   const settings = {};
+
 
   (data || []).forEach(
     item => {
 
       settings[item.key] =
-        item.value;
+        item.value ?? "";
 
     }
   );
 
 
-  document.getElementById(
-    "site_name"
-  ).value =
-    settings.site_name || "";
+  document
+    .getElementById(
+      "siteName"
+    )
+    .value =
+      settings.site_name || "";
 
 
-  document.getElementById(
-    "site_description"
-  ).value =
-    settings.site_description || "";
+  document
+    .getElementById(
+      "siteDescription"
+    )
+    .value =
+      settings.site_description || "";
 
 
-  document.getElementById(
-    "contact_email"
-  ).value =
-    settings.contact_email || "";
+  document
+    .getElementById(
+      "contactEmail"
+    )
+    .value =
+      settings.contact_email || "";
 
 
-  document.getElementById(
-    "contact_phone"
-  ).value =
-    settings.contact_phone || "";
+  document
+    .getElementById(
+      "contactPhone"
+    )
+    .value =
+      settings.contact_phone || "";
 
 
-  document.getElementById(
-    "facebook_url"
-  ).value =
-    settings.facebook_url || "";
+  document
+    .getElementById(
+      "facebookUrl"
+    )
+    .value =
+      settings.facebook_url || "";
 
 
-  document.getElementById(
-    "instagram_url"
-  ).value =
-    settings.instagram_url || "";
+  document
+    .getElementById(
+      "instagramUrl"
+    )
+    .value =
+      settings.instagram_url || "";
 
 
-  document.getElementById(
-    "telegram_url"
-  ).value =
-    settings.telegram_url || "";
+  document
+    .getElementById(
+      "telegramUrl"
+    )
+    .value =
+      settings.telegram_url || "";
 
 }
+
+
+
+/* =========================================
+   SAVE SETTINGS
+========================================= */
 
 
 async function saveSetting(
@@ -441,169 +883,307 @@ async function saveSetting(
 ) {
 
   const {
-    error
-  } = await supabaseClient
-    .from("site_settings")
-    .upsert({
-      key,
-      value,
-      updated_at:
-        new Date().toISOString()
-    }, {
-      onConflict: "key"
-    });
 
-  return error;
+    error
+
+  } = await supabaseClient
+
+    .from(
+      "site_settings"
+    )
+
+    .upsert(
+      {
+        key,
+        value,
+        updated_at:
+          new Date()
+            .toISOString()
+      },
+      {
+        onConflict: "key"
+      }
+    );
+
+
+  if (error) {
+
+    throw error;
+
+  }
 
 }
 
 
+
+/* =========================================
+   GENERAL FORM
+========================================= */
+
+
 document
-  .getElementById("generalForm")
+  .getElementById(
+    "generalForm"
+  )
   .addEventListener(
     "submit",
-    async event => {
+    async function(event) {
 
       event.preventDefault();
+
+
+      hideError();
+
 
       const status =
         document.getElementById(
           "generalStatus"
         );
 
+
       status.textContent =
         "Saving...";
 
 
-      const settings = {
-
-        site_name:
-          document.getElementById(
-            "site_name"
-          ).value.trim(),
-
-        site_description:
-          document.getElementById(
-            "site_description"
-          ).value.trim(),
-
-        contact_email:
-          document.getElementById(
-            "contact_email"
-          ).value.trim(),
-
-        contact_phone:
-          document.getElementById(
-            "contact_phone"
-          ).value.trim()
-
-      };
+      try {
 
 
-      for (
-        const [key, value]
-        of Object.entries(settings)
-      ) {
+        await saveSetting(
+          "site_name",
+          document
+            .getElementById(
+              "siteName"
+            )
+            .value
+            .trim()
+        );
 
-        const error =
-          await saveSetting(
-            key,
-            value
-          );
 
-        if (error) {
+        await saveSetting(
+          "site_description",
+          document
+            .getElementById(
+              "siteDescription"
+            )
+            .value
+            .trim()
+        );
 
-          status.textContent =
-            "Unable to save: " +
-            error.message;
 
-          return;
-        }
+        status.textContent =
+          "Saved successfully.";
+
+        showSuccess(
+          "General settings saved."
+        );
 
       }
 
+      catch (error) {
 
-      status.textContent =
-        "Settings saved.";
+        status.textContent =
+          "";
+
+        showError(
+          "Unable to save general settings: " +
+          error.message
+        );
+
+      }
 
     }
   );
 
 
+
+/* =========================================
+   CONTACT FORM
+========================================= */
+
+
 document
-  .getElementById("socialForm")
+  .getElementById(
+    "contactForm"
+  )
   .addEventListener(
     "submit",
-    async event => {
+    async function(event) {
 
       event.preventDefault();
+
+
+      hideError();
+
+
+      const status =
+        document.getElementById(
+          "contactStatus"
+        );
+
+
+      status.textContent =
+        "Saving...";
+
+
+      try {
+
+
+        await saveSetting(
+          "contact_email",
+          document
+            .getElementById(
+              "contactEmail"
+            )
+            .value
+            .trim()
+        );
+
+
+        await saveSetting(
+          "contact_phone",
+          document
+            .getElementById(
+              "contactPhone"
+            )
+            .value
+            .trim()
+        );
+
+
+        status.textContent =
+          "Saved successfully.";
+
+        showSuccess(
+          "Contact settings saved."
+        );
+
+      }
+
+      catch (error) {
+
+        status.textContent =
+          "";
+
+        showError(
+          "Unable to save contact settings: " +
+          error.message
+        );
+
+      }
+
+    }
+  );
+
+
+
+/* =========================================
+   SOCIAL FORM
+========================================= */
+
+
+document
+  .getElementById(
+    "socialForm"
+  )
+  .addEventListener(
+    "submit",
+    async function(event) {
+
+      event.preventDefault();
+
+
+      hideError();
+
 
       const status =
         document.getElementById(
           "socialStatus"
         );
 
+
       status.textContent =
         "Saving...";
 
 
-      const settings = {
-
-        facebook_url:
-          document.getElementById(
-            "facebook_url"
-          ).value.trim(),
-
-        instagram_url:
-          document.getElementById(
-            "instagram_url"
-          ).value.trim(),
-
-        telegram_url:
-          document.getElementById(
-            "telegram_url"
-          ).value.trim()
-
-      };
+      try {
 
 
-      for (
-        const [key, value]
-        of Object.entries(settings)
-      ) {
+        await saveSetting(
+          "facebook_url",
+          document
+            .getElementById(
+              "facebookUrl"
+            )
+            .value
+            .trim()
+        );
 
-        const error =
-          await saveSetting(
-            key,
-            value
-          );
 
-        if (error) {
+        await saveSetting(
+          "instagram_url",
+          document
+            .getElementById(
+              "instagramUrl"
+            )
+            .value
+            .trim()
+        );
 
-          status.textContent =
-            "Unable to save: " +
-            error.message;
 
-          return;
-        }
+        await saveSetting(
+          "telegram_url",
+          document
+            .getElementById(
+              "telegramUrl"
+            )
+            .value
+            .trim()
+        );
+
+
+        status.textContent =
+          "Saved successfully.";
+
+        showSuccess(
+          "Social links saved."
+        );
 
       }
 
+      catch (error) {
 
-      status.textContent =
-        "Social links saved.";
+        status.textContent =
+          "";
+
+        showError(
+          "Unable to save social links: " +
+          error.message
+        );
+
+      }
 
     }
   );
 
 
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+
 document
-  .getElementById("logoutBtn")
+  .getElementById(
+    "logoutBtn"
+  )
   .addEventListener(
     "click",
     async () => {
 
-      await supabaseClient.auth.signOut();
+      await supabaseClient
+        .auth
+        .signOut();
+
 
       window.location.replace(
         "login.html"
@@ -613,9 +1193,17 @@ document
   );
 
 
+
+/* =========================================
+   INITIAL LOAD
+========================================= */
+
+
 loadSettings();
+
 
 </script>
 
 </body>
+
 </html>
