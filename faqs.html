@@ -1,59 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <link rel="icon" type="image/png" href="favicon.png">
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>ASPIN Admin | FAQs</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="icon"
+    type="image/png"
+    href="favicon.png"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
   <style>
+
+    .faq-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .faq-count {
+      color: #888;
+      font-size: 12px;
+    }
+
     .faq-list {
-      display: grid;
-      gap: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
     .faq-card {
       background: #101010;
       border: 1px solid #292929;
-      padding: 22px;
+      padding: 20px;
+    }
+
+    .faq-card:hover {
+      border-color: #4a3a1c;
+    }
+
+    .faq-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
     }
 
     .faq-question {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
-      margin-bottom: 10px;
+      color: #fff;
+      line-height: 1.4;
     }
 
     .faq-answer {
+      margin-top: 12px;
       color: #aaa;
+      font-size: 14px;
       line-height: 1.7;
       white-space: pre-wrap;
     }
 
     .faq-meta {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-top: 18px;
       padding-top: 15px;
       border-top: 1px solid #292929;
     }
 
+    .faq-status {
+      display: inline-block;
+      padding: 5px 9px;
+      font-size: 10px;
+      letter-spacing: .12em;
+      font-weight: 700;
+      border: 1px solid;
+    }
+
+    .faq-status.published {
+      color: #d4af37;
+      border-color: #6a5620;
+      background: #181408;
+    }
+
+    .faq-status.hidden {
+      color: #888;
+      border-color: #3a3a3a;
+      background: #151515;
+    }
+
+    .faq-order {
+      color: #777;
+      font-size: 11px;
+    }
+
     .faq-actions {
       display: flex;
       gap: 8px;
+      margin-left: auto;
       flex-wrap: wrap;
     }
 
     .faq-actions button {
-      padding: 9px 13px;
-      border: 1px solid #333;
-      background: #181818;
+      border: 1px solid #3a3a3a;
+      background: #171717;
       color: #eee;
+      padding: 8px 12px;
+      font-size: 11px;
       cursor: pointer;
     }
 
@@ -62,20 +133,31 @@
       color: #d4af37;
     }
 
-    .status {
-      font-size: 11px;
-      letter-spacing: .1em;
-      padding: 6px 9px;
-      border: 1px solid #444;
+    .faq-actions .delete-btn:hover {
+      border-color: #a33;
+      color: #ff7777;
     }
 
-    .published {
-      color: #79d18b;
-      border-color: #315d3a;
+    .empty-state {
+      padding: 55px;
+      text-align: center;
+      border: 1px solid #292929;
+      background: #101010;
     }
 
-    .draft {
-      color: #aaa;
+    .empty-state p {
+      color: #888;
+      margin-top: 8px;
+    }
+
+    .error-message {
+      display: none;
+      margin-bottom: 20px;
+      padding: 14px;
+      border: 1px solid #6b2424;
+      background: #190909;
+      color: #ff8c8c;
+      font-size: 13px;
     }
 
     .modal-overlay {
@@ -85,32 +167,52 @@
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
       padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      display: flex;
     }
 
     .modal {
-      width: min(650px, 100%);
+      width: min(680px, 100%);
       max-height: 90vh;
       overflow-y: auto;
-      background: #111;
-      border: 1px solid #333;
-      padding: 25px;
+      background: #101010;
+      border: 1px solid #3a3a3a;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
+      padding: 20px;
+      border-bottom: 1px solid #292929;
+    }
+
+    .modal-header h2 {
+      margin: 0;
     }
 
     .close-btn {
-      border: 0;
-      background: transparent;
-      color: #aaa;
-      font-size: 28px;
+      width: 34px;
+      height: 34px;
+      border: 1px solid #3a3a3a;
+      background: #171717;
+      color: #fff;
+      font-size: 22px;
       cursor: pointer;
+    }
+
+    .close-btn:hover {
+      border-color: #d4af37;
+      color: #d4af37;
+    }
+
+    .faq-form {
+      padding: 20px;
     }
 
     .form-group {
@@ -119,35 +221,59 @@
 
     .form-group label {
       display: block;
+      margin-bottom: 8px;
+      color: #d4af37;
       font-size: 11px;
-      letter-spacing: .1em;
-      margin-bottom: 7px;
-      color: #aaa;
+      font-weight: 700;
+      letter-spacing: .12em;
     }
 
     .form-group input,
     .form-group textarea {
       width: 100%;
       box-sizing: border-box;
-      padding: 12px;
+      padding: 12px 13px;
       background: #080808;
-      border: 1px solid #333;
+      border: 1px solid #353535;
       color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #d4af37;
     }
 
     .form-group textarea {
       min-height: 150px;
       resize: vertical;
+      line-height: 1.6;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
     }
 
     .checkbox-row {
       display: flex;
       align-items: center;
       gap: 10px;
+      margin: 8px 0 20px;
     }
 
     .checkbox-row input {
       width: auto;
+      accent-color: #d4af37;
+    }
+
+    .checkbox-row label {
+      color: #ccc;
+      font-size: 13px;
+      cursor: pointer;
     }
 
     .modal-actions {
@@ -159,84 +285,238 @@
     }
 
     .secondary-btn {
-      padding: 12px 16px;
-      border: 1px solid #333;
-      background: #181818;
+      border: 1px solid #3a3a3a;
+      background: #171717;
       color: #eee;
+      padding: 11px 16px;
+      font-size: 12px;
       cursor: pointer;
     }
 
-    @media (max-width: 650px) {
-      .faq-meta {
+    .secondary-btn:hover {
+      border-color: #d4af37;
+      color: #d4af37;
+    }
+
+    .loading {
+      color: #888;
+      padding: 20px 0;
+    }
+
+    @media (max-width: 800px) {
+
+      .faq-toolbar {
         align-items: flex-start;
         flex-direction: column;
       }
+
+      .faq-top {
+        flex-direction: column;
+      }
+
+      .faq-actions {
+        margin-left: 0;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
     }
+
+    @media (max-width: 520px) {
+
+      .faq-card {
+        padding: 16px;
+      }
+
+      .faq-actions {
+        width: 100%;
+      }
+
+      .faq-actions button {
+        flex: 1;
+      }
+
+      .modal {
+        max-height: 95vh;
+      }
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <div class="admin-layout">
+
 
   <aside class="sidebar">
 
     <div class="sidebar-brand">
-      <img src="favicon.png" alt="ASPIN" class="sidebar-logo">
+
+      <img
+        src="favicon.png"
+        alt="ASPIN"
+        class="sidebar-logo"
+      >
 
       <div class="sidebar-brand-text">
+
         <strong>ASPIN.SITE</strong>
+
         <span>ADMIN PORTAL</span>
+
       </div>
+
     </div>
 
+
     <nav>
-      <a href="index.html">Dashboard</a>
-      <a href="promotions.html">Promotions</a>
-      <a href="media.html">Media</a>
-      <a href="faqs.html" class="active">FAQs</a>
-      <a href="payments.html">Payments</a>
-      <a href="subscribers.html">Subscribers</a>
-      <a href="analytics.html">Analytics</a>
-      <a href="settings.html">Settings</a>
+
+      <a href="index.html">
+        Dashboard
+      </a>
+
+      <a href="promotions.html">
+        Promotions
+      </a>
+
+      <a href="media.html">
+        Media
+      </a>
+
+      <a
+        href="faqs.html"
+        class="active"
+      >
+        FAQs
+      </a>
+
+      <a href="payments.html">
+        Payments
+      </a>
+
+      <a href="subscribers.html">
+        Subscribers
+      </a>
+
+      <a href="analytics.html">
+        Analytics
+      </a>
+
+      <a href="settings.html">
+        Settings
+      </a>
+
     </nav>
 
-    <button id="logoutBtn" class="logout-btn">
+
+    <button
+      id="logoutBtn"
+      class="logout-btn"
+    >
+
       LOG OUT
+
     </button>
 
   </aside>
 
+
   <main class="admin-main">
+
 
     <header class="page-header">
 
       <div>
-        <div class="eyebrow">ASPIN.SITE</div>
-        <h1>FAQs</h1>
-        <p>Manage frequently asked questions shown on the website.</p>
+
+        <div class="eyebrow">
+          ASPIN.SITE
+        </div>
+
+        <h1>
+          FAQs
+        </h1>
+
+        <p>
+          Manage frequently asked questions displayed on the website.
+        </p>
+
       </div>
+
 
       <button
         id="addFaqBtn"
         class="primary-btn"
       >
+
         + ADD FAQ
+
       </button>
 
     </header>
 
-    <div id="errorMessage"></div>
 
-    <section
-      id="faqList"
-      class="faq-list"
-    ></section>
+    <div
+      id="errorMessage"
+      class="error-message"
+    ></div>
+
+
+    <div
+      id="loading"
+      class="loading"
+    >
+
+      Loading FAQs...
+
+    </div>
+
+
+    <section>
+
+      <div class="faq-toolbar">
+
+        <div>
+
+          <div class="eyebrow">
+            CONTENT
+          </div>
+
+          <h2>
+            FAQ Library
+          </h2>
+
+        </div>
+
+
+        <div
+          id="faqCount"
+          class="faq-count"
+        ></div>
+
+      </div>
+
+
+      <div
+        id="faqList"
+        class="faq-list"
+      ></div>
+
+    </section>
+
 
   </main>
 
 </div>
 
+
+<!-- MODAL -->
 
 <div
   id="faqModal"
@@ -245,6 +525,7 @@
 
   <div class="modal">
 
+
     <div class="modal-header">
 
       <h2 id="modalTitle">
@@ -252,63 +533,79 @@
       </h2>
 
       <button
-        id="closeModal"
+        id="closeModalBtn"
         class="close-btn"
+        type="button"
       >
+
         ×
+
       </button>
 
     </div>
 
-    <form id="faqForm">
+
+    <form
+      id="faqForm"
+      class="faq-form"
+    >
 
       <input
         type="hidden"
         id="faqId"
       >
 
+
       <div class="form-group">
 
-        <label>
+        <label for="question">
           QUESTION
         </label>
 
         <input
           id="question"
           type="text"
-          required
           placeholder="How do I register?"
+          required
         >
 
       </div>
 
+
       <div class="form-group">
 
-        <label>
+        <label for="answer">
           ANSWER
         </label>
 
         <textarea
           id="answer"
-          required
           placeholder="Enter the answer..."
+          required
         ></textarea>
 
       </div>
 
-      <div class="form-group">
 
-        <label>
-          SORT ORDER
-        </label>
+      <div class="form-row">
 
-        <input
-          id="sortOrder"
-          type="number"
-          value="0"
-        >
+        <div class="form-group">
+
+          <label for="sortOrder">
+            DISPLAY ORDER
+          </label>
+
+          <input
+            id="sortOrder"
+            type="number"
+            min="0"
+            value="0"
+          >
+
+        </div>
 
       </div>
+
 
       <div class="checkbox-row">
 
@@ -319,29 +616,36 @@
         >
 
         <label for="isPublished">
-          Publish this FAQ
+          Publish this FAQ on the website
         </label>
 
       </div>
 
+
       <div class="modal-actions">
 
         <button
-          type="button"
           id="cancelBtn"
+          type="button"
           class="secondary-btn"
         >
+
           CANCEL
+
         </button>
+
 
         <button
           type="submit"
           class="primary-btn"
         >
+
           SAVE FAQ
+
         </button>
 
       </div>
+
 
     </form>
 
@@ -351,374 +655,800 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
+
 
 <script>
 
-let faqs = [];
+
+let currentFaqs = [];
+
+
+
+/* =========================================
+   ADMIN CHECK
+========================================= */
 
 
 async function requireAdmin() {
 
   const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
 
-  if (!session) {
+    data: { session },
+
+    error
+
+  } = await supabaseClient
+    .auth
+    .getSession();
+
+
+  if (error || !session) {
 
     window.location.replace(
       "login.html"
     );
 
     return false;
+
   }
 
+
   return true;
+
 }
+
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+
+function showError(message) {
+
+  const el =
+    document.getElementById(
+      "errorMessage"
+    );
+
+  el.textContent = message;
+
+  el.style.display = "block";
+
+}
+
+
+function hideError() {
+
+  const el =
+    document.getElementById(
+      "errorMessage"
+    );
+
+  el.textContent = "";
+
+  el.style.display = "none";
+
+}
+
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+
+function escapeHtml(value) {
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+
+/* =========================================
+   LOAD FAQS
+========================================= */
 
 
 async function loadFaqs() {
 
-  if (!(await requireAdmin())) return;
+  const allowed =
+    await requireAdmin();
+
+
+  if (!allowed) return;
+
+
+  const loading =
+    document.getElementById(
+      "loading"
+    );
 
   const list =
-    document.getElementById("faqList");
+    document.getElementById(
+      "faqList"
+    );
 
-  list.innerHTML =
-    "<p>Loading FAQs...</p>";
-
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("faqs")
-    .select("*")
-    .order("sort_order", {
-      ascending: true
-    })
-    .order("created_at", {
-      ascending: false
-    });
-
-  if (error) {
-
-    list.innerHTML =
-      `<p>Unable to load FAQs: ${escapeHtml(error.message)}</p>`;
-
-    return;
-  }
-
-  faqs = data || [];
-
-  renderFaqs();
-
-}
+  const count =
+    document.getElementById(
+      "faqCount"
+    );
 
 
-function renderFaqs() {
-
-  const list =
-    document.getElementById("faqList");
+  loading.style.display =
+    "block";
 
   list.innerHTML = "";
 
-  if (!faqs.length) {
+  count.textContent = "";
+
+
+  const {
+
+    data,
+
+    error
+
+  } = await supabaseClient
+
+    .from("faqs")
+
+    .select("*")
+
+    .order(
+      "sort_order",
+      {
+        ascending: true
+      }
+    )
+
+    .order(
+      "created_at",
+      {
+        ascending: true
+      }
+    );
+
+
+  loading.style.display =
+    "none";
+
+
+  if (error) {
+
+    showError(
+      "Unable to load FAQs: " +
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  hideError();
+
+
+  currentFaqs =
+    data || [];
+
+
+  count.textContent =
+    `${currentFaqs.length} FAQ${
+      currentFaqs.length === 1
+        ? ""
+        : "s"
+    }`;
+
+
+  if (!currentFaqs.length) {
 
     list.innerHTML = `
+
       <div class="empty-state">
-        <h2>No FAQs yet</h2>
-        <p>Add your first FAQ.</p>
+
+        <h2>
+          No FAQs yet
+        </h2>
+
+        <p>
+          Add your first FAQ to get started.
+        </p>
+
       </div>
+
     `;
 
     return;
+
   }
 
-  faqs.forEach(faq => {
 
-    const card =
-      document.createElement("article");
+  currentFaqs.forEach(
+    faq => {
 
-    card.className =
-      "faq-card";
+      const card =
+        document.createElement(
+          "article"
+        );
 
-    card.innerHTML = `
 
-      <div class="faq-question">
-        ${escapeHtml(faq.question)}
-      </div>
+      card.className =
+        "faq-card";
 
-      <div class="faq-answer">
-        ${escapeHtml(faq.answer)}
-      </div>
 
-      <div class="faq-meta">
+      const statusClass =
+        faq.is_published
+          ? "published"
+          : "hidden";
 
-        <span class="status ${
-          faq.is_published
-            ? "published"
-            : "draft"
-        }">
-          ${
-            faq.is_published
-              ? "PUBLISHED"
-              : "DRAFT"
-          }
-        </span>
 
-        <div class="faq-actions">
+      const statusText =
+        faq.is_published
+          ? "PUBLISHED"
+          : "HIDDEN";
 
-          <button
-            onclick="editFaq('${faq.id}')"
-          >
-            EDIT
-          </button>
 
-          <button
-            onclick="toggleFaq('${faq.id}', ${!faq.is_published})"
-          >
-            ${
-              faq.is_published
-                ? "UNPUBLISH"
-                : "PUBLISH"
-            }
-          </button>
+      card.innerHTML = `
 
-          <button
-            onclick="deleteFaq('${faq.id}')"
-          >
-            DELETE
-          </button>
+        <div class="faq-top">
+
+          <div>
+
+            <div class="faq-question">
+
+              ${escapeHtml(
+                faq.question
+              )}
+
+            </div>
+
+
+            <div class="faq-answer">
+
+              ${escapeHtml(
+                faq.answer
+              )}
+
+            </div>
+
+          </div>
 
         </div>
 
-      </div>
 
-    `;
+        <div class="faq-meta">
 
-    list.appendChild(card);
+          <span
+            class="faq-status ${statusClass}"
+          >
 
-  });
+            ${statusText}
+
+          </span>
+
+
+          <span class="faq-order">
+
+            Order:
+            ${Number(
+              faq.sort_order || 0
+            )}
+
+          </span>
+
+
+          <div class="faq-actions">
+
+            <button
+              type="button"
+              onclick="editFaq('${faq.id}')"
+            >
+
+              EDIT
+
+            </button>
+
+
+            <button
+              type="button"
+              onclick="toggleFaq('${faq.id}')"
+            >
+
+              ${
+                faq.is_published
+                  ? "HIDE"
+                  : "PUBLISH"
+              }
+
+            </button>
+
+
+            <button
+              type="button"
+              class="delete-btn"
+              onclick="deleteFaq('${faq.id}')"
+            >
+
+              DELETE
+
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      list.appendChild(
+        card
+      );
+
+    }
+  );
 
 }
 
 
-function openModal(faq = null) {
 
-  document.getElementById(
-    "faqModal"
-  ).style.display = "flex";
+/* =========================================
+   OPEN ADD MODAL
+========================================= */
 
-  document.getElementById(
-    "modalTitle"
-  ).textContent =
-    faq
-      ? "Edit FAQ"
-      : "Add FAQ";
 
-  document.getElementById(
-    "faqId"
-  ).value =
-    faq?.id || "";
+function openAddModal() {
 
-  document.getElementById(
-    "question"
-  ).value =
-    faq?.question || "";
+  hideError();
 
-  document.getElementById(
-    "answer"
-  ).value =
-    faq?.answer || "";
 
-  document.getElementById(
-    "sortOrder"
-  ).value =
-    faq?.sort_order ?? 0;
+  document
+    .getElementById("faqForm")
+    .reset();
 
-  document.getElementById(
-    "isPublished"
-  ).checked =
-    faq
-      ? faq.is_published
-      : true;
+
+  document
+    .getElementById("faqId")
+    .value = "";
+
+
+  document
+    .getElementById("sortOrder")
+    .value = 0;
+
+
+  document
+    .getElementById("isPublished")
+    .checked = true;
+
+
+  document
+    .getElementById("modalTitle")
+    .textContent =
+      "Add FAQ";
+
+
+  document
+    .getElementById("faqModal")
+    .classList.add(
+      "active"
+    );
 
 }
+
+
+
+/* =========================================
+   EDIT FAQ
+========================================= */
+
+
+window.editFaq =
+  function(id) {
+
+    const faq =
+      currentFaqs.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!faq) return;
+
+
+    hideError();
+
+
+    document
+      .getElementById("faqId")
+      .value =
+        faq.id;
+
+
+    document
+      .getElementById("question")
+      .value =
+        faq.question || "";
+
+
+    document
+      .getElementById("answer")
+      .value =
+        faq.answer || "";
+
+
+    document
+      .getElementById("sortOrder")
+      .value =
+        faq.sort_order || 0;
+
+
+    document
+      .getElementById("isPublished")
+      .checked =
+        !!faq.is_published;
+
+
+    document
+      .getElementById("modalTitle")
+      .textContent =
+        "Edit FAQ";
+
+
+    document
+      .getElementById("faqModal")
+      .classList.add(
+        "active"
+      );
+
+  };
+
+
+
+/* =========================================
+   CLOSE MODAL
+========================================= */
 
 
 function closeModal() {
 
-  document.getElementById(
-    "faqModal"
-  ).style.display = "none";
+  document
+    .getElementById("faqModal")
+    .classList.remove(
+      "active"
+    );
 
 }
 
 
-function editFaq(id) {
 
-  const faq =
-    faqs.find(
-      item => item.id === id
-    );
-
-  if (faq) openModal(faq);
-
-}
-
-
-async function toggleFaq(id, publish) {
-
-  const {
-    error
-  } = await supabaseClient
-    .from("faqs")
-    .update({
-      is_published: publish,
-      updated_at:
-        new Date().toISOString()
-    })
-    .eq("id", id);
-
-  if (error) {
-
-    alert(
-      "Unable to update FAQ: " +
-      error.message
-    );
-
-    return;
-  }
-
-  loadFaqs();
-
-}
-
-
-async function deleteFaq(id) {
-
-  const faq =
-    faqs.find(
-      item => item.id === id
-    );
-
-  if (!faq) return;
-
-  if (!confirm(
-    `Delete "${faq.question}"?\n\nThis cannot be undone.`
-  )) return;
-
-  const {
-    error
-  } = await supabaseClient
-    .from("faqs")
-    .delete()
-    .eq("id", id);
-
-  if (error) {
-
-    alert(
-      "Unable to delete FAQ: " +
-      error.message
-    );
-
-    return;
-  }
-
-  loadFaqs();
-
-}
+/* =========================================
+   SAVE FAQ
+========================================= */
 
 
 document
   .getElementById("faqForm")
   .addEventListener(
     "submit",
-    async event => {
+    async function(event) {
 
       event.preventDefault();
 
+
+      hideError();
+
+
       const id =
-        document.getElementById(
-          "faqId"
-        ).value;
+        document
+          .getElementById("faqId")
+          .value;
+
+
+      const question =
+        document
+          .getElementById("question")
+          .value
+          .trim();
+
+
+      const answer =
+        document
+          .getElementById("answer")
+          .value
+          .trim();
+
+
+      const sortOrder =
+        Number(
+          document
+            .getElementById("sortOrder")
+            .value
+        ) || 0;
+
+
+      const isPublished =
+        document
+          .getElementById("isPublished")
+          .checked;
+
+
+      if (!question) {
+
+        showError(
+          "Please enter a question."
+        );
+
+        return;
+
+      }
+
+
+      if (!answer) {
+
+        showError(
+          "Please enter an answer."
+        );
+
+        return;
+
+      }
+
 
       const faqData = {
 
-        question:
-          document.getElementById(
-            "question"
-          ).value.trim(),
+        question,
 
-        answer:
-          document.getElementById(
-            "answer"
-          ).value.trim(),
+        answer,
 
         sort_order:
-          Number(
-            document.getElementById(
-              "sortOrder"
-            ).value
-          ) || 0,
+          sortOrder,
 
         is_published:
-          document.getElementById(
-            "isPublished"
-          ).checked,
+          isPublished,
 
         updated_at:
-          new Date().toISOString()
+          new Date()
+            .toISOString()
 
       };
 
+
       let result;
+
 
       if (id) {
 
         result =
           await supabaseClient
-            .from("faqs")
-            .update(faqData)
-            .eq("id", id);
 
-      } else {
-
-        result =
-          await supabaseClient
             .from("faqs")
-            .insert(faqData);
+
+            .update(
+              faqData
+            )
+
+            .eq(
+              "id",
+              id
+            );
 
       }
 
+      else {
+
+        result =
+          await supabaseClient
+
+            .from("faqs")
+
+            .insert(
+              faqData
+            );
+
+      }
+
+
       if (result.error) {
 
-        alert(
+        showError(
           "Unable to save FAQ: " +
           result.error.message
         );
 
         return;
+
       }
+
 
       closeModal();
 
-      loadFaqs();
+
+      await loadFaqs();
 
     }
   );
+
+
+
+/* =========================================
+   TOGGLE PUBLISHED
+========================================= */
+
+
+window.toggleFaq =
+  async function(id) {
+
+    const faq =
+      currentFaqs.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!faq) return;
+
+
+    hideError();
+
+
+    const {
+
+      error
+
+    } = await supabaseClient
+
+      .from("faqs")
+
+      .update({
+
+        is_published:
+          !faq.is_published,
+
+        updated_at:
+          new Date()
+            .toISOString()
+
+      })
+
+      .eq(
+        "id",
+        id
+      );
+
+
+    if (error) {
+
+      showError(
+        "Unable to update FAQ: " +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    await loadFaqs();
+
+  };
+
+
+
+/* =========================================
+   DELETE FAQ
+========================================= */
+
+
+window.deleteFaq =
+  async function(id) {
+
+    const faq =
+      currentFaqs.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!faq) return;
+
+
+    const confirmed =
+      confirm(
+
+        `Delete "${faq.question}"?\n\n` +
+
+        "This cannot be undone."
+
+      );
+
+
+    if (!confirmed) return;
+
+
+    hideError();
+
+
+    const {
+
+      error
+
+    } = await supabaseClient
+
+      .from("faqs")
+
+      .delete()
+
+      .eq(
+        "id",
+        id
+      );
+
+
+    if (error) {
+
+      showError(
+        "Unable to delete FAQ: " +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    await loadFaqs();
+
+  };
+
+
+
+/* =========================================
+   BUTTONS
+========================================= */
 
 
 document
   .getElementById("addFaqBtn")
   .addEventListener(
     "click",
-    () => openModal()
+    openAddModal
   );
 
 
 document
-  .getElementById("closeModal")
+  .getElementById("closeModalBtn")
   .addEventListener(
     "click",
     closeModal
@@ -734,12 +1464,39 @@ document
 
 
 document
+  .getElementById("faqModal")
+  .addEventListener(
+    "click",
+    function(event) {
+
+      if (
+        event.target ===
+        this
+      ) {
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+
+document
   .getElementById("logoutBtn")
   .addEventListener(
     "click",
     async () => {
 
-      await supabaseClient.auth.signOut();
+      await supabaseClient
+        .auth
+        .signOut();
+
 
       window.location.replace(
         "login.html"
@@ -749,16 +1506,9 @@ document
   );
 
 
-function escapeHtml(value) {
-
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
+/* =========================================
+   INITIAL LOAD
+========================================= */
 
 
 loadFaqs();
@@ -766,4 +1516,5 @@ loadFaqs();
 </script>
 
 </body>
+
 </html>
