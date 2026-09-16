@@ -1,200 +1,376 @@
+// ========================================
+// ASPIN.SITE BACK OFFICE ADMIN.JS
+// ========================================
+
+
+// ========================================
+// AUTH CHECK
+// ========================================
+
 async function requireAdmin() {
 
-  const {
-    data: { session },
-    error
-  } = await supabaseClient.auth.getSession();
+    try {
 
-  if (error || !session) {
+        const {
+            data: { session },
+            error
+        } = await supabaseClient.auth.getSession();
 
-    window.location.replace(
-      "login.html"
-    );
+        if (error) {
+            console.error("Authentication error:", error);
+        }
 
-    return null;
-  }
+        if (!session) {
+            window.location.replace("login.html");
+            return null;
+        }
 
-  return session;
+        return session;
+
+    } catch (error) {
+
+        console.error(
+            "Authentication check failed:",
+            error
+        );
+
+        window.location.replace("login.html");
+
+        return null;
+    }
 }
 
+
+// ========================================
+// DASHBOARD
+// ========================================
 
 async function loadDashboard() {
 
-  const session =
-    await requireAdmin();
+    // Only run Dashboard code when the
+    // Dashboard elements actually exist.
 
-  if (!session) return;
+    const adminEmail =
+        document.getElementById("adminEmail");
 
+    const dbStatus =
+        document.getElementById("dbStatus");
 
-  const email =
-    document.getElementById(
-      "adminEmail"
-    );
+    const promotionCount =
+        document.getElementById("promotionCount");
 
-  if (email) {
+    const subscriberCount =
+        document.getElementById("subscriberCount");
 
-    email.textContent =
-      session.user.email || "";
+    const registerClicks =
+        document.getElementById("registerClicks");
 
-  }
-
-
-  const [
-    promotions,
-    subscribers,
-    registerClicks,
-    events
-  ] = await Promise.all([
-
-    supabaseClient
-      .from("promotions")
-      .select("id", {
-        count: "exact",
-        head: true
-      })
-      .eq("is_published", true),
-
-    supabaseClient
-      .from("subscribers")
-      .select("id", {
-        count: "exact",
-        head: true
-      })
-      .eq("is_active", true),
-
-    supabaseClient
-      .from("analytics_events")
-      .select("id", {
-        count: "exact",
-        head: true
-      })
-      .eq(
-        "event_name",
-        "register_click"
-      ),
-
-    supabaseClient
-      .from("analytics_events")
-      .select("id", {
-        count: "exact",
-        head: true
-      })
-
-  ]);
+    const eventCount =
+        document.getElementById("eventCount");
 
 
-  const firstError =
-    [
-      promotions,
-      subscribers,
-      registerClicks,
-      events
-    ].find(
-      result => result.error
-    );
-
-
-  const dbStatus =
-    document.getElementById(
-      "dbStatus"
-    );
-
-
-  if (firstError) {
-
-    if (dbStatus) {
-
-      dbStatus.textContent =
-        "CHECK RLS";
-
-      dbStatus.className =
-        "status-warning";
-
+    if (
+        !adminEmail ||
+        !dbStatus ||
+        !promotionCount ||
+        !subscriberCount ||
+        !registerClicks ||
+        !eventCount
+    ) {
+        return;
     }
 
-    return;
-  }
+
+    // ========================================
+    // AUTH
+    // ========================================
+
+    const session =
+        await requireAdmin();
+
+    if (!session) {
+        return;
+    }
 
 
-  if (dbStatus) {
+    adminEmail.textContent =
+        session.user?.email || "";
+
+
+    // ========================================
+    // DATABASE STATUS
+    // ========================================
 
     dbStatus.textContent =
-      "CONNECTED";
+        "CHECKING";
 
-    dbStatus.className =
-      "status-ok";
-
-  }
+    dbStatus.className = "";
 
 
-  const promotionCount =
-    document.getElementById(
-      "promotionCount"
-    );
+    // ========================================
+    // DATABASE TIMEOUT
+    // ========================================
 
-  if (promotionCount) {
+    const timeoutPromise =
+        new Promise((_, reject) => {
 
-    promotionCount.textContent =
-      promotions.count ?? 0;
+            setTimeout(() => {
 
-  }
+                reject(
+                    new Error(
+                        "Database request timed out."
+                    )
+                );
 
+            }, 10000);
 
-  const subscriberCount =
-    document.getElementById(
-      "subscriberCount"
-    );
-
-  if (subscriberCount) {
-
-    subscriberCount.textContent =
-      subscribers.count ?? 0;
-
-  }
+        });
 
 
-  const registerCount =
-    document.getElementById(
-      "registerClicks"
-    );
+    try {
 
-  if (registerCount) {
+        const databasePromise =
+            Promise.all([
 
-    registerCount.textContent =
-      registerClicks.count ?? 0;
+                supabaseClient
+                    .from("promotions")
+                    .select("id", {
+                        count: "exact",
+                        head: true
+                    })
+                    .eq(
+                        "is_published",
+                        true
+                    ),
 
-  }
+                supabaseClient
+                    .from("subscribers")
+                    .select("id", {
+                        count: "exact",
+                        head: true
+                    })
+                    .eq(
+                        "is_active",
+                        true
+                    ),
+
+                supabaseClient
+                    .from("analytics_events")
+                    .select("id", {
+                        count: "exact",
+                        head: true
+                    })
+                    .eq(
+                        "event_name",
+                        "register_click"
+                    ),
+
+                supabaseClient
+                    .from("analytics_events")
+                    .select("id", {
+                        count: "exact",
+                        head: true
+                    })
+
+            ]);
 
 
-  const eventCount =
-    document.getElementById(
-      "eventCount"
-    );
+        // Race database against 10-second timeout
 
-  if (eventCount) {
+        const [
+            promotions,
+            subscribers,
+            registerClicksResult,
+            events
+        ] =
+            await Promise.race([
+                databasePromise,
+                timeoutPromise
+            ]);
 
-    eventCount.textContent =
-      events.count ?? 0;
 
-  }
+        // ========================================
+        // CHECK DATABASE ERRORS
+        // ========================================
+
+        const results = [
+
+            promotions,
+
+            subscribers,
+
+            registerClicksResult,
+
+            events
+
+        ];
+
+
+        const firstError =
+            results.find(
+                result => result.error
+            );
+
+
+        if (firstError) {
+
+            throw firstError.error;
+
+        }
+
+
+        // ========================================
+        // DATABASE CONNECTED
+        // ========================================
+
+        dbStatus.textContent =
+            "CONNECTED";
+
+        dbStatus.className =
+            "status-ok";
+
+
+        // ========================================
+        // UPDATE COUNTS
+        // ========================================
+
+        promotionCount.textContent =
+            formatNumber(
+                promotions.count
+            );
+
+
+        subscriberCount.textContent =
+            formatNumber(
+                subscribers.count
+            );
+
+
+        registerClicks.textContent =
+            formatNumber(
+                registerClicksResult.count
+            );
+
+
+        eventCount.textContent =
+            formatNumber(
+                events.count
+            );
+
+
+    } catch (error) {
+
+        console.error(
+            "Dashboard database error:",
+            error
+        );
+
+
+        // ========================================
+        // DATABASE ERROR
+        // ========================================
+
+        dbStatus.textContent =
+            "ERROR";
+
+        dbStatus.className =
+            "status-warning";
+
+
+        promotionCount.textContent =
+            "—";
+
+        subscriberCount.textContent =
+            "—";
+
+        registerClicks.textContent =
+            "—";
+
+        eventCount.textContent =
+            "—";
+
+    }
 
 }
 
 
-document
-  .getElementById("logoutBtn")
-  ?.addEventListener(
-    "click",
-    async () => {
+// ========================================
+// NUMBER FORMAT
+// ========================================
 
-      await supabaseClient.auth.signOut();
+function formatNumber(value) {
 
-      window.location.replace(
-        "login.html"
-      );
+    const number =
+        Number(value);
 
+    if (
+        !Number.isFinite(number)
+    ) {
+        return "0";
     }
-  );
 
+    return number.toLocaleString();
+}
+
+
+// ========================================
+// LOGOUT
+// ========================================
+
+const logoutBtn =
+    document.getElementById(
+        "logoutBtn"
+    );
+
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener(
+        "click",
+        async function () {
+
+            logoutBtn.disabled =
+                true;
+
+            logoutBtn.textContent =
+                "LOGGING OUT...";
+
+
+            try {
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+
+                if (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+                }
+
+            } finally {
+
+                window.location.replace(
+                    "login.html"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// ========================================
+// START
+// ========================================
 
 loadDashboard();
