@@ -2,1689 +2,968 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta charset="UTF-8">
+    <title>ASPIN BO | Analytics</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
 
-  <title>ASPIN Admin | Analytics</title>
+    <style>
+        .analytics-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
 
-  <link
-    rel="icon"
-    type="image/png"
-    href="favicon.png"
-  >
+        .analytics-stat {
+            background: #101010;
+            border: 1px solid #292929;
+            padding: 20px;
+        }
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+        .analytics-stat span {
+            display: block;
+            color: #999;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 10px;
+        }
 
-  <style>
+        .analytics-stat strong {
+            font-size: 28px;
+        }
 
-    .analytics-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 20px;
-      margin-bottom: 25px;
-    }
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
 
-    .analytics-period {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+        .analytics-panel {
+            background: #101010;
+            border: 1px solid #292929;
+            padding: 20px;
+        }
 
-    .period-btn {
-      border: 1px solid #3a3a3a;
-      background: #171717;
-      color: #aaa;
-      padding: 9px 13px;
-      font-size: 10px;
-      cursor: pointer;
-    }
+        .analytics-panel h2 {
+            margin: 8px 0 20px;
+        }
 
-    .period-btn:hover,
-    .period-btn.active {
-      border-color: #d4af37;
-      color: #d4af37;
-      background: #181408;
-    }
+        .event-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 13px 0;
+            border-bottom: 1px solid #292929;
+        }
 
-    .analytics-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 25px;
-    }
+        .event-row:last-child,
+        .source-row:last-child {
+            border-bottom: none;
+        }
 
-    .analytics-stat {
-      background: #101010;
-      border: 1px solid #292929;
-      padding: 20px;
-    }
+        .event-name {
+            color: #eee;
+            font-size: 13px;
+        }
 
-    .analytics-stat span {
-      display: block;
-      color: #888;
-      font-size: 11px;
-      letter-spacing: .08em;
-      margin-bottom: 10px;
-    }
+        .event-count {
+            color: #d4af37;
+            font-weight: 700;
+        }
 
-    .analytics-stat strong {
-      color: #fff;
-      font-size: 28px;
-      line-height: 1;
-    }
+        .source-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            padding: 13px 0;
+            border-bottom: 1px solid #292929;
+            font-size: 13px;
+        }
 
-    .analytics-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
+        .source-row strong {
+            color: #d4af37;
+        }
 
-    .analytics-panel {
-      background: #101010;
-      border: 1px solid #292929;
-      padding: 20px;
-      min-width: 0;
-    }
+        .empty-state {
+            color: #888;
+            padding: 20px 0;
+        }
 
-    .analytics-panel.full {
-      grid-column: 1 / -1;
-    }
+        .analytics-error {
+            color: #d66;
+            padding: 15px;
+            background: rgba(150, 20, 20, .08);
+            border: 1px solid rgba(200, 50, 50, .2);
+            margin-bottom: 20px;
+        }
 
-    .analytics-panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
+        .analytics-loading {
+            color: #888;
+            padding: 20px 0;
+        }
 
-    .analytics-panel-header h2 {
-      margin: 0;
-    }
+        .refresh-btn {
+            padding: 11px 16px;
+            border: 1px solid #333;
+            background: #181818;
+            color: #eee;
+            cursor: pointer;
+            font-size: 12px;
+            letter-spacing: .05em;
+        }
 
-    .analytics-panel-header p {
-      color: #777;
-      font-size: 12px;
-      margin-top: 5px;
-    }
+        .refresh-btn:hover {
+            border-color: #d4af37;
+            color: #d4af37;
+        }
 
-    .chart-wrap {
-      width: 100%;
-      overflow-x: auto;
-    }
+        .refresh-btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
 
-    .bar-chart {
-      min-width: 500px;
-      display: flex;
-      align-items: flex-end;
-      gap: 12px;
-      height: 240px;
-      padding: 15px 5px 0;
-      border-bottom: 1px solid #333;
-    }
+        @media (max-width: 900px) {
+            .analytics-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
 
-    .bar-item {
-      flex: 1;
-      min-width: 35px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 8px;
-    }
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-    .bar-value {
-      color: #d4af37;
-      font-size: 10px;
-      min-height: 14px;
-    }
+        @media (max-width: 600px) {
+            .page-header {
+                gap: 15px;
+            }
 
-    .bar {
-      width: 70%;
-      max-width: 55px;
-      min-height: 2px;
-      background: #8f7425;
-    }
+            .refresh-btn {
+                width: 100%;
+            }
+        }
 
-    .bar-label {
-      color: #777;
-      font-size: 9px;
-      white-space: nowrap;
-    }
-
-    .data-list {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .data-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 15px;
-      padding: 12px 0;
-      border-bottom: 1px solid #242424;
-    }
-
-    .data-row:last-child {
-      border-bottom: none;
-    }
-
-    .data-name {
-      color: #ddd;
-      font-size: 13px;
-      word-break: break-word;
-    }
-
-    .data-value {
-      color: #d4af37;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .event-table-wrap {
-      overflow-x: auto;
-    }
-
-    .event-table {
-      width: 100%;
-      min-width: 650px;
-      border-collapse: collapse;
-    }
-
-    .event-table th {
-      padding: 12px;
-      text-align: left;
-      background: #151515;
-      border-bottom: 1px solid #292929;
-      color: #d4af37;
-      font-size: 10px;
-      letter-spacing: .1em;
-    }
-
-    .event-table td {
-      padding: 12px;
-      border-bottom: 1px solid #242424;
-      color: #aaa;
-      font-size: 12px;
-    }
-
-    .event-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .empty-state {
-      padding: 40px 20px;
-      text-align: center;
-      color: #777;
-    }
-
-    .empty-state h3 {
-      color: #ddd;
-      margin-bottom: 7px;
-    }
-
-    .error-message {
-      display: none;
-      margin-bottom: 20px;
-      padding: 14px;
-      border: 1px solid #6b2424;
-      background: #190909;
-      color: #ff8c8c;
-      font-size: 13px;
-    }
-
-    .loading {
-      color: #888;
-      padding: 20px 0;
-    }
-
-    .source-bar {
-      height: 7px;
-      background: #242424;
-      margin-top: 6px;
-      overflow: hidden;
-    }
-
-    .source-bar-fill {
-      height: 100%;
-      background: #8f7425;
-    }
-
-    @media (max-width: 1000px) {
-
-      .analytics-stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-    }
-
-    @media (max-width: 800px) {
-
-      .analytics-toolbar {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .analytics-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .analytics-panel.full {
-        grid-column: auto;
-      }
-
-    }
-
-    @media (max-width: 520px) {
-
-      .analytics-stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .analytics-stat strong {
-        font-size: 23px;
-      }
-
-    }
-
-  </style>
-
+        @media (max-width: 500px) {
+            .analytics-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-
 
 <body>
 
-
 <div class="admin-layout">
 
-
-  <aside class="sidebar">
-
-    <div class="sidebar-brand">
-
-      <img
-        src="favicon.png"
-        alt="ASPIN"
-        class="sidebar-logo"
-      >
-
-      <div class="sidebar-brand-text">
-
-        <strong>ASPIN.SITE</strong>
-
-        <span>ADMIN PORTAL</span>
-
-      </div>
-
-    </div>
-
-
-    <nav>
-
-      <a href="index.html">
-        Dashboard
-      </a>
-
-      <a href="promotions.html">
-        Promotions
-      </a>
-
-      <a href="media.html">
-        Media
-      </a>
-
-      <a href="faqs.html">
-        FAQs
-      </a>
-
-      <a href="payments.html">
-        Payments
-      </a>
-
-      <a href="subscribers.html">
-        Subscribers
-      </a>
-
-      <a
-        href="analytics.html"
-        class="active"
-      >
-        Analytics
-      </a>
-
-      <a href="settings.html">
-        Settings
-      </a>
-
-    </nav>
-
-
-    <button
-      id="logoutBtn"
-      class="logout-btn"
-    >
-
-      LOG OUT
-
-    </button>
-
-  </aside>
-
-
-  <main class="admin-main">
-
-
-    <header class="page-header">
-
-      <div>
-
-        <div class="eyebrow">
-          ASPIN.SITE
-        </div>
-
-        <h1>
-          Analytics
-        </h1>
-
-        <p>
-          Monitor website activity, traffic sources and tracked events.
-        </p>
-
-      </div>
-
-    </header>
-
-
-    <div
-      id="errorMessage"
-      class="error-message"
-    ></div>
-
-
-    <div
-      id="loading"
-      class="loading"
-    >
-
-      Loading analytics...
-
-    </div>
-
-
-    <section class="analytics-toolbar">
-
-      <div>
-
-        <div class="eyebrow">
-          OVERVIEW
-        </div>
-
-        <h2>
-          Website Activity
-        </h2>
-
-      </div>
-
-
-      <div class="analytics-period">
-
-        <button
-          class="period-btn active"
-          data-days="7"
-        >
-          7 DAYS
-        </button>
-
-        <button
-          class="period-btn"
-          data-days="30"
-        >
-          30 DAYS
-        </button>
-
-        <button
-          class="period-btn"
-          data-days="90"
-        >
-          90 DAYS
-        </button>
-
-        <button
-          class="period-btn"
-          data-days="0"
-        >
-          ALL TIME
-        </button>
-
-      </div>
-
-    </section>
-
-
-    <section class="analytics-stats">
-
-      <article class="analytics-stat">
-
-        <span>
-          TOTAL EVENTS
-        </span>
-
-        <strong id="totalEvents">
-          0
-        </strong>
-
-      </article>
-
-
-      <article class="analytics-stat">
-
-        <span>
-          REGISTER CLICKS
-        </span>
-
-        <strong id="registerClicks">
-          0
-        </strong>
-
-      </article>
-
-
-      <article class="analytics-stat">
-
-        <span>
-          SUBSCRIPTIONS
-        </span>
-
-        <strong id="subscriptions">
-          0
-        </strong>
-
-      </article>
-
-
-      <article class="analytics-stat">
-
-        <span>
-          UNIQUE SESSIONS
-        </span>
-
-        <strong id="uniqueSessions">
-          0
-        </strong>
-
-      </article>
-
-    </section>
-
-
-    <section class="analytics-grid">
-
-
-      <!-- EVENTS CHART -->
-
-      <article class="analytics-panel full">
-
-        <div class="analytics-panel-header">
-
-          <div>
-
-            <div class="eyebrow">
-              ACTIVITY
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <img
+                src="favicon.png"
+                alt="ASPIN"
+                class="sidebar-logo"
+            >
+
+            <div class="sidebar-brand-text">
+                <strong>ASPIN.SITE</strong>
+                <span>BACK OFFICE</span>
             </div>
 
-            <h2>
-              Events Over Time
-            </h2>
-
-            <p>
-              Tracked events by day.
-            </p>
-
-          </div>
-
         </div>
 
+        <nav>
+            <a href="index.html">Dashboard</a>
+            <a href="promotions.html">Promotions</a>
+            <a href="media.html">Media</a>
+            <a href="faqs.html">FAQs</a>
+            <a href="payments.html">Payments</a>
+            <a href="subscribers.html">Subscribers</a>
+            <a href="analytics.html" class="active">Analytics</a>
+            <a href="activity.html">Activity History</a>
+            <a href="settings.html">Settings</a>
+        </nav>
 
-        <div class="chart-wrap">
+        <button
+            id="logoutBtn"
+            class="logout-btn"
+            type="button"
+        >
+            LOG OUT
+        </button>
 
-          <div
-            id="eventChart"
-            class="bar-chart"
-          ></div>
-
-        </div>
-
-      </article>
+    </aside>
 
 
-      <!-- EVENT TYPES -->
+    <!-- MAIN -->
+    <main class="admin-main">
 
-      <article class="analytics-panel">
+        <header class="page-header">
 
-        <div class="analytics-panel-header">
+            <div>
+                <div class="eyebrow">
+                    ASPIN.SITE
+                </div>
 
-          <div>
+                <h1>
+                    Analytics
+                </h1>
 
-            <div class="eyebrow">
-              EVENTS
+                <p>
+                    First-party website activity recorded by ASPIN.SITE.
+                </p>
             </div>
 
-            <h2>
-              Event Types
-            </h2>
+            <button
+                id="refreshBtn"
+                class="refresh-btn"
+                type="button"
+            >
+                REFRESH
+            </button>
 
-            <p>
-              Most frequently recorded actions.
-            </p>
-
-          </div>
-
-        </div>
+        </header>
 
 
+        <!-- ERROR -->
         <div
-          id="eventTypes"
-          class="data-list"
+            id="analyticsError"
+            class="analytics-error"
+            style="display:none;"
         ></div>
 
-      </article>
+
+        <!-- STATS -->
+        <section class="analytics-stats">
+
+            <article class="analytics-stat">
+                <span>Total Events</span>
+
+                <strong id="totalEvents">
+                    —
+                </strong>
+            </article>
 
 
-      <!-- TRAFFIC SOURCES -->
+            <article class="analytics-stat">
+                <span>Register Clicks</span>
 
-      <article class="analytics-panel">
-
-        <div class="analytics-panel-header">
-
-          <div>
-
-            <div class="eyebrow">
-              ACQUISITION
-            </div>
-
-            <h2>
-              Traffic Sources
-            </h2>
-
-            <p>
-              Sources recorded through tracking data.
-            </p>
-
-          </div>
-
-        </div>
+                <strong id="registerClicks">
+                    —
+                </strong>
+            </article>
 
 
-        <div
-          id="trafficSources"
-          class="data-list"
-        ></div>
+            <article class="analytics-stat">
+                <span>Subscriptions</span>
 
-      </article>
-
-
-      <!-- RECENT EVENTS -->
-
-      <article class="analytics-panel full">
-
-        <div class="analytics-panel-header">
-
-          <div>
-
-            <div class="eyebrow">
-              ACTIVITY LOG
-            </div>
-
-            <h2>
-              Recent Events
-            </h2>
-
-            <p>
-              Latest tracked website activity.
-            </p>
-
-          </div>
-
-        </div>
+                <strong id="subscriptions">
+                    —
+                </strong>
+            </article>
 
 
-        <div
-          id="recentEvents"
-          class="event-table-wrap"
-        ></div>
+            <article class="analytics-stat">
+                <span>Page Views</span>
 
-      </article>
+                <strong id="pageViews">
+                    —
+                </strong>
+            </article>
+
+        </section>
 
 
-    </section>
+        <!-- ANALYTICS PANELS -->
+        <section class="analytics-grid">
 
 
-  </main>
+            <!-- EVENTS -->
+            <article class="analytics-panel">
+
+                <div class="eyebrow">
+                    EVENTS
+                </div>
+
+                <h2>
+                    Event Activity
+                </h2>
+
+                <div id="eventList">
+
+                    <div class="analytics-loading">
+                        Loading analytics...
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- SOURCES -->
+            <article class="analytics-panel">
+
+                <div class="eyebrow">
+                    SOURCES
+                </div>
+
+                <h2>
+                    Traffic Sources
+                </h2>
+
+                <div id="sourceList">
+
+                    <div class="analytics-loading">
+                        Loading sources...
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+    </main>
 
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- SUPABASE -->
 
-<script src="supabase.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script src="mobile-menu.js"></script>
 
 <script>
 
-
-let allEvents = [];
-
-let selectedDays = 7;
-
-
-
-/* =========================================
-   ADMIN CHECK
-========================================= */
-
-
 async function requireAdmin() {
 
-  const {
+    try {
 
-    data: { session },
-
-    error
-
-  } = await supabaseClient
-    .auth
-    .getSession();
+        const {
+            data: { session },
+            error
+        } = await supabaseClient.auth.getSession();
 
 
-  if (error || !session) {
-
-    window.location.replace(
-      "login.html"
-    );
-
-    return false;
-
-  }
+        if (error) {
+            throw error;
+        }
 
 
-  return true;
+        if (!session) {
 
-}
+            window.location.replace(
+                "login.html"
+            );
 
-
-
-/* =========================================
-   ESCAPE HTML
-========================================= */
-
-
-function escapeHtml(value) {
-
-  return String(value ?? "")
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
+            return false;
+        }
 
 
+        return true;
 
-/* =========================================
-   GET FILTERED EVENTS
-========================================= */
+    } catch (error) {
 
+        console.error(
+            "Authentication error:",
+            error
+        );
 
-function getFilteredEvents() {
-
-  if (!selectedDays) {
-
-    return allEvents;
-
-  }
-
-
-  const cutoff =
-    new Date();
-
-
-  cutoff.setDate(
-    cutoff.getDate() -
-    selectedDays
-  );
-
-
-  return allEvents.filter(
-    event => {
-
-      if (!event.created_at) {
+        window.location.replace(
+            "login.html"
+        );
 
         return false;
-
-      }
-
-
-      return (
-        new Date(
-          event.created_at
-        ) >= cutoff
-      );
-
     }
-  );
-
 }
 
-
-
-/* =========================================
-   LOAD ANALYTICS
-========================================= */
 
 
 async function loadAnalytics() {
 
-  const allowed =
-    await requireAdmin();
+    const allowed =
+        await requireAdmin();
 
 
-  if (!allowed) return;
+    if (!allowed) {
+        return;
+    }
 
 
-  const loading =
-    document.getElementById(
-      "loading"
-    );
-
-
-  loading.style.display =
-    "block";
-
-
-  const {
-
-    data,
-
-    error
-
-  } = await supabaseClient
-
-    .from(
-      "analytics_events"
-    )
-
-    .select("*")
-
-    .order(
-      "created_at",
-      {
-        ascending: false
-      }
-    );
-
-
-  loading.style.display =
-    "none";
-
-
-  if (error) {
-
-    showError(
-      "Unable to load analytics: " +
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  hideError();
-
-
-  allEvents =
-    data || [];
-
-
-  renderAnalytics();
-
-}
-
-
-
-/* =========================================
-   RENDER EVERYTHING
-========================================= */
-
-
-function renderAnalytics() {
-
-  const events =
-    getFilteredEvents();
-
-
-  document
-    .getElementById(
-      "totalEvents"
-    )
-    .textContent =
-      events.length;
-
-
-  document
-    .getElementById(
-      "registerClicks"
-    )
-    .textContent =
-      events.filter(
-        event =>
-          event.event_name ===
-          "register_click"
-      ).length;
-
-
-  document
-    .getElementById(
-      "subscriptions"
-    )
-    .textContent =
-      events.filter(
-        event =>
-          event.event_name ===
-            "newsletter_subscribe" ||
-          event.event_name ===
-            "subscription"
-      ).length;
-
-
-  const sessions =
-    new Set();
-
-
-  events.forEach(
-    event => {
-
-      const sessionId =
-        event.session_id ||
-        event.sessionId;
-
-
-      if (sessionId) {
-
-        sessions.add(
-          sessionId
+    const refreshBtn =
+        document.getElementById(
+            "refreshBtn"
         );
 
-      }
+    const errorBox =
+        document.getElementById(
+            "analyticsError"
+        );
+
+    const eventList =
+        document.getElementById(
+            "eventList"
+        );
+
+    const sourceList =
+        document.getElementById(
+            "sourceList"
+        );
+
+
+    if (refreshBtn) {
+
+        refreshBtn.disabled = true;
+        refreshBtn.textContent =
+            "LOADING...";
 
     }
-  );
 
 
-  document
-    .getElementById(
-      "uniqueSessions"
-    )
-    .textContent =
-      sessions.size ||
-      "—";
+    if (errorBox) {
 
+        errorBox.style.display =
+            "none";
 
-  renderChart(
-    events
-  );
-
-
-  renderEventTypes(
-    events
-  );
-
-
-  renderTrafficSources(
-    events
-  );
-
-
-  renderRecentEvents(
-    events
-  );
-
-}
-
-
-
-/* =========================================
-   EVENT CHART
-========================================= */
-
-
-function renderChart(events) {
-
-  const chart =
-    document.getElementById(
-      "eventChart"
-    );
-
-
-  if (!events.length) {
-
-    chart.innerHTML = `
-
-      <div class="empty-state">
-
-        <h3>
-          No event data
-        </h3>
-
-        <p>
-          Tracked activity will appear here.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  const days =
-    selectedDays || 30;
-
-
-  const today =
-    new Date();
-
-
-  const daily = {};
-
-
-  for (
-    let i = days - 1;
-    i >= 0;
-    i--
-  ) {
-
-    const date =
-      new Date(today);
-
-
-    date.setDate(
-      today.getDate() - i
-    );
-
-
-    const key =
-      date
-        .toISOString()
-        .slice(
-          0,
-          10
-        );
-
-
-    daily[key] = 0;
-
-  }
-
-
-  events.forEach(
-    event => {
-
-      if (!event.created_at) return;
-
-
-      const key =
-        new Date(
-          event.created_at
-        )
-        .toISOString()
-        .slice(
-          0,
-          10
-        );
-
-
-      if (
-        Object.prototype
-          .hasOwnProperty
-          .call(
-            daily,
-            key
-          )
-      ) {
-
-        daily[key]++;
-
-      }
+        errorBox.textContent =
+            "";
 
     }
-  );
 
 
-  const values =
-    Object.values(
-      daily
-    );
+    if (eventList) {
 
-
-  const max =
-    Math.max(
-      ...values,
-      1
-    );
-
-
-  chart.innerHTML =
-    Object.entries(
-      daily
-    )
-    .map(
-      ([date, value]) => {
-
-        const height =
-          Math.max(
-            2,
-            (value / max) *
-            100
-          );
-
-
-        const label =
-          new Date(
-            `${date}T00:00:00`
-          )
-          .toLocaleDateString(
-            undefined,
-            {
-              month: "short",
-              day: "numeric"
-            }
-          );
-
-
-        return `
-
-          <div class="bar-item">
-
-            <div class="bar-value">
-              ${value}
+        eventList.innerHTML = `
+            <div class="analytics-loading">
+                Loading analytics...
             </div>
-
-            <div
-              class="bar"
-              style="height:${height}%"
-              title="${value} events"
-            ></div>
-
-            <div class="bar-label">
-              ${escapeHtml(label)}
-            </div>
-
-          </div>
-
         `;
 
-      }
-    )
-    .join("");
-
-}
+    }
 
 
+    if (sourceList) {
 
-/* =========================================
-   EVENT TYPES
-========================================= */
-
-
-function renderEventTypes(events) {
-
-  const container =
-    document.getElementById(
-      "eventTypes"
-    );
-
-
-  const counts = {};
-
-
-  events.forEach(
-    event => {
-
-      const name =
-        event.event_name ||
-        "unknown";
-
-
-      counts[name] =
-        (counts[name] || 0) +
-        1;
+        sourceList.innerHTML = `
+            <div class="analytics-loading">
+                Loading sources...
+            </div>
+        `;
 
     }
-  );
 
 
-  const sorted =
-    Object.entries(
-      counts
-    )
-    .sort(
-      (a, b) =>
-        b[1] - a[1]
-    );
+    try {
 
+        const {
+            data,
+            error
+        } = await supabaseClient
 
-  if (!sorted.length) {
+            .from("analytics_events")
 
-    container.innerHTML = `
+            .select("*")
 
-      <div class="empty-state">
-
-        <h3>
-          No events
-        </h3>
-
-        <p>
-          No tracked events for this period.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    sorted
-      .map(
-        ([name, value]) => `
-
-          <div class="data-row">
-
-            <div class="data-name">
-
-              ${escapeHtml(
-                name
-              )}
-
-            </div>
-
-            <div class="data-value">
-
-              ${value}
-
-            </div>
-
-          </div>
-
-        `
-      )
-      .join("");
-
-}
-
-
-
-/* =========================================
-   TRAFFIC SOURCES
-========================================= */
-
-
-function renderTrafficSources(
-  events
-) {
-
-  const container =
-    document.getElementById(
-      "trafficSources"
-    );
-
-
-  const counts = {};
-
-
-  events.forEach(
-    event => {
-
-      const source =
-        event.utm_source ||
-        event.source ||
-        "Direct / Unknown";
-
-
-      counts[source] =
-        (counts[source] || 0) +
-        1;
-
-    }
-  );
-
-
-  const sorted =
-    Object.entries(
-      counts
-    )
-    .sort(
-      (a, b) =>
-        b[1] - a[1]
-    );
-
-
-  if (!sorted.length) {
-
-    container.innerHTML = `
-
-      <div class="empty-state">
-
-        <h3>
-          No source data
-        </h3>
-
-        <p>
-          UTM or source data will appear here.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  const max =
-    sorted[0][1];
-
-
-  container.innerHTML =
-    sorted
-      .slice(
-        0,
-        10
-      )
-      .map(
-        ([source, value]) => {
-
-          const width =
-            Math.max(
-              3,
-              (value / max) *
-              100
-            );
-
-
-          return `
-
-            <div class="data-row">
-
-              <div>
-
-                <div class="data-name">
-
-                  ${escapeHtml(
-                    source
-                  )}
-
-                </div>
-
-                <div class="source-bar">
-
-                  <div
-                    class="source-bar-fill"
-                    style="width:${width}%"
-                  ></div>
-
-                </div>
-
-              </div>
-
-
-              <div class="data-value">
-
-                ${value}
-
-              </div>
-
-            </div>
-
-          `;
-
-        }
-      )
-      .join("");
-
-}
-
-
-
-/* =========================================
-   RECENT EVENTS
-========================================= */
-
-
-function renderRecentEvents(
-  events
-) {
-
-  const container =
-    document.getElementById(
-      "recentEvents"
-    );
-
-
-  const recent =
-    events.slice(
-      0,
-      50
-    );
-
-
-  if (!recent.length) {
-
-    container.innerHTML = `
-
-      <div class="empty-state">
-
-        <h3>
-          No recent events
-        </h3>
-
-        <p>
-          No tracked activity is available.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  const rows =
-    recent
-      .map(
-        event => {
-
-          const date =
-            event.created_at
-              ? new Date(
-                  event.created_at
-                ).toLocaleString()
-              : "—";
-
-
-          const source =
-            event.utm_source ||
-            event.source ||
-            "Direct / Unknown";
-
-
-          const page =
-            event.page_url ||
-            event.page ||
-            "—";
-
-
-          return `
-
-            <tr>
-
-              <td>
-
-                ${escapeHtml(
-                  event.event_name ||
-                  "unknown"
-                )}
-
-              </td>
-
-
-              <td>
-
-                ${escapeHtml(
-                  source
-                )}
-
-              </td>
-
-
-              <td>
-
-                ${escapeHtml(
-                  page
-                )}
-
-              </td>
-
-
-              <td>
-
-                ${escapeHtml(
-                  date
-                )}
-
-              </td>
-
-            </tr>
-
-          `;
-
-        }
-      )
-      .join("");
-
-
-  container.innerHTML = `
-
-    <table class="event-table">
-
-      <thead>
-
-        <tr>
-
-          <th>
-            EVENT
-          </th>
-
-          <th>
-            SOURCE
-          </th>
-
-          <th>
-            PAGE
-          </th>
-
-          <th>
-            DATE
-          </th>
-
-        </tr>
-
-      </thead>
-
-
-      <tbody>
-
-        ${rows}
-
-      </tbody>
-
-    </table>
-
-  `;
-
-}
-
-
-
-/* =========================================
-   ERROR
-========================================= */
-
-
-function showError(message) {
-
-  const el =
-    document.getElementById(
-      "errorMessage"
-    );
-
-
-  el.textContent =
-    message;
-
-
-  el.style.display =
-    "block";
-
-}
-
-
-function hideError() {
-
-  const el =
-    document.getElementById(
-      "errorMessage"
-    );
-
-
-  el.textContent =
-    "";
-
-
-  el.style.display =
-    "none";
-
-}
-
-
-
-/* =========================================
-   PERIOD BUTTONS
-========================================= */
-
-
-document
-  .querySelectorAll(
-    ".period-btn"
-  )
-  .forEach(
-    button => {
-
-      button.addEventListener(
-        "click",
-        function() {
-
-          document
-            .querySelectorAll(
-              ".period-btn"
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
             )
-            .forEach(
-              item =>
-                item.classList.remove(
-                  "active"
-                )
+
+            .limit(5000);
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        const events =
+            data || [];
+
+
+        /*
+         * =========================
+         * TOTAL EVENTS
+         * =========================
+         */
+
+        document.getElementById(
+            "totalEvents"
+        ).textContent =
+            formatNumber(
+                events.length
             );
 
 
-          this.classList.add(
-            "active"
-          );
+        /*
+         * =========================
+         * REGISTER CLICKS
+         * =========================
+         */
+
+        const registerClicks =
+            events.filter(
+                event =>
+                    event.event_name ===
+                    "register_click"
+            ).length;
 
 
-          selectedDays =
-            Number(
-              this.dataset.days
+        document.getElementById(
+            "registerClicks"
+        ).textContent =
+            formatNumber(
+                registerClicks
             );
 
 
-          renderAnalytics();
+        /*
+         * =========================
+         * SUBSCRIPTIONS
+         * =========================
+         */
+
+        const subscriptions =
+            events.filter(
+                event =>
+                    event.event_name ===
+                    "newsletter_subscribe"
+            ).length;
+
+
+        document.getElementById(
+            "subscriptions"
+        ).textContent =
+            formatNumber(
+                subscriptions
+            );
+
+
+        /*
+         * =========================
+         * PAGE VIEWS
+         * =========================
+         */
+
+        const pageViews =
+            events.filter(
+                event =>
+                    event.event_name ===
+                    "page_view"
+            ).length;
+
+
+        document.getElementById(
+            "pageViews"
+        ).textContent =
+            formatNumber(
+                pageViews
+            );
+
+
+        /*
+         * =========================
+         * EVENT COUNTS
+         * =========================
+         */
+
+        const eventCounts = {};
+
+
+        events.forEach(
+            event => {
+
+                const name =
+                    event.event_name ||
+                    "unknown";
+
+
+                eventCounts[name] =
+                    (
+                        eventCounts[name] ||
+                        0
+                    ) + 1;
+
+            }
+        );
+
+
+        const sortedEvents =
+            Object.entries(
+                eventCounts
+            ).sort(
+                (a, b) =>
+                    b[1] - a[1]
+            );
+
+
+        eventList.innerHTML =
+            "";
+
+
+        if (!sortedEvents.length) {
+
+            eventList.innerHTML = `
+                <div class="empty-state">
+                    No tracked events yet.
+                </div>
+            `;
+
+        } else {
+
+            sortedEvents.forEach(
+                ([name, count]) => {
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    row.className =
+                        "event-row";
+
+
+                    const nameElement =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    nameElement.className =
+                        "event-name";
+
+
+                    nameElement.textContent =
+                        name;
+
+
+                    const countElement =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    countElement.className =
+                        "event-count";
+
+
+                    countElement.textContent =
+                        formatNumber(
+                            count
+                        );
+
+
+                    row.appendChild(
+                        nameElement
+                    );
+
+                    row.appendChild(
+                        countElement
+                    );
+
+
+                    eventList.appendChild(
+                        row
+                    );
+
+                }
+            );
 
         }
-      );
+
+
+        /*
+         * =========================
+         * TRAFFIC SOURCES
+         * =========================
+         */
+
+        const sourceCounts = {};
+
+
+        events.forEach(
+            event => {
+
+                const source =
+                    event.utm_source ||
+                    event.source ||
+                    "Direct / Unknown";
+
+
+                sourceCounts[source] =
+                    (
+                        sourceCounts[source] ||
+                        0
+                    ) + 1;
+
+            }
+        );
+
+
+        const sortedSources =
+            Object.entries(
+                sourceCounts
+            ).sort(
+                (a, b) =>
+                    b[1] - a[1]
+            );
+
+
+        sourceList.innerHTML =
+            "";
+
+
+        if (!sortedSources.length) {
+
+            sourceList.innerHTML = `
+                <div class="empty-state">
+                    No source data yet.
+                </div>
+            `;
+
+        } else {
+
+            sortedSources.forEach(
+                ([source, count]) => {
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    row.className =
+                        "source-row";
+
+
+                    const sourceElement =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    sourceElement.textContent =
+                        source;
+
+
+                    const countElement =
+                        document.createElement(
+                            "strong"
+                        );
+
+
+                    countElement.textContent =
+                        formatNumber(
+                            count
+                        );
+
+
+                    row.appendChild(
+                        sourceElement
+                    );
+
+                    row.appendChild(
+                        countElement
+                    );
+
+
+                    sourceList.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Analytics loading failed:",
+            error
+        );
+
+
+        if (errorBox) {
+
+            errorBox.textContent =
+                "Unable to load analytics: " +
+                (
+                    error.message ||
+                    "Unknown error."
+                );
+
+            errorBox.style.display =
+                "block";
+
+        }
+
+
+        if (eventList) {
+
+            eventList.innerHTML = `
+                <div class="empty-state">
+                    Analytics could not be loaded.
+                </div>
+            `;
+
+        }
+
+
+        if (sourceList) {
+
+            sourceList.innerHTML = `
+                <div class="empty-state">
+                    Source data could not be loaded.
+                </div>
+            `;
+
+        }
+
+
+        document.getElementById(
+            "totalEvents"
+        ).textContent = "—";
+
+        document.getElementById(
+            "registerClicks"
+        ).textContent = "—";
+
+        document.getElementById(
+            "subscriptions"
+        ).textContent = "—";
+
+        document.getElementById(
+            "pageViews"
+        ).textContent = "—";
+
+    } finally {
+
+        if (refreshBtn) {
+
+            refreshBtn.disabled =
+                false;
+
+            refreshBtn.textContent =
+                "REFRESH";
+
+        }
 
     }
-  );
+
+}
 
 
 
-/* =========================================
-   LOGOUT
-========================================= */
+function formatNumber(value) {
 
+    const number =
+        Number(value);
+
+
+    if (!Number.isFinite(number)) {
+        return "0";
+    }
+
+
+    return number.toLocaleString();
+
+}
+
+
+
+/*
+ * =========================
+ * REFRESH
+ * =========================
+ */
 
 document
-  .getElementById(
-    "logoutBtn"
-  )
-  .addEventListener(
-    "click",
-    async () => {
-
-      await supabaseClient
-        .auth
-        .signOut();
-
-
-      window.location.replace(
-        "login.html"
-      );
-
-    }
-  );
+    .getElementById("refreshBtn")
+    .addEventListener(
+        "click",
+        loadAnalytics
+    );
 
 
 
-/* =========================================
-   INITIAL LOAD
-========================================= */
+/*
+ * =========================
+ * LOGOUT
+ * =========================
+ */
 
+document
+    .getElementById("logoutBtn")
+    .addEventListener(
+        "click",
+        async () => {
+
+            const logoutBtn =
+                document.getElementById(
+                    "logoutBtn"
+                );
+
+
+            logoutBtn.disabled =
+                true;
+
+            logoutBtn.textContent =
+                "LOGGING OUT...";
+
+
+            try {
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+
+                if (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+                }
+
+            } finally {
+
+                window.location.replace(
+                    "login.html"
+                );
+
+            }
+
+        }
+    );
+
+
+
+/*
+ * =========================
+ * START
+ * =========================
+ */
 
 loadAnalytics();
-
 
 </script>
 
 </body>
-
 </html>
