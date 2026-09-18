@@ -27,7 +27,7 @@ function redirectToLogin() {
     return;
   }
 
-  window.location.replace("login.html");
+  window.location.replace("/login.html");
 }
 
 /* Supabase authentication listener */
