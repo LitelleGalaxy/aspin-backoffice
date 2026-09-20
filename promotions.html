@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  <title>ASPIN BO | Promotions</title>
+  <title>Promotions | ASPIN Admin</title>
 
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="icon"
+    type="image/png"
+    href="favicon.png"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
   <style>
+
     .page-header {
       display: flex;
       justify-content: space-between;
@@ -130,6 +144,12 @@
     .promotion-meta {
       color: #777;
       font-size: 12px;
+      line-height: 1.7;
+      margin-top: 10px;
+    }
+
+    .promotion-meta strong {
+      color: #aaa;
     }
 
     .promotion-actions {
@@ -161,6 +181,12 @@
       background: rgba(212, 175, 55, 0.06);
     }
 
+    .status.inactive {
+      color: #ff7777;
+      border: 1px solid #632323;
+      background: rgba(150, 20, 20, 0.08);
+    }
+
     .empty-state {
       border: 1px dashed #3a3020;
       padding: 60px 20px;
@@ -187,7 +213,7 @@
       display: none;
     }
 
-    /* Modal */
+    /* MODAL */
 
     .modal-overlay {
       position: fixed;
@@ -281,6 +307,51 @@
       gap: 15px;
     }
 
+    .date-section {
+      border: 1px solid #302818;
+      padding: 18px;
+      margin-top: 5px;
+      margin-bottom: 20px;
+      background: #0d0d0d;
+    }
+
+    .date-section-title {
+      color: #d4af37;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+    }
+
+    .date-section-description {
+      color: #777;
+      font-size: 11px;
+      line-height: 1.5;
+      margin-bottom: 17px;
+    }
+
+    .schedule-section {
+      border: 1px solid #292929;
+      padding: 18px;
+      margin-bottom: 20px;
+      background: #0b0b0b;
+    }
+
+    .schedule-section-title {
+      color: #aaa;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+    }
+
+    .schedule-section-description {
+      color: #666;
+      font-size: 11px;
+      line-height: 1.5;
+      margin-bottom: 17px;
+    }
+
     .upload-box {
       border: 1px dashed #5a4a26;
       padding: 18px;
@@ -323,94 +394,6 @@
       cursor: pointer;
     }
 
-    .action-type-row {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 10px;
-      align-items: start;
-    }
-
-    .action-content {
-      display: none;
-    }
-
-    .action-content.active {
-      display: block;
-    }
-
-    .publish-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 10px;
-      margin-top: 25px;
-      border-top: 1px solid #292929;
-      padding-top: 20px;
-    }
-
-    .publish-btn,
-    .draft-btn,
-    .cancel-btn {
-      min-height: 48px;
-      padding: 12px 18px;
-      cursor: pointer;
-      font-weight: 800;
-      letter-spacing: 1px;
-      transition: 0.2s ease;
-    }
-
-    .publish-btn {
-      background: #b10d16;
-      color: #fff;
-      border: 1px solid #d4af37;
-    }
-
-    .publish-btn:hover {
-      background: #d1111c;
-    }
-
-    .draft-btn {
-      background: transparent;
-      color: #d4af37;
-      border: 1px solid #d4af37;
-    }
-
-    .draft-btn:hover {
-      background: rgba(212, 175, 55, 0.08);
-    }
-
-    .cancel-btn {
-      background: transparent;
-      color: #aaa;
-      border: 1px solid #555;
-    }
-
-    .cancel-btn:hover {
-      color: #fff;
-      border-color: #888;
-    }
-
-    .publish-actions button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .field-error {
-      display: none;
-      margin-top: 7px;
-      color: #ff5b5b;
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.4;
-    }
-
-    .field-error.active {
-      display: block;
-    }
-
-    .input-error {
-      border-color: #ff3b3b !important;
-    }
-
     .modal-actions {
       display: flex;
       justify-content: flex-end;
@@ -421,6 +404,7 @@
     }
 
     @media (max-width: 800px) {
+
       .page-header {
         align-items: flex-start;
         flex-direction: column;
@@ -444,9 +428,11 @@
       .form-row {
         grid-template-columns: 1fr;
       }
+
     }
 
     @media (max-width: 500px) {
+
       .modal {
         padding: 20px;
       }
@@ -458,45 +444,89 @@
       .modal-actions button {
         width: 100%;
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
   <div class="admin-layout">
 
+
     <!-- SIDEBAR -->
+
     <aside class="sidebar">
 
       <div class="sidebar-brand">
 
-    <img
-        src="favicon.png"
-        alt="ASPIN"
-        class="sidebar-logo"
-    >
+        <img
+          src="favicon.png"
+          alt="ASPIN"
+          class="sidebar-logo"
+        >
 
-    <div class="sidebar-brand-text">
-        <strong>ASPIN.SITE</strong>
-        <span>BACK OFFICE</span>
-    </div>
+        <div class="sidebar-brand-text">
 
-</div>
+          <strong>ASPIN.SITE</strong>
+
+          <span>BACK OFFICE</span>
+
+        </div>
+
+      </div>
+
 
       <nav class="admin-nav">
-        <a href="index.html">Dashboard</a>
-        <a href="promotions.html">Promotions</a>
-        <a href="media.html">Media</a>
-        <a href="faqs.html">FAQs</a>
-        <a href="payments.html">Payments</a>
-        <a href="subscribers.html">Subscribers</a>
-        <a href="analytics.html">Analytics</a>
-        <a href="activity.html">Activity History</a>
-        <a href="settings.html">Settings</a>
+
+        <a href="index.html">
+          Dashboard
+        </a>
+
+        <a href="promotions.html">
+          Promotions
+        </a>
+
+        <a href="media.html">
+          Media
+        </a>
+
+        <a href="faqs.html">
+          FAQs
+        </a>
+
+        <a href="payments.html">
+          Payments
+        </a>
+
+        <a href="subscribers.html">
+          Subscribers
+        </a>
+
+        <a href="analytics.html">
+          Analytics
+        </a>
+
+        <a href="activity.html">
+          Activity History
+        </a>
+
+        <a href="settings.html">
+          Settings
+        </a>
+
       </nav>
 
-      <button id="logoutBtn" class="logout-btn">
+
+      <button
+        id="logoutBtn"
+        class="logout-btn"
+        type="button"
+      >
         LOG OUT
       </button>
 
@@ -504,19 +534,28 @@
 
 
     <!-- MAIN -->
+
     <main class="admin-main">
+
 
       <header class="page-header">
 
         <div>
-          <div class="eyebrow">ASPIN.SITE</div>
 
-          <h1>Promotions</h1>
+          <div class="eyebrow">
+            ASPIN.SITE
+          </div>
+
+          <h1>
+            Promotions
+          </h1>
 
           <p>
             Manage the promotional content displayed on the website.
           </p>
+
         </div>
+
 
         <button
           id="addPromotionBtn"
@@ -529,18 +568,28 @@
       </header>
 
 
-      <div id="errorMessage" class="error-message"></div>
+      <div
+        id="errorMessage"
+        class="error-message"
+      ></div>
 
-      <div id="loading" class="loading">
+
+      <div
+        id="loading"
+        class="loading"
+      >
         Loading promotions...
       </div>
+
 
       <section
         id="promotionsList"
         class="promotions-list"
       ></section>
 
+
     </main>
+
 
   </div>
 
@@ -556,6 +605,7 @@
   >
 
     <div class="modal">
+
 
       <div class="modal-header">
 
@@ -577,11 +627,14 @@
 
       <form id="promotionForm">
 
+
         <input
           type="hidden"
           id="promotionId"
         >
 
+
+        <!-- PROMOTION TITLE -->
 
         <div class="form-group">
 
@@ -600,6 +653,8 @@
         </div>
 
 
+        <!-- DESCRIPTION -->
+
         <div class="form-group">
 
           <label for="description">
@@ -614,6 +669,8 @@
 
         </div>
 
+
+        <!-- IMAGE -->
 
         <div class="form-group">
 
@@ -645,7 +702,10 @@
         </div>
 
 
+        <!-- LABEL / BUTTON -->
+
         <div class="form-row">
+
 
           <div class="form-group">
 
@@ -680,110 +740,150 @@
 
           </div>
 
+
         </div>
 
 
+        <!-- BUTTON ACTION -->
+
         <div class="form-group">
 
-          <label for="buttonActionType">
-            BUTTON ACTION
+          <label for="buttonUrl">
+            BUTTON URL
           </label>
 
-          <div class="action-type-row">
-
-            <select id="buttonActionType">
-              <option value="url">OPEN EXTERNAL URL</option>
-              <option value="content">OPEN LONG DESCRIPTION</option>
-            </select>
-
-            <div id="buttonUrlWrap" class="action-content active">
-              <input
-                id="buttonUrl"
-                type="url"
-                value="https://aspin.vip/"
-                placeholder="https://aspin.vip/"
-              >
-            </div>
-
-            <div id="buttonContentWrap" class="action-content">
-              <textarea
-                id="buttonContent"
-                placeholder="Enter the full promotion details..."
-                maxlength="10000"
-              ></textarea>
-              <div id="buttonContentError" class="field-error"></div>
-            </div>
-
-          </div>
-          <div id="buttonActionError" class="field-error"></div>
+          <input
+            id="buttonUrl"
+            type="url"
+            value="https://aspin.vip/"
+            placeholder="https://aspin.vip/"
+          >
 
         </div>
 
+
+        <!-- PROMO DURATION -->
+
+        <div class="date-section">
+
+          <div class="date-section-title">
+            PROMOTION DURATION
+          </div>
+
+          <div class="date-section-description">
+            These dates describe the promotion period shown to visitors on ASPIN.SITE.
+          </div>
+
+
+          <div class="form-row">
+
+
+            <div class="form-group">
+
+              <label for="promoStartDate">
+                PROMO START DATE
+              </label>
+
+              <input
+                id="promoStartDate"
+                type="date"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="promoEndDate">
+                PROMO END DATE
+              </label>
+
+              <input
+                id="promoEndDate"
+                type="date"
+              >
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+
+        <!-- PUBLISH SCHEDULE -->
+
+        <div class="schedule-section">
+
+          <div class="schedule-section-title">
+            PUBLISH SCHEDULE
+          </div>
+
+          <div class="schedule-section-description">
+            Optional. Use these fields to automatically control when the promotion is published or removed from the website.
+          </div>
+
+
+          <div class="form-row">
+
+
+            <div class="form-group">
+
+              <label for="publishStartAt">
+                PUBLISH START
+              </label>
+
+              <input
+                id="publishStartAt"
+                type="datetime-local"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="publishEndAt">
+                PUBLISH END
+              </label>
+
+              <input
+                id="publishEndAt"
+                type="datetime-local"
+              >
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+
+        <!-- STATUS -->
 
         <div class="form-group">
 
-          <label for="termsActionType">
-            TERMS & CONDITIONS
-          </label>
-
-          <div class="action-type-row">
-
-            <select id="termsActionType">
-              <option value="url">OPEN EXTERNAL URL</option>
-              <option value="content">OPEN FULL TERMS</option>
-            </select>
-
-            <div id="termsUrlWrap" class="action-content active">
-              <input
-                id="termsUrl"
-                type="url"
-                placeholder="https://example.com/terms"
-              >
-            </div>
-
-            <div id="termsContentWrap" class="action-content">
-              <textarea
-                id="termsContent"
-                placeholder="Enter the full terms and conditions..."
-                maxlength="20000"
-              ></textarea>
-              <div id="termsContentError" class="field-error"></div>
-            </div>
-
-          </div>
-          <div id="termsActionError" class="field-error"></div>
-
-        </div>
-
-
-        <div class="form-row">
-
-          <div class="form-group">
-            <label for="startDate">START DATE</label>
-            <input id="startDate" type="date">
-          </div>
-
-          <div class="form-group">
-            <label for="endDate">END DATE</label>
-            <input id="endDate" type="date">
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="isActive">
+          <label for="status">
             STATUS
           </label>
 
-          <select id="isActive">
-            <option value="true">ACTIVE</option>
-            <option value="false">INACTIVE</option>
+          <select id="status">
+
+            <option value="active">
+              ACTIVE
+            </option>
+
+            <option value="inactive">
+              INACTIVE
+            </option>
+
           </select>
 
         </div>
 
+
+        <!-- SORT -->
 
         <div class="form-group">
 
@@ -802,37 +902,47 @@
         </div>
 
 
-        <div class="publish-actions">
+        <!-- PUBLISH -->
 
-          <button
-            type="submit"
-            id="publishBtn"
-            class="publish-btn"
-            data-publish-state="true"
-          >
-            PUBLISH
-          </button>
+        <label class="checkbox-row">
 
-          <button
-            type="submit"
-            id="draftBtn"
-            class="draft-btn"
-            data-publish-state="false"
+          <input
+            id="isPublished"
+            type="checkbox"
           >
-            SAVE DRAFT
-          </button>
+
+          <span>
+            Publish this promotion on ASPIN.SITE
+          </span>
+
+        </label>
+
+
+        <!-- ACTIONS -->
+
+        <div class="modal-actions">
 
           <button
             type="button"
             id="cancelBtn"
-            class="cancel-btn"
+            class="secondary-btn"
           >
             CANCEL
           </button>
 
+          <button
+            type="submit"
+            id="savePromotionBtn"
+            class="primary-btn"
+          >
+            SAVE PROMOTION
+          </button>
+
         </div>
 
+
       </form>
+
 
     </div>
 
@@ -842,12 +952,16 @@
   <!-- SUPABASE -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script src="supabase.js"></script>
+
   <script src="mobile-menu.js"></script>
+
 
   <script>
 
     let currentPromotions = [];
+
     let editingPromotion = null;
 
 
@@ -869,43 +983,29 @@
     const buttonTextInput =
       document.getElementById("buttonText");
 
-    const buttonActionTypeInput =
-      document.getElementById("buttonActionType");
-
     const buttonUrlInput =
       document.getElementById("buttonUrl");
 
-    const buttonContentInput =
-      document.getElementById("buttonContent");
+    const promoStartDateInput =
+      document.getElementById("promoStartDate");
 
-    const termsActionTypeInput =
-      document.getElementById("termsActionType");
+    const promoEndDateInput =
+      document.getElementById("promoEndDate");
 
-    const termsUrlInput =
-      document.getElementById("termsUrl");
+    const publishStartAtInput =
+      document.getElementById("publishStartAt");
 
-    const termsContentInput =
-      document.getElementById("termsContent");
+    const publishEndAtInput =
+      document.getElementById("publishEndAt");
 
-    const startDateInput =
-      document.getElementById("startDate");
-
-    const endDateInput =
-      document.getElementById("endDate");
-
-    const isActiveInput =
-      document.getElementById("isActive");
+    const statusInput =
+      document.getElementById("status");
 
     const sortOrderInput =
       document.getElementById("sortOrder");
 
-    const publishBtn =
-      document.getElementById("publishBtn");
-
-    const draftBtn =
-      document.getElementById("draftBtn");
-
-    let publishState = false;
+    const publishedInput =
+      document.getElementById("isPublished");
 
     const imageFileInput =
       document.getElementById("imageFile");
@@ -925,10 +1025,14 @@
     const errorMessage =
       document.getElementById("errorMessage");
 
+    const savePromotionBtn =
+      document.getElementById("savePromotionBtn");
+
 
     function showError(message) {
 
       errorMessage.textContent = message;
+
       errorMessage.style.display = "block";
 
     }
@@ -937,17 +1041,121 @@
     function hideError() {
 
       errorMessage.textContent = "";
+
       errorMessage.style.display = "none";
 
     }
 
 
-    function setUploadStatus(message, type = "") {
+    function setUploadStatus(
+      message,
+      type = ""
+    ) {
 
-      uploadStatus.textContent = message;
+      uploadStatus.textContent =
+        message;
+
       uploadStatus.className =
         "upload-status" +
         (type ? ` ${type}` : "");
+
+    }
+
+
+    function formatDate(dateString) {
+
+      if (!dateString) {
+        return "";
+      }
+
+      const date =
+        new Date(
+          `${dateString}T00:00:00`
+        );
+
+      if (isNaN(date.getTime())) {
+        return dateString;
+      }
+
+      return date.toLocaleDateString(
+        "en-US",
+        {
+          month: "long",
+          day: "numeric",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    function formatDateTime(dateString) {
+
+      if (!dateString) {
+        return "";
+      }
+
+      const date =
+        new Date(dateString);
+
+      if (isNaN(date.getTime())) {
+        return dateString;
+      }
+
+      return date.toLocaleString(
+        "en-US",
+        {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit"
+        }
+      );
+
+    }
+
+
+    function toDateTimeLocal(value) {
+
+      if (!value) {
+        return "";
+      }
+
+      const date =
+        new Date(value);
+
+      if (isNaN(date.getTime())) {
+        return "";
+      }
+
+      const year =
+        date.getFullYear();
+
+      const month =
+        String(
+          date.getMonth() + 1
+        ).padStart(2, "0");
+
+      const day =
+        String(
+          date.getDate()
+        ).padStart(2, "0");
+
+      const hours =
+        String(
+          date.getHours()
+        ).padStart(2, "0");
+
+      const minutes =
+        String(
+          date.getMinutes()
+        ).padStart(2, "0");
+
+      return (
+        `${year}-${month}-${day}` +
+        `T${hours}:${minutes}`
+      );
 
     }
 
@@ -959,7 +1167,10 @@
         const {
           data: { session },
           error
-        } = await supabaseClient.auth.getSession();
+        } =
+          await supabaseClient
+            .auth
+            .getSession();
 
         if (error) {
           throw error;
@@ -967,14 +1178,18 @@
 
         if (!session) {
 
-          window.location.href = "login.html";
+          window.location.href =
+            "login.html";
 
           return false;
+
         }
 
         return true;
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         showError(
           "Unable to verify authentication: " +
@@ -992,43 +1207,58 @@
 
       hideError();
 
-      loading.style.display = "block";
+      loading.style.display =
+        "block";
 
-      promotionsList.innerHTML = "";
+      promotionsList.innerHTML =
+        "";
 
       try {
 
         const {
           data,
           error
-        } = await supabaseClient
-          .from("promotions")
-          .select("*")
-          .order("sort_order", {
-            ascending: true
-          })
-          .order("created_at", {
-            ascending: false
-          });
+        } =
+          await supabaseClient
+            .from("promotions")
+            .select("*")
+            .order(
+              "sort_order",
+              {
+                ascending: true
+              }
+            )
+            .order(
+              "created_at",
+              {
+                ascending: false
+              }
+            );
 
         if (error) {
           throw error;
         }
 
-        currentPromotions = data || [];
+        currentPromotions =
+          data || [];
 
         renderPromotions();
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         showError(
           "Unable to load promotions: " +
           error.message
         );
 
-      } finally {
+      }
 
-        loading.style.display = "none";
+      finally {
+
+        loading.style.display =
+          "none";
 
       }
 
@@ -1037,140 +1267,304 @@
 
     function renderPromotions() {
 
-      promotionsList.innerHTML = "";
+      promotionsList.innerHTML =
+        "";
 
-      if (currentPromotions.length === 0) {
+      if (
+        currentPromotions.length ===
+        0
+      ) {
 
         promotionsList.innerHTML = `
+
           <div class="empty-state">
 
-            <h2>No promotions yet</h2>
+            <h2>
+              No promotions yet
+            </h2>
 
             <p>
               Create your first promotion to display it on ASPIN.SITE.
             </p>
 
           </div>
+
         `;
 
         return;
+
       }
 
 
-      currentPromotions.forEach(promotion => {
+      currentPromotions.forEach(
+        promotion => {
 
-        const card =
-          document.createElement("article");
+          const card =
+            document.createElement(
+              "article"
+            );
 
-        card.className =
-          "promotion-card";
+          card.className =
+            "promotion-card";
 
 
-        let image;
+          let image;
 
-        if (promotion.image_url) {
+          if (
+            promotion.image_url
+          ) {
 
-          image = `
-            <img
-              class="promotion-image"
-              src="${escapeHtml(promotion.image_url)}"
-              alt="${escapeHtml(promotion.title)}"
-              loading="lazy"
-            >
-          `;
+            image = `
 
-        } else {
+              <img
+                class="promotion-image"
+                src="${escapeHtml(
+                  promotion.image_url
+                )}"
+                alt="${escapeHtml(
+                  promotion.title
+                )}"
+                loading="lazy"
+              >
 
-          image = `
-            <div class="promotion-image placeholder">
-              NO IMAGE
+            `;
+
+          }
+
+          else {
+
+            image = `
+
+              <div class="promotion-image placeholder">
+                NO IMAGE
+              </div>
+
+            `;
+
+          }
+
+
+          const status =
+            promotion.is_published
+
+              ? `
+                <span class="status published">
+                  PUBLISHED
+                </span>
+              `
+
+              : `
+                <span class="status draft">
+                  DRAFT
+                </span>
+              `;
+
+
+          const activeStatus =
+            promotion.is_active === false
+
+              ? `
+                <span class="status inactive">
+                  INACTIVE
+                </span>
+              `
+
+              : "";
+
+
+          let promoDuration =
+            "";
+
+          if (
+            promotion.start_date &&
+            promotion.end_date
+          ) {
+
+            promoDuration = `
+
+              <div class="promotion-meta">
+
+                <strong>
+                  PROMO PERIOD:
+                </strong>
+
+                ${escapeHtml(
+                  formatDate(
+                    promotion.start_date
+                  )
+                )}
+
+                -
+
+                ${escapeHtml(
+                  formatDate(
+                    promotion.end_date
+                  )
+                )}
+
+              </div>
+
+            `;
+
+          }
+
+          else if (
+            promotion.start_date
+          ) {
+
+            promoDuration = `
+
+              <div class="promotion-meta">
+
+                <strong>
+                  PROMO START:
+                </strong>
+
+                ${escapeHtml(
+                  formatDate(
+                    promotion.start_date
+                  )
+                )}
+
+              </div>
+
+            `;
+
+          }
+
+          else if (
+            promotion.end_date
+          ) {
+
+            promoDuration = `
+
+              <div class="promotion-meta">
+
+                <strong>
+                  PROMO ENDS:
+                </strong>
+
+                ${escapeHtml(
+                  formatDate(
+                    promotion.end_date
+                  )
+                )}
+
+              </div>
+
+            `;
+
+          }
+
+
+          card.innerHTML = `
+
+            ${image}
+
+
+            <div class="promotion-content">
+
+              <div class="promotion-label">
+
+                ${escapeHtml(
+                  promotion.label ||
+                  "FEATURED"
+                )}
+
+              </div>
+
+
+              <h2>
+
+                ${escapeHtml(
+                  promotion.title
+                )}
+
+              </h2>
+
+
+              <p>
+
+                ${escapeHtml(
+                  promotion.description ||
+                  "No description."
+                )}
+
+              </p>
+
+
+              ${status}
+
+              ${activeStatus}
+
+              ${promoDuration}
+
             </div>
+
+
+            <div class="promotion-actions">
+
+              <button
+                class="secondary-btn edit-btn"
+                type="button"
+                data-id="${escapeHtml(
+                  promotion.id
+                )}"
+              >
+                EDIT
+              </button>
+
+
+              <button
+                class="danger-btn delete-btn"
+                type="button"
+                data-id="${escapeHtml(
+                  promotion.id
+                )}"
+              >
+                DELETE
+              </button>
+
+            </div>
+
           `;
+
+
+          const editBtn =
+            card.querySelector(
+              ".edit-btn"
+            );
+
+          const deleteBtn =
+            card.querySelector(
+              ".delete-btn"
+            );
+
+
+          editBtn.addEventListener(
+            "click",
+            () =>
+              editPromotion(
+                promotion.id
+              )
+          );
+
+
+          deleteBtn.addEventListener(
+            "click",
+            () =>
+              deletePromotion(
+                promotion.id
+              )
+          );
+
+
+          promotionsList.appendChild(
+            card
+          );
 
         }
-
-
-        const status =
-          promotion.is_published
-            ? `<span class="status published">PUBLISHED</span>`
-            : `<span class="status draft">DRAFT</span>`;
-
-
-        card.innerHTML = `
-
-          ${image}
-
-          <div class="promotion-content">
-
-            <div class="promotion-label">
-              ${escapeHtml(
-                promotion.label || "FEATURED"
-              )}
-            </div>
-
-            <h2>
-              ${escapeHtml(
-                promotion.title
-              )}
-            </h2>
-
-            <p>
-              ${escapeHtml(
-                promotion.description ||
-                "No description."
-              )}
-            </p>
-
-            ${status}
-
-          </div>
-
-
-          <div class="promotion-actions">
-
-            <button
-              class="secondary-btn edit-btn"
-              type="button"
-              data-id="${escapeHtml(promotion.id)}"
-            >
-              EDIT
-            </button>
-
-            <button
-              class="danger-btn delete-btn"
-              type="button"
-              data-id="${escapeHtml(promotion.id)}"
-            >
-              DELETE
-            </button>
-
-          </div>
-
-        `;
-
-
-        const editBtn =
-          card.querySelector(".edit-btn");
-
-        const deleteBtn =
-          card.querySelector(".delete-btn");
-
-
-        editBtn.addEventListener(
-          "click",
-          () => editPromotion(promotion.id)
-        );
-
-
-        deleteBtn.addEventListener(
-          "click",
-          () => deletePromotion(promotion.id)
-        );
-
-
-        promotionsList.appendChild(card);
-
-      });
+      );
 
     }
 
@@ -1178,126 +1572,119 @@
     function escapeHtml(value) {
 
       return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
 
-    }
-
-
-    function clearFieldErrors() {
-
-      document.querySelectorAll(".field-error").forEach(error => {
-        error.textContent = "";
-        error.classList.remove("active");
-      });
-
-      document.querySelectorAll(".input-error").forEach(input => {
-        input.classList.remove("input-error");
-      });
-
-    }
-
-
-    function showFieldError(elementId, message, inputElement = null) {
-
-      const element = document.getElementById(elementId);
-
-      if (element) {
-        element.textContent = message;
-        element.classList.add("active");
-      }
-
-      if (inputElement) {
-        inputElement.classList.add("input-error");
-        inputElement.focus();
-      }
-
-    }
-
-
-    function updateActionVisibility() {
-
-      const buttonIsUrl =
-        buttonActionTypeInput.value === "url";
-
-      document.getElementById("buttonUrlWrap")
-        .classList.toggle("active", buttonIsUrl);
-
-      document.getElementById("buttonContentWrap")
-        .classList.toggle("active", !buttonIsUrl);
-
-      const termsIsUrl =
-        termsActionTypeInput.value === "url";
-
-      document.getElementById("termsUrlWrap")
-        .classList.toggle("active", termsIsUrl);
-
-      document.getElementById("termsContentWrap")
-        .classList.toggle("active", !termsIsUrl);
     }
 
 
     function openAddModal() {
 
-      editingPromotion = null;
+      editingPromotion =
+        null;
 
       hideError();
-      clearFieldErrors();
+
 
       document.getElementById(
         "modalTitle"
-      ).textContent = "Add Promotion";
+      ).textContent =
+        "Add Promotion";
+
 
       form.reset();
+
 
       document.getElementById(
         "promotionId"
       ).value = "";
 
-      labelInput.value = "FEATURED";
+
+      labelInput.value =
+        "FEATURED";
+
 
       buttonTextInput.value =
         "LEARN MORE";
 
-      buttonActionTypeInput.value = "url";
-      buttonUrlInput.value = "https://aspin.vip/";
-      buttonContentInput.value = "";
 
-      termsActionTypeInput.value = "url";
-      termsUrlInput.value = "";
-      termsContentInput.value = "";
+      buttonUrlInput.value =
+        "https://aspin.vip/";
 
-      startDateInput.value = "";
-      endDateInput.value = "";
-      isActiveInput.value = "true";
 
-      sortOrderInput.value = "0";
-      publishState = false;
+      statusInput.value =
+        "active";
 
-      updateActionVisibility();
 
-      imageFileInput.value = "";
+      sortOrderInput.value =
+        "0";
+
+
+      publishedInput.checked =
+        false;
+
+
+      promoStartDateInput.value =
+        "";
+
+      promoEndDateInput.value =
+        "";
+
+      publishStartAtInput.value =
+        "";
+
+      publishEndAtInput.value =
+        "";
+
+
+      imageFileInput.value =
+        "";
+
 
       imagePreview.style.display =
         "none";
 
-      imagePreview.src = "";
+      imagePreview.src =
+        "";
+
 
       setUploadStatus("");
 
-      publishBtn.disabled = false;
-      draftBtn.disabled = false;
-      publishBtn.textContent = "PUBLISH";
-      draftBtn.textContent = "SAVE DRAFT";
 
-      modal.classList.add("active");
+      savePromotionBtn.disabled =
+        false;
 
-      setTimeout(() => {
-        titleInput.focus();
-      }, 50);
+      savePromotionBtn.textContent =
+        "SAVE PROMOTION";
+
+
+      modal.classList.add(
+        "active"
+      );
+
+
+      setTimeout(
+        () => titleInput.focus(),
+        50
+      );
 
     }
 
@@ -1306,25 +1693,32 @@
 
       const promotion =
         currentPromotions.find(
-          item => String(item.id) === String(id)
+          item =>
+            String(item.id) ===
+            String(id)
         );
 
-      if (!promotion) return;
+      if (!promotion) {
+        return;
+      }
 
 
-      editingPromotion = promotion;
+      editingPromotion =
+        promotion;
 
       hideError();
 
 
       document.getElementById(
         "modalTitle"
-      ).textContent = "Edit Promotion";
+      ).textContent =
+        "Edit Promotion";
 
 
       document.getElementById(
         "promotionId"
-      ).value = promotion.id;
+      ).value =
+        promotion.id;
 
 
       titleInput.value =
@@ -1336,55 +1730,63 @@
 
 
       labelInput.value =
-        promotion.label || "FEATURED";
+        promotion.label ||
+        "FEATURED";
 
 
       buttonTextInput.value =
-        promotion.button_text || "LEARN MORE";
+        promotion.button_text ||
+        "LEARN MORE";
 
-
-      buttonActionTypeInput.value =
-        promotion.button_action_type || "url";
 
       buttonUrlInput.value =
-        promotion.button_url || "https://aspin.vip/";
+        promotion.button_url ||
+        "https://aspin.vip/";
 
-      buttonContentInput.value =
-        promotion.button_content || "";
 
-      termsActionTypeInput.value =
-        promotion.terms_action_type || "url";
+      promoStartDateInput.value =
+        promotion.start_date ||
+        "";
 
-      termsUrlInput.value =
-        promotion.terms_url || "";
+      promoEndDateInput.value =
+        promotion.end_date ||
+        "";
 
-      termsContentInput.value =
-        promotion.terms_content || "";
 
-      startDateInput.value =
-        promotion.start_date || "";
+      publishStartAtInput.value =
+        toDateTimeLocal(
+          promotion.publish_start_at
+        );
 
-      endDateInput.value =
-        promotion.end_date || "";
+      publishEndAtInput.value =
+        toDateTimeLocal(
+          promotion.publish_end_at
+        );
 
-      isActiveInput.value =
-        promotion.is_active === false ? "false" : "true";
+
+      statusInput.value =
+        promotion.is_active === false
+          ? "inactive"
+          : "active";
+
 
       sortOrderInput.value =
         promotion.sort_order ?? 0;
 
-      publishState =
+
+      publishedInput.checked =
         promotion.is_published === true;
 
-      updateActionVisibility();
 
-
-      imageFileInput.value = "";
+      imageFileInput.value =
+        "";
 
       setUploadStatus("");
 
 
-      if (promotion.image_url) {
+      if (
+        promotion.image_url
+      ) {
 
         imagePreview.src =
           promotion.image_url;
@@ -1392,9 +1794,12 @@
         imagePreview.style.display =
           "block";
 
-      } else {
+      }
 
-        imagePreview.src = "";
+      else {
+
+        imagePreview.src =
+          "";
 
         imagePreview.style.display =
           "none";
@@ -1402,27 +1807,37 @@
       }
 
 
-      publishBtn.disabled = false;
-      draftBtn.disabled = false;
-      publishBtn.textContent = "PUBLISH";
-      draftBtn.textContent = "SAVE DRAFT";
+      savePromotionBtn.disabled =
+        false;
+
+      savePromotionBtn.textContent =
+        "SAVE PROMOTION";
 
 
-      modal.classList.add("active");
+      modal.classList.add(
+        "active"
+      );
 
-      setTimeout(() => {
-        titleInput.focus();
-      }, 50);
+
+      setTimeout(
+        () => titleInput.focus(),
+        50
+      );
 
     }
 
 
     async function uploadImage(file) {
 
-      if (!file) return null;
+      if (!file) {
+        return null;
+      }
 
 
-      if (file.size > 10 * 1024 * 1024) {
+      if (
+        file.size >
+        10 * 1024 * 1024
+      ) {
 
         throw new Error(
           "Image must be smaller than 10 MB."
@@ -1432,14 +1847,20 @@
 
 
       const allowedTypes = [
+
         "image/jpeg",
         "image/png",
         "image/webp",
         "image/svg+xml"
+
       ];
 
 
-      if (!allowedTypes.includes(file.type)) {
+      if (
+        !allowedTypes.includes(
+          file.type
+        )
+      ) {
 
         throw new Error(
           "Only JPG, PNG, WEBP, and SVG images are allowed."
@@ -1460,16 +1881,13 @@
           .toLowerCase();
 
 
-      /*
-       * Timestamp + random string.
-       * This avoids relying on crypto.randomUUID()
-       * in local development.
-       */
-
       const randomPart =
         Math.random()
           .toString(36)
-          .substring(2, 12);
+          .substring(
+            2,
+            12
+          );
 
 
       const filename =
@@ -1482,16 +1900,20 @@
 
       const {
         error
-      } = await supabaseClient.storage
-        .from("media")
-        .upload(
-          path,
-          file,
-          {
-            cacheControl: "3600",
-            upsert: false
-          }
-        );
+      } =
+        await supabaseClient
+          .storage
+          .from("media")
+          .upload(
+            path,
+            file,
+            {
+              cacheControl:
+                "3600",
+              upsert:
+                false
+            }
+          );
 
 
       if (error) {
@@ -1501,9 +1923,13 @@
 
       const {
         data
-      } = supabaseClient.storage
-        .from("media")
-        .getPublicUrl(path);
+      } =
+        supabaseClient
+          .storage
+          .from("media")
+          .getPublicUrl(
+            path
+          );
 
 
       setUploadStatus(
@@ -1525,16 +1951,12 @@
 
         hideError();
 
-        publishBtn.disabled = true;
-        draftBtn.disabled = true;
 
-        const clickedButton = event.submitter;
+        savePromotionBtn.disabled =
+          true;
 
-        publishState =
-          clickedButton?.dataset.publishState === "true";
-
-        clickedButton.textContent =
-          publishState ? "PUBLISHING..." : "SAVING DRAFT...";
+        savePromotionBtn.textContent =
+          "SAVING...";
 
 
         try {
@@ -1577,99 +1999,72 @@
           }
 
 
-          const buttonActionType =
-            buttonActionTypeInput.value;
-
           const buttonUrl =
             buttonUrlInput.value.trim();
 
-          const buttonContent =
-            buttonContentInput.value.trim();
 
-          const termsActionType =
-            termsActionTypeInput.value;
+          if (buttonUrl) {
 
-          const termsUrl =
-            termsUrlInput.value.trim();
-
-          const termsContent =
-            termsContentInput.value.trim();
-
-
-          clearFieldErrors();
-
-          if (buttonActionType === "url" && buttonUrl) {
             try {
+
               new URL(buttonUrl);
-            } catch {
-              showFieldError(
-                "buttonActionError",
-                "Please enter a valid button URL.",
-                buttonUrlInput
-              );
-              publishBtn.disabled = false;
-              draftBtn.disabled = false;
-              publishBtn.textContent = "PUBLISH";
-              draftBtn.textContent = "SAVE DRAFT";
-              return;
+
             }
-          }
 
+            catch {
 
-          if (termsActionType === "url" && termsUrl) {
-            try {
-              new URL(termsUrl);
-            } catch {
-              showFieldError(
-                "termsActionError",
-                "Please enter a valid Terms & Conditions URL.",
-                termsUrlInput
+              throw new Error(
+                "Please enter a valid button URL."
               );
-              publishBtn.disabled = false;
-              draftBtn.disabled = false;
-              publishBtn.textContent = "PUBLISH";
-              draftBtn.textContent = "SAVE DRAFT";
-              return;
+
             }
+
           }
 
 
-          if (buttonActionType === "content" && !buttonContent) {
-            showFieldError(
-              "buttonContentError",
-              "Please enter the long description for the button.",
-              buttonContentInput
-            );
-            publishBtn.disabled = false;
-            draftBtn.disabled = false;
-            publishBtn.textContent = "PUBLISH";
-            draftBtn.textContent = "SAVE DRAFT";
-            return;
-          }
+          const promoStart =
+            promoStartDateInput.value ||
+            null;
 
 
-          if (termsActionType === "content" && !termsContent) {
-            showFieldError(
-              "termsContentError",
-              "Please enter the full Terms & Conditions.",
-              termsContentInput
-            );
-            publishBtn.disabled = false;
-            draftBtn.disabled = false;
-            publishBtn.textContent = "PUBLISH";
-            draftBtn.textContent = "SAVE DRAFT";
-            return;
-          }
+          const promoEnd =
+            promoEndDateInput.value ||
+            null;
 
 
           if (
-            startDateInput.value &&
-            endDateInput.value &&
-            endDateInput.value < startDateInput.value
+            promoStart &&
+            promoEnd &&
+            promoEnd < promoStart
           ) {
+
             throw new Error(
-              "End date cannot be earlier than the start date."
+              "Promo end date cannot be before the promo start date."
             );
+
+          }
+
+
+          const publishStart =
+            publishStartAtInput.value ||
+            null;
+
+
+          const publishEnd =
+            publishEndAtInput.value ||
+            null;
+
+
+          if (
+            publishStart &&
+            publishEnd &&
+            publishEnd < publishStart
+          ) {
+
+            throw new Error(
+              "Publish end cannot be before publish start."
+            );
+
           }
 
 
@@ -1678,52 +2073,58 @@
             title,
 
             description:
-              descriptionInput.value.trim() || null,
+              descriptionInput.value.trim() ||
+              null,
 
             image_url:
               imageUrl,
 
             button_text:
-              buttonTextInput.value.trim() || "LEARN MORE",
-
-            button_action_type:
-              buttonActionType,
+              buttonTextInput.value.trim() ||
+              "LEARN MORE",
 
             button_url:
-              buttonUrl || null,
-
-            button_content:
-              buttonContent || null,
-
-            terms_action_type:
-              termsActionType,
-
-            terms_url:
-              termsUrl || null,
-
-            terms_content:
-              termsContent || null,
-
-            start_date:
-              startDateInput.value || null,
-
-            end_date:
-              endDateInput.value || null,
-
-            is_active:
-              isActiveInput.value === "true",
+              buttonUrl ||
+              "https://aspin.vip/",
 
             label:
-              labelInput.value.trim() || "FEATURED",
+              labelInput.value.trim() ||
+              "FEATURED",
 
             sort_order:
               Math.max(
                 0,
-                Number(sortOrderInput.value) || 0
+                Number(
+                  sortOrderInput.value
+                ) || 0
               ),
 
             is_published:
-              publishState,
+              publishedInput.checked,
+
+            is_active:
+              statusInput.value ===
+              "active",
+
+            start_date:
+              promoStart,
+
+            end_date:
+              promoEnd,
+
+            publish_start_at:
+              publishStart
+                ? new Date(
+                    publishStart
+                  ).toISOString()
+                : null,
+
+            publish_end_at:
+              publishEnd
+                ? new Date(
+                    publishEnd
+                  ).toISOString()
+                : null,
 
             updated_at:
               new Date().toISOString()
@@ -1739,10 +2140,17 @@
             result =
               await supabaseClient
                 .from("promotions")
-                .update(promotionData)
-                .eq("id", id);
+                .update(
+                  promotionData
+                )
+                .eq(
+                  "id",
+                  id
+                );
 
-          } else {
+          }
+
+          else {
 
             result =
               await supabaseClient
@@ -1772,10 +2180,11 @@
             error.message
           );
 
-          publishBtn.disabled = false;
-          draftBtn.disabled = false;
-          publishBtn.textContent = "PUBLISH";
-          draftBtn.textContent = "SAVE DRAFT";
+          savePromotionBtn.disabled =
+            false;
+
+          savePromotionBtn.textContent =
+            "SAVE PROMOTION";
 
         }
 
@@ -1787,11 +2196,15 @@
 
       const promotion =
         currentPromotions.find(
-          item => String(item.id) === String(id)
+          item =>
+            String(item.id) ===
+            String(id)
         );
 
 
-      if (!promotion) return;
+      if (!promotion) {
+        return;
+      }
 
 
       const confirmed =
@@ -1800,7 +2213,9 @@
         );
 
 
-      if (!confirmed) return;
+      if (!confirmed) {
+        return;
+      }
 
 
       hideError();
@@ -1810,10 +2225,14 @@
 
         const {
           error
-        } = await supabaseClient
-          .from("promotions")
-          .delete()
-          .eq("id", id);
+        } =
+          await supabaseClient
+            .from("promotions")
+            .delete()
+            .eq(
+              "id",
+              id
+            );
 
 
         if (error) {
@@ -1821,12 +2240,9 @@
         }
 
 
-        /*
-         * Delete the associated image
-         * after the database record is removed.
-         */
-
-        if (promotion.image_url) {
+        if (
+          promotion.image_url
+        ) {
 
           try {
 
@@ -1835,22 +2251,28 @@
 
 
             const index =
-              promotion.image_url.indexOf(
-                marker
-              );
+              promotion.image_url
+                .indexOf(
+                  marker
+                );
 
 
             if (index !== -1) {
 
               const path =
-                promotion.image_url.substring(
-                  index + marker.length
-                );
+                promotion.image_url
+                  .substring(
+                    index +
+                    marker.length
+                  );
 
 
-              await supabaseClient.storage
+              await supabaseClient
+                .storage
                 .from("media")
-                .remove([path]);
+                .remove([
+                  path
+                ]);
 
             }
 
@@ -1886,29 +2308,39 @@
 
     function closeModal() {
 
-      modal.classList.remove("active");
+      modal.classList.remove(
+        "active"
+      );
 
-      editingPromotion = null;
+      editingPromotion =
+        null;
 
       form.reset();
+
 
       imagePreview.style.display =
         "none";
 
-      imagePreview.src = "";
+      imagePreview.src =
+        "";
+
 
       setUploadStatus("");
 
-      publishBtn.disabled = false;
-      draftBtn.disabled = false;
-      publishBtn.textContent = "PUBLISH";
-      draftBtn.textContent = "SAVE DRAFT";
+
+      savePromotionBtn.disabled =
+        false;
+
+      savePromotionBtn.textContent =
+        "SAVE PROMOTION";
 
     }
 
 
     document
-      .getElementById("addPromotionBtn")
+      .getElementById(
+        "addPromotionBtn"
+      )
       .addEventListener(
         "click",
         openAddModal
@@ -1916,7 +2348,9 @@
 
 
     document
-      .getElementById("closeModalBtn")
+      .getElementById(
+        "closeModalBtn"
+      )
       .addEventListener(
         "click",
         closeModal
@@ -1924,7 +2358,9 @@
 
 
     document
-      .getElementById("cancelBtn")
+      .getElementById(
+        "cancelBtn"
+      )
       .addEventListener(
         "click",
         closeModal
@@ -1935,30 +2371,16 @@
       "click",
       function(event) {
 
-        if (event.target === modal) {
+        if (
+          event.target === modal
+        ) {
+
           closeModal();
+
         }
 
       }
     );
-
-
-    buttonActionTypeInput.addEventListener(
-      "change",
-      updateActionVisibility
-    );
-
-    termsActionTypeInput.addEventListener(
-      "change",
-      updateActionVisibility
-    );
-
-    updateActionVisibility();
-
-    buttonContentInput.addEventListener("input", clearFieldErrors);
-    buttonUrlInput.addEventListener("input", clearFieldErrors);
-    termsContentInput.addEventListener("input", clearFieldErrors);
-    termsUrlInput.addEventListener("input", clearFieldErrors);
 
 
     imageFileInput.addEventListener(
@@ -1969,18 +2391,26 @@
           this.files[0];
 
 
-        if (!file) return;
+        if (!file) {
+          return;
+        }
 
 
         const allowedTypes = [
+
           "image/jpeg",
           "image/png",
           "image/webp",
           "image/svg+xml"
+
         ];
 
 
-        if (!allowedTypes.includes(file.type)) {
+        if (
+          !allowedTypes.includes(
+            file.type
+          )
+        ) {
 
           setUploadStatus(
             "Only JPG, PNG, WEBP, and SVG images are allowed.",
@@ -1990,14 +2420,18 @@
           imagePreview.style.display =
             "none";
 
-          this.value = "";
+          this.value =
+            "";
 
           return;
 
         }
 
 
-        if (file.size > 10 * 1024 * 1024) {
+        if (
+          file.size >
+          10 * 1024 * 1024
+        ) {
 
           setUploadStatus(
             "Image must be smaller than 10 MB.",
@@ -2007,7 +2441,8 @@
           imagePreview.style.display =
             "none";
 
-          this.value = "";
+          this.value =
+            "";
 
           return;
 
@@ -2034,7 +2469,9 @@
           };
 
 
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(
+          file
+        );
 
       }
     );
@@ -2046,9 +2483,13 @@
 
         if (
           event.key === "Escape" &&
-          modal.classList.contains("active")
+          modal.classList.contains(
+            "active"
+          )
         ) {
+
           closeModal();
+
         }
 
       }
@@ -2056,12 +2497,16 @@
 
 
     document
-      .getElementById("logoutBtn")
+      .getElementById(
+        "logoutBtn"
+      )
       .addEventListener(
         "click",
         async function() {
 
-          await supabaseClient.auth.signOut();
+          await supabaseClient
+            .auth
+            .signOut();
 
           window.location.href =
             "login.html";
@@ -2070,9 +2515,7 @@
       );
 
 
-    /*
-     * INITIALIZE
-     */
+    /* INITIALIZE */
 
     (async function init() {
 
@@ -2080,7 +2523,9 @@
         await checkAuth();
 
 
-      if (!authenticated) return;
+      if (!authenticated) {
+        return;
+      }
 
 
       await loadPromotions();
@@ -2089,5 +2534,7 @@
 
   </script>
 
+
 </body>
+
 </html>
