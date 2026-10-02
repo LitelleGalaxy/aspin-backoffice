@@ -3,14 +3,24 @@
 
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
     <title>ASPIN BO | Subscribers</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="favicon.png"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
     <style>
         .subscriber-toolbar {
@@ -148,6 +158,34 @@
                 width: 100%;
             }
         }
+
+        .subscriber-filters {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .subscriber-filter {
+            height: 42px;
+            padding: 0 12px;
+            background: #0d0d0d;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 0;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .subscriber-filter:focus {
+            outline: none;
+            border-color: #c9a227;
+        }
+
+        .subscriber-filter option {
+            background: #111;
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -185,21 +223,45 @@
         </div>
 
 
-    <nav class="admin-nav">
-        <a href="index.html">Dashboard</a>
-        <a href="promotions.html">Promotions</a>
-        <a href="media.html">Media</a>
-        <a href="faqs.html">FAQs</a>
-        <a href="payments.html">Payments</a>
-        <a href="subscribers.html">Subscribers</a>
-        <a href="analytics.html">Analytics</a>
-        <a href="activity.html">Activity History</a>
-        <a href="settings.html">Settings</a>
-      </nav>
+        <nav class="admin-nav">
 
-      <button id="logoutBtn" class="logout-btn">
-        LOG OUT
-      </button>
+            <a href="index.html">
+                Dashboard
+            </a>
+
+            <a href="promotions.html">
+                Promotions
+            </a>
+
+            <a href="faqs.html">
+                FAQs
+            </a>
+
+            <a href="subscribers.html">
+                Subscribers
+            </a>
+
+            <a href="analytics.html">
+                Analytics
+            </a>
+
+            <a href="activity.html">
+                Activity History
+            </a>
+
+            <a href="settings.html">
+                Settings
+            </a>
+
+        </nav>
+
+
+        <button
+            id="logoutBtn"
+            class="logout-btn"
+        >
+            LOG OUT
+        </button>
 
     </aside>
 
@@ -246,13 +308,112 @@
             </div>
 
 
-            <input
-                id="searchInput"
-                class="search-box"
-                type="search"
-                placeholder="Search email or phone..."
-                autocomplete="off"
-            >
+            <div class="subscriber-filters">
+
+                <input
+                    id="searchInput"
+                    class="search-box"
+                    type="search"
+                    placeholder="Search email or phone..."
+                    autocomplete="off"
+                >
+
+
+                <!-- STATUS FILTER -->
+                <select
+                    id="statusFilter"
+                    class="subscriber-filter"
+                >
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="active">
+                        Active
+                    </option>
+
+                    <option value="inactive">
+                        Inactive
+                    </option>
+
+                </select>
+
+
+                <!-- MONTH FILTER -->
+                <select
+                    id="monthFilter"
+                    class="subscriber-filter"
+                >
+
+                    <option value="all">
+                        All Months
+                    </option>
+
+                    <option value="1">
+                        January
+                    </option>
+
+                    <option value="2">
+                        February
+                    </option>
+
+                    <option value="3">
+                        March
+                    </option>
+
+                    <option value="4">
+                        April
+                    </option>
+
+                    <option value="5">
+                        May
+                    </option>
+
+                    <option value="6">
+                        June
+                    </option>
+
+                    <option value="7">
+                        July
+                    </option>
+
+                    <option value="8">
+                        August
+                    </option>
+
+                    <option value="9">
+                        September
+                    </option>
+
+                    <option value="10">
+                        October
+                    </option>
+
+                    <option value="11">
+                        November
+                    </option>
+
+                    <option value="12">
+                        December
+                    </option>
+
+                </select>
+
+
+                <!-- YEAR FILTER -->
+                <select
+                    id="yearFilter"
+                    class="subscriber-filter"
+                >
+
+                    <option value="all">
+                        All Years
+                    </option>
+
+                </select>
+
+            </div>
 
         </div>
 
@@ -268,6 +429,10 @@
                 <thead>
 
                     <tr>
+
+                        <th>
+                            Name
+                        </th>
 
                         <th>
                             Email
@@ -311,11 +476,16 @@
 </div>
 
 
-  <!-- SUPABASE -->
+<!-- =========================
+     SUPABASE
+========================= -->
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js"></script>
-  <script src="mobile-menu.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="mobile-menu.js"></script>
+
 
 <script>
 
@@ -372,6 +542,7 @@ async function loadSubscribers() {
     const isAdmin =
         await requireAdmin();
 
+
     if (!isAdmin) {
         return;
     }
@@ -385,12 +556,14 @@ async function loadSubscribers() {
 
     tbody.innerHTML = `
         <tr>
+
             <td
-                colspan="6"
+                colspan="7"
                 class="loading-cell"
             >
                 Loading subscribers...
             </td>
+
         </tr>
     `;
 
@@ -404,6 +577,9 @@ async function loadSubscribers() {
 
         .select("*")
 
+        /*
+         * NEWEST SUBSCRIBER FIRST
+         */
         .order(
             "created_at",
             {
@@ -422,13 +598,20 @@ async function loadSubscribers() {
 
         tbody.innerHTML = `
             <tr>
+
                 <td
-                    colspan="6"
+                    colspan="7"
                     class="error-cell"
                 >
+
                     Unable to load subscribers:
-                    ${escapeHtml(error.message)}
+
+                    ${escapeHtml(
+                        error.message
+                    )}
+
                 </td>
+
             </tr>
         `;
 
@@ -440,7 +623,73 @@ async function loadSubscribers() {
         data || [];
 
 
+    populateYearFilter();
+
     renderSubscribers();
+}
+
+
+/* =========================
+   POPULATE YEAR FILTER
+========================= */
+
+function populateYearFilter() {
+
+    const yearFilter =
+        document.getElementById(
+            "yearFilter"
+        );
+
+
+    if (!yearFilter) {
+        return;
+    }
+
+
+    const years =
+        [
+            ...new Set(
+
+                subscribers
+
+                    .filter(
+                        subscriber =>
+                            subscriber.created_at
+                    )
+
+                    .map(
+                        subscriber =>
+                            new Date(
+                                subscriber.created_at
+                            ).getFullYear()
+                    )
+
+            )
+        ]
+
+        .sort(
+            (a, b) =>
+                b - a
+        );
+
+
+    yearFilter.innerHTML = `
+        <option value="all">
+            All Years
+        </option>
+
+        ${years
+            .map(
+                year =>
+                    `
+                    <option value="${year}">
+                        ${year}
+                    </option>
+                    `
+            )
+            .join("")
+        }
+    `;
 }
 
 
@@ -466,9 +715,32 @@ function renderSubscribers() {
             .toLowerCase();
 
 
+    const statusFilter =
+        document.getElementById(
+            "statusFilter"
+        ).value;
+
+
+    const monthFilter =
+        document.getElementById(
+            "monthFilter"
+        ).value;
+
+
+    const yearFilter =
+        document.getElementById(
+            "yearFilter"
+        ).value;
+
+
     const filtered =
         subscribers.filter(
             subscriber => {
+
+
+                /* =========================
+                   SEARCH FILTER
+                ========================= */
 
                 const email =
                     String(
@@ -482,42 +754,159 @@ function renderSubscribers() {
                     ).toLowerCase();
 
 
-                return (
+                const name =
+                    String(
+                        subscriber.name || ""
+                    ).toLowerCase();
+
+
+                const matchesSearch =
                     email.includes(search) ||
-                    phone.includes(search)
+                    phone.includes(search) ||
+                    name.includes(search);
+
+
+                /* =========================
+                   STATUS FILTER
+                ========================= */
+
+                const matchesStatus =
+                    statusFilter === "all" ||
+
+                    (
+                        statusFilter === "active" &&
+                        subscriber.is_active === true
+                    ) ||
+
+                    (
+                        statusFilter === "inactive" &&
+                        subscriber.is_active === false
+                    );
+
+
+                /* =========================
+                   DATE FILTER
+                ========================= */
+
+                let matchesDate = true;
+
+
+                if (subscriber.created_at) {
+
+                    const date =
+                        new Date(
+                            subscriber.created_at
+                        );
+
+
+                    const month =
+                        date.getMonth() + 1;
+
+
+                    const year =
+                        date.getFullYear();
+
+
+                    if (
+                        monthFilter !== "all" &&
+                        month !== Number(
+                            monthFilter
+                        )
+                    ) {
+
+                        matchesDate = false;
+
+                    }
+
+
+                    if (
+                        yearFilter !== "all" &&
+                        year !== Number(
+                            yearFilter
+                        )
+                    ) {
+
+                        matchesDate = false;
+
+                    }
+
+                } else {
+
+                    if (
+                        monthFilter !== "all" ||
+                        yearFilter !== "all"
+                    ) {
+
+                        matchesDate = false;
+
+                    }
+
+                }
+
+
+                /* =========================
+                   FINAL FILTER
+                ========================= */
+
+                return (
+                    matchesSearch &&
+                    matchesStatus &&
+                    matchesDate
                 );
 
             }
         );
 
 
+    /* =========================
+       SUBSCRIBER COUNT
+    ========================= */
+
     document.getElementById(
         "subscriberCount"
     ).textContent =
-        `${subscribers.length} subscriber${
-            subscribers.length === 1
+
+        `${filtered.length} subscriber${
+            filtered.length === 1
                 ? ""
                 : "s"
         }`;
 
 
+    /* =========================
+       CLEAR TABLE
+    ========================= */
+
     tbody.innerHTML = "";
 
+
+    /* =========================
+       NO RESULTS
+    ========================= */
 
     if (!filtered.length) {
 
         tbody.innerHTML = `
             <tr>
+
                 <td
-                    colspan="6"
+                    colspan="7"
                     class="empty-cell"
                 >
+
                     ${
-                        search
-                            ? "No subscribers match your search."
+                        search ||
+                        statusFilter !== "all" ||
+                        monthFilter !== "all" ||
+                        yearFilter !== "all"
+
+                            ? "No subscribers match your filters."
+
                             : "No subscribers found."
                     }
+
                 </td>
+
             </tr>
         `;
 
@@ -525,8 +914,13 @@ function renderSubscribers() {
     }
 
 
+    /* =========================
+       RENDER ROWS
+    ========================= */
+
     filtered.forEach(
         subscriber => {
+
 
             const tr =
                 document.createElement(
@@ -534,8 +928,13 @@ function renderSubscribers() {
                 );
 
 
+            /* =========================
+               DATE
+            ========================= */
+
             const date =
                 subscriber.created_at
+
                     ? new Date(
                         subscriber.created_at
                     ).toLocaleDateString(
@@ -546,14 +945,23 @@ function renderSubscribers() {
                             day: "numeric"
                         }
                     )
+
                     : "—";
 
+
+            /* =========================
+               CONSENT
+            ========================= */
 
             const consentClass =
                 subscriber.consent
                     ? "consent-yes"
                     : "consent-no";
 
+
+            /* =========================
+               STATUS
+            ========================= */
 
             const statusClass =
                 subscriber.is_active
@@ -567,36 +975,61 @@ function renderSubscribers() {
                     : "INACTIVE";
 
 
+            /* =========================
+               ACTION
+            ========================= */
+
             const actionText =
                 subscriber.is_active
                     ? "DEACTIVATE"
                     : "ACTIVATE";
 
 
+            /* =========================
+               ROW
+            ========================= */
+
             tr.innerHTML = `
 
                 <td>
+
+                    ${escapeHtml(
+                        subscriber.name || "—"
+                    )}
+
+                </td>
+
+
+                <td>
+
                     ${escapeHtml(
                         subscriber.email || "—"
                     )}
+
                 </td>
 
 
                 <td>
+
                     ${escapeHtml(
                         subscriber.phone || "—"
                     )}
+
                 </td>
 
 
                 <td>
 
-                    <span class="${consentClass}">
+                    <span
+                        class="${consentClass}"
+                    >
+
                         ${
                             subscriber.consent
                                 ? "YES"
                                 : "NO"
                         }
+
                     </span>
 
                 </td>
@@ -607,14 +1040,20 @@ function renderSubscribers() {
                     <span
                         class="status ${statusClass}"
                     >
+
                         ${statusText}
+
                     </span>
 
                 </td>
 
 
                 <td>
-                    ${escapeHtml(date)}
+
+                    ${escapeHtml(
+                        date
+                    )}
+
                 </td>
 
 
@@ -630,13 +1069,19 @@ function renderSubscribers() {
                             !subscriber.is_active
                         }"
                     >
+
                         ${actionText}
+
                     </button>
 
                 </td>
 
             `;
 
+
+            /* =========================
+               ACTION BUTTON
+            ========================= */
 
             const button =
                 tr.querySelector(
@@ -658,10 +1103,13 @@ function renderSubscribers() {
             );
 
 
-            tbody.appendChild(tr);
+            tbody.appendChild(
+                tr
+            );
 
         }
     );
+
 }
 
 
@@ -681,6 +1129,7 @@ async function toggleSubscriber(
 
         button.textContent =
             "SAVING...";
+
     }
 
 
@@ -722,6 +1171,7 @@ async function toggleSubscriber(
                 active
                     ? "ACTIVATE"
                     : "DEACTIVATE";
+
         }
 
 
@@ -730,6 +1180,7 @@ async function toggleSubscriber(
 
 
     await loadSubscribers();
+
 }
 
 
@@ -743,6 +1194,48 @@ document
     )
     .addEventListener(
         "input",
+        renderSubscribers
+    );
+
+
+/* =========================
+   STATUS FILTER
+========================= */
+
+document
+    .getElementById(
+        "statusFilter"
+    )
+    .addEventListener(
+        "change",
+        renderSubscribers
+    );
+
+
+/* =========================
+   MONTH FILTER
+========================= */
+
+document
+    .getElementById(
+        "monthFilter"
+    )
+    .addEventListener(
+        "change",
+        renderSubscribers
+    );
+
+
+/* =========================
+   YEAR FILTER
+========================= */
+
+document
+    .getElementById(
+        "yearFilter"
+    )
+    .addEventListener(
+        "change",
         renderSubscribers
     );
 
@@ -803,6 +1296,7 @@ function escapeHtml(value) {
             /'/g,
             "&#039;"
         );
+
 }
 
 
@@ -815,4 +1309,5 @@ loadSubscribers();
 </script>
 
 </body>
+
 </html>
