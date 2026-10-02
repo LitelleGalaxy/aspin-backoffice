@@ -2,15 +2,29 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>ASPIN BO | Analytics</title>
 
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="icon"
+        type="image/png"
+        href="favicon.png"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
     <style>
+
         .analytics-stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -129,6 +143,7 @@
         }
 
         @media (max-width: 900px) {
+
             .analytics-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -136,9 +151,11 @@
             .analytics-grid {
                 grid-template-columns: 1fr;
             }
+
         }
 
         @media (max-width: 600px) {
+
             .page-header {
                 gap: 15px;
             }
@@ -146,21 +163,29 @@
             .refresh-btn {
                 width: 100%;
             }
+
         }
 
         @media (max-width: 500px) {
+
             .analytics-stats {
                 grid-template-columns: 1fr;
             }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
 <div class="admin-layout">
 
+
     <!-- SIDEBAR -->
+
     <aside class="sidebar">
 
         <div class="sidebar-brand">
@@ -172,23 +197,55 @@
             >
 
             <div class="sidebar-brand-text">
-                <strong>ASPIN.SITE</strong>
-                <span>BACK OFFICE</span>
+
+                <strong>
+                    ASPIN.SITE
+                </strong>
+
+                <span>
+                    BACK OFFICE
+                </span>
+
             </div>
 
         </div>
 
+
         <nav>
-            <a href="index.html">Dashboard</a>
-            <a href="promotions.html">Promotions</a>
-            <a href="media.html">Media</a>
-            <a href="faqs.html">FAQs</a>
-            <a href="payments.html">Payments</a>
-            <a href="subscribers.html">Subscribers</a>
-            <a href="analytics.html" class="active">Analytics</a>
-            <a href="activity.html">Activity History</a>
-            <a href="settings.html">Settings</a>
+
+            <a href="index.html">
+                Dashboard
+            </a>
+
+            <a href="promotions.html">
+                Promotions
+            </a>
+
+            <a href="faqs.html">
+                FAQs
+            </a>
+
+            <a href="subscribers.html">
+                Subscribers
+            </a>
+
+            <a
+                href="analytics.html"
+                class="active"
+            >
+                Analytics
+            </a>
+
+            <a href="activity.html">
+                Activity History
+            </a>
+
+            <a href="settings.html">
+                Settings
+            </a>
+
         </nav>
+
 
         <button
             id="logoutBtn"
@@ -202,11 +259,13 @@
 
 
     <!-- MAIN -->
+
     <main class="admin-main">
 
         <header class="page-header">
 
             <div>
+
                 <div class="eyebrow">
                     ASPIN.SITE
                 </div>
@@ -218,7 +277,9 @@
                 <p>
                     First-party website activity recorded by ASPIN.SITE.
                 </p>
+
             </div>
+
 
             <button
                 id="refreshBtn"
@@ -232,6 +293,7 @@
 
 
         <!-- ERROR -->
+
         <div
             id="analyticsError"
             class="analytics-error"
@@ -240,51 +302,70 @@
 
 
         <!-- STATS -->
+
         <section class="analytics-stats">
 
             <article class="analytics-stat">
-                <span>Total Events</span>
+
+                <span>
+                    Total Events
+                </span>
 
                 <strong id="totalEvents">
                     —
                 </strong>
+
             </article>
 
 
             <article class="analytics-stat">
-                <span>Register Clicks</span>
+
+                <span>
+                    Register Clicks
+                </span>
 
                 <strong id="registerClicks">
                     —
                 </strong>
+
             </article>
 
 
             <article class="analytics-stat">
-                <span>Subscriptions</span>
+
+                <span>
+                    Subscriptions
+                </span>
 
                 <strong id="subscriptions">
                     —
                 </strong>
+
             </article>
 
 
             <article class="analytics-stat">
-                <span>Page Views</span>
+
+                <span>
+                    Page Views
+                </span>
 
                 <strong id="pageViews">
                     —
                 </strong>
+
             </article>
 
         </section>
 
 
         <!-- ANALYTICS PANELS -->
+
         <section class="analytics-grid">
 
 
             <!-- EVENTS -->
+
             <article class="analytics-panel">
 
                 <div class="eyebrow">
@@ -307,6 +388,7 @@
 
 
             <!-- SOURCES -->
+
             <article class="analytics-panel">
 
                 <div class="eyebrow">
@@ -327,6 +409,7 @@
 
             </article>
 
+
         </section>
 
     </main>
@@ -334,13 +417,21 @@
 </div>
 
 
-  <!-- SUPABASE -->
+<!-- SUPABASE -->
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js"></script>
-  <script src="mobile-menu.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="mobile-menu.js"></script>
+
 
 <script>
+
+
+/* ========================================
+   ADMIN AUTHENTICATION
+======================================== */
 
 async function requireAdmin() {
 
@@ -349,7 +440,10 @@ async function requireAdmin() {
         const {
             data: { session },
             error
-        } = await supabaseClient.auth.getSession();
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
 
 
         if (error) {
@@ -364,10 +458,12 @@ async function requireAdmin() {
             );
 
             return false;
+
         }
 
 
         return true;
+
 
     } catch (error) {
 
@@ -381,10 +477,15 @@ async function requireAdmin() {
         );
 
         return false;
+
     }
+
 }
 
 
+/* ========================================
+   LOAD ANALYTICS
+======================================== */
 
 async function loadAnalytics() {
 
@@ -402,15 +503,18 @@ async function loadAnalytics() {
             "refreshBtn"
         );
 
+
     const errorBox =
         document.getElementById(
             "analyticsError"
         );
 
+
     const eventList =
         document.getElementById(
             "eventList"
         );
+
 
     const sourceList =
         document.getElementById(
@@ -421,6 +525,7 @@ async function loadAnalytics() {
     if (refreshBtn) {
 
         refreshBtn.disabled = true;
+
         refreshBtn.textContent =
             "LOADING...";
 
@@ -465,20 +570,23 @@ async function loadAnalytics() {
         const {
             data,
             error
-        } = await supabaseClient
+        } =
+            await supabaseClient
 
-            .from("analytics_events")
+                .from(
+                    "analytics_events"
+                )
 
-            .select("*")
+                .select("*")
 
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
 
-            .limit(5000);
+                .limit(5000);
 
 
         if (error) {
@@ -490,11 +598,9 @@ async function loadAnalytics() {
             data || [];
 
 
-        /*
-         * =========================
-         * TOTAL EVENTS
-         * =========================
-         */
+        /* ========================================
+           TOTAL EVENTS
+        ======================================== */
 
         document.getElementById(
             "totalEvents"
@@ -504,11 +610,9 @@ async function loadAnalytics() {
             );
 
 
-        /*
-         * =========================
-         * REGISTER CLICKS
-         * =========================
-         */
+        /* ========================================
+           REGISTER CLICKS
+        ======================================== */
 
         const registerClicks =
             events.filter(
@@ -526,11 +630,9 @@ async function loadAnalytics() {
             );
 
 
-        /*
-         * =========================
-         * SUBSCRIPTIONS
-         * =========================
-         */
+        /* ========================================
+           SUBSCRIPTIONS
+        ======================================== */
 
         const subscriptions =
             events.filter(
@@ -548,17 +650,17 @@ async function loadAnalytics() {
             );
 
 
-        /*
-         * =========================
-         * PAGE VIEWS
-         * =========================
-         */
+        /* ========================================
+           PAGE VIEWS
+        ======================================== */
 
         const pageViews =
             events.filter(
                 event =>
                     event.event_name ===
-                    "page_view"
+                        "page_view" ||
+                    event.event_name ===
+                        "aspin_page_view"
             ).length;
 
 
@@ -570,11 +672,9 @@ async function loadAnalytics() {
             );
 
 
-        /*
-         * =========================
-         * EVENT COUNTS
-         * =========================
-         */
+        /* ========================================
+           EVENT COUNTS
+        ======================================== */
 
         const eventCounts = {};
 
@@ -667,6 +767,7 @@ async function loadAnalytics() {
                         nameElement
                     );
 
+
                     row.appendChild(
                         countElement
                     );
@@ -682,11 +783,9 @@ async function loadAnalytics() {
         }
 
 
-        /*
-         * =========================
-         * TRAFFIC SOURCES
-         * =========================
-         */
+        /* ========================================
+           TRAFFIC SOURCES
+        ======================================== */
 
         const sourceCounts = {};
 
@@ -695,6 +794,7 @@ async function loadAnalytics() {
             event => {
 
                 const source =
+                    event.traffic_source ||
                     event.utm_source ||
                     event.source ||
                     "Direct / Unknown";
@@ -772,6 +872,7 @@ async function loadAnalytics() {
                         sourceElement
                     );
 
+
                     row.appendChild(
                         countElement
                     );
@@ -836,17 +937,21 @@ async function loadAnalytics() {
             "totalEvents"
         ).textContent = "—";
 
+
         document.getElementById(
             "registerClicks"
         ).textContent = "—";
+
 
         document.getElementById(
             "subscriptions"
         ).textContent = "—";
 
+
         document.getElementById(
             "pageViews"
         ).textContent = "—";
+
 
     } finally {
 
@@ -865,6 +970,9 @@ async function loadAnalytics() {
 }
 
 
+/* ========================================
+   NUMBER FORMAT
+======================================== */
 
 function formatNumber(value) {
 
@@ -872,8 +980,12 @@ function formatNumber(value) {
         Number(value);
 
 
-    if (!Number.isFinite(number)) {
+    if (
+        !Number.isFinite(number)
+    ) {
+
         return "0";
+
     }
 
 
@@ -882,42 +994,39 @@ function formatNumber(value) {
 }
 
 
-
-/*
- * =========================
- * REFRESH
- * =========================
- */
+/* ========================================
+   REFRESH
+======================================== */
 
 document
-    .getElementById("refreshBtn")
+    .getElementById(
+        "refreshBtn"
+    )
     .addEventListener(
         "click",
         loadAnalytics
     );
 
 
+/* ========================================
+   LOGOUT
+======================================== */
 
-/*
- * =========================
- * LOGOUT
- * =========================
- */
+const logoutBtn =
+    document.getElementById(
+        "logoutBtn"
+    );
 
-document
-    .getElementById("logoutBtn")
-    .addEventListener(
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener(
         "click",
-        async () => {
-
-            const logoutBtn =
-                document.getElementById(
-                    "logoutBtn"
-                );
-
+        async function () {
 
             logoutBtn.disabled =
                 true;
+
 
             logoutBtn.textContent =
                 "LOGGING OUT...";
@@ -953,17 +1062,17 @@ document
         }
     );
 
+}
 
 
-/*
- * =========================
- * START
- * =========================
- */
+/* ========================================
+   INITIAL LOAD
+======================================== */
 
 loadAnalytics();
 
 </script>
 
 </body>
+
 </html>
