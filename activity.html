@@ -103,7 +103,7 @@
         }
 
         .activity-table tbody tr:hover {
-            background: rgba(255,255,255,.025);
+            background: rgba(255, 255, 255, .025);
         }
 
 
@@ -306,7 +306,6 @@
             .activity-pagination {
                 margin-bottom: 20px;
             }
-
         }
     </style>
 </head>
@@ -331,11 +330,8 @@
                 >
 
                 <div class="sidebar-brand-text">
-
                     <strong>ASPIN.SITE</strong>
-
                     <span>BACK OFFICE</span>
-
                 </div>
 
             </div>
@@ -563,64 +559,98 @@
 
     <script>
 
-        // ========================================
-        // ELEMENTS
-        // ========================================
+        /* ========================================
+           ELEMENTS
+        ======================================== */
 
         const activityBody =
-            document.getElementById(
-                "activityBody"
-            );
+            document.getElementById("activityBody");
 
         const activitySearch =
-            document.getElementById(
-                "activitySearch"
-            );
+            document.getElementById("activitySearch");
 
         const refreshBtn =
-            document.getElementById(
-                "refreshBtn"
-            );
+            document.getElementById("refreshBtn");
 
         const activityStatus =
-            document.getElementById(
-                "activityStatus"
-            );
+            document.getElementById("activityStatus");
 
         const previousBtn =
-            document.getElementById(
-                "previousBtn"
-            );
+            document.getElementById("previousBtn");
 
         const nextBtn =
-            document.getElementById(
-                "nextBtn"
-            );
+            document.getElementById("nextBtn");
 
         const paginationInfo =
-            document.getElementById(
-                "paginationInfo"
-            );
+            document.getElementById("paginationInfo");
 
 
-        // ========================================
-        // SETTINGS
-        // ========================================
+        /* ========================================
+           SETTINGS
+        ======================================== */
 
         const RECORDS_PER_PAGE = 50;
 
+        let activityData = [];
+
+        let filteredActivity = [];
+
         let currentPage = 1;
 
-        let totalRecords = 0;
 
-        let totalPages = 1;
+        /* ========================================
+           ADMIN AUTHENTICATION
+        ======================================== */
 
-        let currentSearch = "";
+        async function requireAdmin() {
+
+            try {
+
+                const {
+                    data: {
+                        session
+                    },
+                    error
+                } =
+                    await supabaseClient.auth.getSession();
 
 
-        // ========================================
-        // DATE FORMAT
-        // ========================================
+                if (error) {
+                    throw error;
+                }
+
+
+                if (!session) {
+
+                    window.location.replace(
+                        "login.html"
+                    );
+
+                    return null;
+                }
+
+
+                return session;
+
+            } catch (error) {
+
+                console.error(
+                    "Authentication error:",
+                    error
+                );
+
+                window.location.replace(
+                    "login.html"
+                );
+
+                return null;
+            }
+        }
+
+
+        /* ========================================
+           DATE FORMAT
+        ======================================== */
 
         function formatDate(value) {
 
@@ -638,9 +668,7 @@
                     date.getTime()
                 )
             ) {
-
                 return "Unknown";
-
             }
 
 
@@ -658,13 +686,17 @@
         }
 
 
-        // ========================================
-        // UPDATE PAGINATION
-        // ========================================
+        /* ========================================
+           UPDATE PAGINATION
+        ======================================== */
 
         function updatePagination() {
 
-            totalPages =
+            const totalRecords =
+                filteredActivity.length;
+
+
+            const totalPages =
                 Math.max(
                     1,
                     Math.ceil(
@@ -678,10 +710,8 @@
                 currentPage >
                 totalPages
             ) {
-
                 currentPage =
                     totalPages;
-
             }
 
 
@@ -702,53 +732,94 @@
                 paginationInfo.textContent =
                     "PAGE 1 OF 1";
 
+                previousBtn.disabled = true;
+                nextBtn.disabled = true;
+            }
+
+
+            return totalPages;
+        }
+
+
+        /* ========================================
+           SEARCH
+        ======================================== */
+
+        function applySearch() {
+
+            const search =
+                activitySearch.value
+                    .trim()
+                    .toLowerCase();
+
+
+            if (!search) {
+
+                filteredActivity =
+                    [...activityData];
+
+            } else {
+
+                filteredActivity =
+                    activityData.filter(
+                        activity => {
+
+                            const email =
+                                String(
+                                    activity.user_email || ""
+                                ).toLowerCase();
+
+                            const action =
+                                String(
+                                    activity.action || ""
+                                ).toLowerCase();
+
+                            const ip =
+                                String(
+                                    activity.ip_address || ""
+                                ).toLowerCase();
+
+                            const userAgent =
+                                String(
+                                    activity.user_agent || ""
+                                ).toLowerCase();
+
+                            return (
+                                email.includes(search) ||
+                                action.includes(search) ||
+                                ip.includes(search) ||
+                                userAgent.includes(search)
+                            );
+                        }
+                    );
+            }
+
+
+            currentPage = 1;
+
+            updatePagination();
+
+            renderCurrentPage();
+
+
+            if (search) {
+
+                activityStatus.textContent =
+                    `${filteredActivity.length.toLocaleString()} matching record${filteredActivity.length === 1 ? "" : "s"}`;
+
+            } else {
+
+                activityStatus.textContent =
+                    `${filteredActivity.length.toLocaleString()} activity record${filteredActivity.length === 1 ? "" : "s"}`;
             }
         }
 
 
-        // ========================================
-        // SEARCH FILTER
-        // ========================================
-
-        function buildSearchFilter(query) {
-
-            if (!query) {
-                return null;
-            }
-
-
-            /*
-             * Escape characters that could interfere
-             * with the Supabase PostgREST filter.
-             */
-
-            const escaped =
-                query
-                    .replace(/\\/g, "")
-                    .replace(/,/g, "")
-                    .replace(/\(/g, "")
-                    .replace(/\)/g, "")
-                    .replace(/%/g, "");
-
-
-            return [
-                `user_email.ilike.%${escaped}%`,
-                `action.ilike.%${escaped}%`,
-                `ip_address.ilike.%${escaped}%`,
-                `user_agent.ilike.%${escaped}%`
-            ].join(",");
-        }
-
-
-        // ========================================
-        // LOAD ACTIVITY
-        // ========================================
+        /* ========================================
+           LOAD ACTIVITY
+        ======================================== */
 
         async function loadActivity() {
-
-            /*
-             * Make sure the user is authenticated.
-             */
 
             const session =
                 await requireAdmin();
@@ -759,8 +830,7 @@
             }
 
 
-            refreshBtn.disabled =
-                true;
+            refreshBtn.disabled = true;
 
             refreshBtn.textContent =
                 "LOADING...";
@@ -781,105 +851,23 @@
             try {
 
                 /*
-                 * Use ONLY the custom activity table.
+                 * Use the tested Supabase RPC function.
                  *
-                 * This prevents duplicate Auth Audit
-                 * Log records from appearing.
+                 * This function reads from:
+                 * admin_activity_logs
+                 *
+                 * It also prevents the frontend
+                 * from depending directly on
+                 * table SELECT permissions.
                  */
-
-                let query =
-                    supabaseClient
-                        .from(
-                            "admin_activity_logs"
-                        )
-                        .select(
-                            `
-                            id,
-                            created_at,
-                            user_id,
-                            user_email,
-                            action,
-                            ip_address,
-                            user_agent
-                            `,
-                            {
-                                count: "exact"
-                            }
-                        );
-
-
-                // ========================================
-                // SEARCH
-                // ========================================
-
-                if (currentSearch) {
-
-                    const searchFilter =
-                        buildSearchFilter(
-                            currentSearch
-                        );
-
-
-                    if (searchFilter) {
-
-                        query =
-                            query.or(
-                                searchFilter
-                            );
-
-                    }
-
-                }
-
-
-                // ========================================
-                // NEWEST FIRST
-                // ========================================
-
-                query =
-                    query.order(
-                        "created_at",
-                        {
-                            ascending: false
-                        }
-                    );
-
-
-                // ========================================
-                // 50 RECORDS PER PAGE
-                // ========================================
-
-                const from =
-                    (
-                        currentPage -
-                        1
-                    ) *
-                    RECORDS_PER_PAGE;
-
-
-                const to =
-                    from +
-                    RECORDS_PER_PAGE -
-                    1;
-
-
-                query =
-                    query.range(
-                        from,
-                        to
-                    );
-
-
-                // ========================================
-                // EXECUTE
-                // ========================================
 
                 const {
                     data,
-                    error,
-                    count
+                    error
                 } =
-                    await query;
+                    await supabaseClient.rpc(
+                        "get_admin_activity_history"
+                    );
 
 
                 if (error) {
@@ -887,33 +875,49 @@
                 }
 
 
-                totalRecords =
-                    count || 0;
+                activityData =
+                    Array.isArray(data)
+                        ? data
+                        : [];
+
+
+                /*
+                 * The RPC already returns newest
+                 * activity first.
+                 *
+                 * Sort again on the client as
+                 * an extra safeguard.
+                 */
+
+                activityData.sort(
+                    (a, b) => {
+
+                        return (
+                            new Date(
+                                b.created_at
+                            ) -
+                            new Date(
+                                a.created_at
+                            )
+                        );
+                    }
+                );
+
+
+                filteredActivity =
+                    [...activityData];
+
+
+                currentPage = 1;
 
 
                 updatePagination();
 
-
-                renderActivity(
-                    data || []
-                );
+                renderCurrentPage();
 
 
-                // ========================================
-                // STATUS
-                // ========================================
-
-                if (currentSearch) {
-
-                    activityStatus.textContent =
-                        `${totalRecords.toLocaleString()} matching record${totalRecords === 1 ? "" : "s"}`;
-
-                } else {
-
-                    activityStatus.textContent =
-                        `${totalRecords.toLocaleString()} activity record${totalRecords === 1 ? "" : "s"}`;
-
-                }
+                activityStatus.textContent =
+                    `${activityData.length.toLocaleString()} activity record${activityData.length === 1 ? "" : "s"}`;
 
 
             } catch (error) {
@@ -924,8 +928,11 @@
                 );
 
 
-                totalRecords =
-                    0;
+                activityData = [];
+
+                filteredActivity = [];
+
+                currentPage = 1;
 
 
                 updatePagination();
@@ -947,91 +954,106 @@
                     error.message ||
                     "Unable to load activity history.";
 
+
             } finally {
 
-                refreshBtn.disabled =
-                    false;
+                refreshBtn.disabled = false;
 
                 refreshBtn.textContent =
                     "REFRESH";
-
             }
         }
 
 
-        // ========================================
-        // RENDER ACTIVITY
-        // ========================================
+        /* ========================================
+           RENDER CURRENT PAGE
+        ======================================== */
 
-        function renderActivity(data) {
+        function renderCurrentPage() {
 
-            activityBody.innerHTML =
-                "";
+            activityBody.innerHTML = "";
 
 
-            if (!data.length) {
+            if (
+                !filteredActivity.length
+            ) {
 
                 const row =
-                    document.createElement(
-                        "tr"
-                    );
+                    document.createElement("tr");
 
 
                 const cell =
-                    document.createElement(
-                        "td"
-                    );
+                    document.createElement("td");
 
 
-                cell.colSpan =
-                    5;
+                cell.colSpan = 5;
 
                 cell.className =
                     "activity-empty";
 
 
                 cell.textContent =
-                    currentSearch
+                    activitySearch.value.trim()
                         ? "No matching activity found."
                         : "No activity found.";
 
 
-                row.appendChild(
-                    cell
-                );
+                row.appendChild(cell);
 
-
-                activityBody.appendChild(
-                    row
-                );
-
+                activityBody.appendChild(row);
 
                 return;
             }
+
+
+            const start =
+                (
+                    currentPage - 1
+                ) *
+                RECORDS_PER_PAGE;
+
+
+            const end =
+                start +
+                RECORDS_PER_PAGE;
+
+
+            const pageData =
+                filteredActivity.slice(
+                    start,
+                    end
+                );
+
+
+            renderActivity(pageData);
+        }
+
+
+        /* ========================================
+           RENDER ACTIVITY
+        ======================================== */
+
+        function renderActivity(data) {
+
+            activityBody.innerHTML = "";
 
 
             data.forEach(
                 activity => {
 
                     const row =
-                        document.createElement(
-                            "tr"
-                        );
+                        document.createElement("tr");
 
 
-                    // ========================================
-                    // DATE
-                    // ========================================
+                    /* ========================================
+                       DATE
+                    ======================================== */
 
                     const dateCell =
-                        document.createElement(
-                            "td"
-                        );
-
+                        document.createElement("td");
 
                     dateCell.className =
                         "activity-date";
-
 
                     dateCell.textContent =
                         formatDate(
@@ -1039,92 +1061,71 @@
                         );
 
 
-                    // ========================================
-                    // USER
-                    // ========================================
+                    /* ========================================
+                       USER
+                    ======================================== */
 
                     const userCell =
-                        document.createElement(
-                            "td"
-                        );
-
+                        document.createElement("td");
 
                     userCell.className =
                         "activity-user";
-
 
                     userCell.textContent =
                         activity.user_email ||
                         "Unknown";
 
 
-                    // ========================================
-                    // ACTIVITY
-                    // ========================================
+                    /* ========================================
+                       ACTIVITY
+                    ======================================== */
 
                     const actionCell =
-                        document.createElement(
-                            "td"
-                        );
-
+                        document.createElement("td");
 
                     actionCell.className =
                         "activity-action";
-
 
                     actionCell.textContent =
                         activity.action ||
                         "UNKNOWN";
 
 
-                    // ========================================
-                    // IP ADDRESS
-                    // ========================================
+                    /* ========================================
+                       IP ADDRESS
+                    ======================================== */
 
                     const ipCell =
-                        document.createElement(
-                            "td"
-                        );
-
+                        document.createElement("td");
 
                     ipCell.className =
                         "activity-ip";
-
 
                     ipCell.textContent =
                         activity.ip_address ||
                         "Unavailable";
 
 
-                    // ========================================
-                    // DEVICE / BROWSER
-                    // ========================================
+                    /* ========================================
+                       DEVICE / BROWSER
+                    ======================================== */
 
                     const deviceCell =
-                        document.createElement(
-                            "td"
-                        );
-
+                        document.createElement("td");
 
                     deviceCell.className =
                         "device-cell";
 
 
                     const deviceRow =
-                        document.createElement(
-                            "div"
-                        );
-
+                        document.createElement("div");
 
                     deviceRow.className =
                         "device-row";
 
 
                     const preview =
-                        document.createElement(
-                            "span"
-                        );
-
+                        document.createElement("span");
 
                     preview.className =
                         "device-preview";
@@ -1140,32 +1141,22 @@
 
 
                     const toggle =
-                        document.createElement(
-                            "button"
-                        );
+                        document.createElement("button");
 
-
-                    toggle.type =
-                        "button";
-
+                    toggle.type = "button";
 
                     toggle.className =
                         "device-toggle";
-
 
                     toggle.textContent =
                         "VIEW";
 
 
                     const fullText =
-                        document.createElement(
-                            "div"
-                        );
-
+                        document.createElement("div");
 
                     fullText.className =
                         "device-full";
-
 
                     fullText.textContent =
                         userAgent;
@@ -1185,7 +1176,6 @@
                                 expanded
                                     ? "HIDE"
                                     : "VIEW";
-
                         }
                     );
 
@@ -1193,7 +1183,6 @@
                     deviceRow.appendChild(
                         preview
                     );
-
 
                     deviceRow.appendChild(
                         toggle
@@ -1204,15 +1193,14 @@
                         deviceRow
                     );
 
-
                     deviceCell.appendChild(
                         fullText
                     );
 
 
-                    // ========================================
-                    // APPEND CELLS
-                    // ========================================
+                    /* ========================================
+                       APPEND CELLS
+                    ======================================== */
 
                     row.appendChild(
                         dateCell
@@ -1238,15 +1226,14 @@
                     activityBody.appendChild(
                         row
                     );
-
                 }
             );
         }
 
 
-        // ========================================
-        // SEARCH
-        // ========================================
+        /* ========================================
+           SEARCH INPUT
+        ======================================== */
 
         let searchTimer;
 
@@ -1264,28 +1251,18 @@
                     setTimeout(
                         function () {
 
-                            currentSearch =
-                                activitySearch.value
-                                    .trim();
-
-
-                            currentPage =
-                                1;
-
-
-                            loadActivity();
+                            applySearch();
 
                         },
                         300
                     );
-
             }
         );
 
 
-        // ========================================
-        // PREVIOUS
-        // ========================================
+        /* ========================================
+           PREVIOUS
+        ======================================== */
 
         previousBtn.addEventListener(
             "click",
@@ -1294,65 +1271,115 @@
                 if (
                     currentPage <= 1
                 ) {
-
                     return;
-
                 }
 
 
                 currentPage--;
 
 
-                loadActivity();
+                updatePagination();
 
+                renderCurrentPage();
             }
         );
 
 
-        // ========================================
-        // NEXT
-        // ========================================
+        /* ========================================
+           NEXT
+        ======================================== */
 
         nextBtn.addEventListener(
             "click",
             function () {
 
+                const totalPages =
+                    Math.max(
+                        1,
+                        Math.ceil(
+                            filteredActivity.length /
+                            RECORDS_PER_PAGE
+                        )
+                    );
+
+
                 if (
                     currentPage >=
                     totalPages
                 ) {
-
                     return;
-
                 }
 
 
                 currentPage++;
 
 
-                loadActivity();
+                updatePagination();
 
+                renderCurrentPage();
             }
         );
 
 
-        // ========================================
-        // REFRESH
-        // ========================================
+        /* ========================================
+           REFRESH
+        ======================================== */
 
         refreshBtn.addEventListener(
             "click",
             function () {
 
                 loadActivity();
-
             }
         );
 
+        /* ========================================
+           LOGOUT
+        ======================================== */
 
-        // ========================================
-        // INITIAL LOAD
-        // ========================================
+        const logoutBtn =
+            document.getElementById("logoutBtn");
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener(
+                "click",
+                async function () {
+
+                    logoutBtn.disabled = true;
+                    logoutBtn.textContent =
+                        "LOGGING OUT...";
+
+                    try {
+
+                        const {
+                            error
+                        } =
+                            await supabaseClient
+                                .auth
+                                .signOut();
+
+                        if (error) {
+                            console.error(
+                                "Logout error:",
+                                error
+                            );
+                        }
+
+                    } finally {
+
+                        window.location.replace(
+                            "login.html"
+                        );
+
+                    }
+                }
+            );
+        }
+
+
+        /* ========================================
+           INITIAL LOAD
+        ======================================== */
 
         loadActivity();
 
